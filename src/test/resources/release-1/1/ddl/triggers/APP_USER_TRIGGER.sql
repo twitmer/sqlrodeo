@@ -1,0 +1,11 @@
+CREATE OR REPLACE TRIGGER app_user_bir 
+BEFORE INSERT ON APP_USER 
+FOR EACH ROW
+
+BEGIN
+  SELECT app_user_seq.NEXTVAL
+  INTO   :new.id
+  
+  FROM   dual;
+END;
+/

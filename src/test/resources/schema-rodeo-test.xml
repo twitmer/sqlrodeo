@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!-- 
+<GolfCountryClub 
+xmlns:tns="http://www.example.org/GolfCountryClub" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.example.org/GolfCountryClub GolfCountryClub.xsd ">
+-->
+<!-- 
+<sql-rodeo xmlns="http://www.example.org/SqlRodeoSchema" 
+	xmlns:tns="http://www.example.org/SqlRodeoSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/SqlRodeoSchema">
+-->
+<sql-rodeo 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema"
+	xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- SAD NEWS: Oracle cannot rollback DDL statements, like Create table. 
+		See: http://stackoverflow.com/questions/4692690/is-it-possible-to-roll-back-create-table-and-alter-table-statements-in-major-sql -->
+	<!-- -->
+	<!-- Commits are still useful for DML, so at least there's that. -->
+
+	<datasource id="myConnectionDatasource" name="jdbc/myConnection"
+		maxTotal="1" maxIdle="0" maxWaitMillis="1000" driverClassName="oracle.jdbc.OracleDriver"
+		url="jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS =  (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA = (SERVICE_NAME = XE)))"
+		username="prowalk" password="prowalk" validationQuery="select 1 from dual" />
+
+
+	<connection id="myConnection" datasource-id="myConnectionDatasource"/>
+
+	<assign  id="myVar" value="2" />
+	<assign id="myJvm" value="sysProps.get('java.version')" />
+	<assign id="skipMath" value="50 / 5 + 12" if="myVar > 3" />
+	<assign id="someMath" value="50 / ${myVar} + 12" />
+	<assign id="initialRelease" value="0" />
+	<assign id="initialBuild" value="0" />
+
+	<query connection-id="myConnection" rowcount="versionTableCount">
+		SELECT tname from
+		tab WHERE tname = 'SCHEMA_VERSION'
+	</query>
+
+	<sql connection-id="myConnection" if="versionTableCount == 0">
+		CREATE TABLE SCHEMA_VERSION (
+		release INT NOT NULL,
+		build INT NOT NULL,
+		created DATE DEFAULT SYSDATE
+		NOT NULL,
+		PRIMARY KEY (release, build));
+
+		INSERT INTO
+		SCHEMA_VERSION(release, build)
+		VALUES (${initialRelease}, ${initialBuild});
+	</sql>
+<!-- 	<commit id="myConnection"/> -->
+
+	<delegate id="myDelegate" delegate-class="sqlrodeo.DoNothingDelegate">
+		Hello delegate!
+	</delegate>
+
+	<!-- Determine DB version -->
+	<!-- PROBLEM: "release" is reported by db as "release" (all caps), not case-sensitive -->
+	<!-- PROBLEM: If Schema_Version is empty, this returns null. -->
+	<query connection-id="myConnection" publish-as="release">
+		SELECT MAX(release) as release FROM SCHEMA_VERSION
+	</query>
+
+	<query connection-id="myConnection" publish-as="build">
+		SELECT MAX(build) as build FROM
+		SCHEMA_VERSION WHERE release = ${release}
+	</query>
+	<commit id="myConnection"/>
+
+	<include if="release le 1" href="release-1/release.xml" />
+	<commit id="myConnection"/>
+
+<!-- 	<include if="release le 2" href="release-2/release.xml" /> -->
+<!-- 	<commit id="myConnection"/> -->
+
+</sql-rodeo>

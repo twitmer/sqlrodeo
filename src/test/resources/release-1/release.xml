@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- <!DOCTYPE db-slurper SYSTEM "db-slurper.dtd"> -->
+<sql-rodeo 
+	xmlns="http://www.example.org/SqlRodeoSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<include if="release le 1 and build lt 1" href="1/build.xml" />
+<!-- 	<include if="release le 1 and build lt 2" href="2/build.xml" /> -->
+
+</sql-rodeo>
