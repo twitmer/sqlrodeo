@@ -1,0 +1,1 @@
+CREATE SEQUENCE dept_seq;
