@@ -121,13 +121,9 @@ public final class SqlAction extends BaseAction {
 
 	private void executeStatement(Connection connection, String sqlText)
 			throws SQLException {
-		Statement stmt = connection.createStatement();
-		log.info("Executing statement: " + sqlText);
-		stmt.execute(sqlText);
-		try {
-			stmt.close();
-		} catch (Exception e) {
-			log.debug("Ignoring problem closing statement: " + e.getMessage());
+		try (Statement stmt = connection.createStatement()) {
+			log.info("Executing statement: " + sqlText);
+			stmt.execute(sqlText);
 		}
 	}
 

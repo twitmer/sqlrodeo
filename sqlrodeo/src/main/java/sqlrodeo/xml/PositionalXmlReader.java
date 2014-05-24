@@ -66,7 +66,7 @@ class PositionalXmlReader {
 
 		final DefaultHandler handler = new DefaultHandler() {
 
-			private Locator locator;
+			private Locator locator = null;
 
 			// Outputs text accumulated under the current node
 			private void addTextIfNeeded() {
