@@ -9,14 +9,14 @@ import sqlrodeo.IAction;
 @SuppressWarnings("serial")
 public class ValidationException extends LocateableException {
 
-	public ValidationException(IAction action, Throwable throwable) {
-		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
-				.getNode(), throwable);
-	}
-
 	public ValidationException(IAction action, String message) {
 		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
 				.getNode(), message);
+	}
+
+	public ValidationException(IAction action, Throwable throwable) {
+		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
+				.getNode(), throwable);
 	}
 
 	public ValidationException(URL url, long lineNumber, Node node,

@@ -29,7 +29,7 @@ public final class Parser {
     private static final URL schemaURL = Parser.class.getResource("/SqlRodeoSchema.xsd");
 
     public static void display(String indent, Node node) {
-        log.info(indent + "Node: " + new LessStupidNode(node).toString());
+        log.info(indent + "Node: " + new NodeWrapper(node).toString());
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
             Node childNode = node.getChildNodes().item(i);
             display(indent + "  ", childNode);

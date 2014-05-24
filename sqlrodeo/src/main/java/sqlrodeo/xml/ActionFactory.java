@@ -48,7 +48,7 @@ final class ActionFactory {
                 return new SqlRodeoAction(element);
             default:
                 // Shouldn't be possible if XSD validation succeeded.
-                LessStupidNode node = new LessStupidNode(element);
+                NodeWrapper node = new NodeWrapper(element);
                 throw new ValidationException(node.resolveResourceUrl(), node.resolveLineNumber(), node,
                         "Could not determine appropriate Action to create.");
         }

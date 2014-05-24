@@ -17,16 +17,16 @@ import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.NotFoundException;
 import sqlrodeo.util.StringUtils;
-import sqlrodeo.xml.LessStupidNode;
+import sqlrodeo.xml.NodeWrapper;
 
 public abstract class BaseAction implements IAction {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseAction.class);
 
-	private final LessStupidNode node;
+	private final NodeWrapper node;
 
 	public BaseAction(Node node) {
-		this.node = new LessStupidNode(node);
+		this.node = new NodeWrapper(node);
 	}
 
 	public void executeChildren(ISqlRodeoContext context) {
@@ -47,7 +47,7 @@ public abstract class BaseAction implements IAction {
 		// consumed by their parent.)
 		List<Node> kids = getNode().getChildNodesAsList();
 		for (int i = 0; i < kids.size(); ++i) {
-			LessStupidNode kid = new LessStupidNode(kids.get(i));
+			NodeWrapper kid = new NodeWrapper(kids.get(i));
 
 			// log.debug("NODE: " + kids.get(i).getClass().getName());
 			// com.sun.org.apache.xerces.internal.dom.DeferredElementImpl impl;
@@ -87,7 +87,7 @@ public abstract class BaseAction implements IAction {
 	// @Override
 	public Connection getConnection(ISqlRodeoContext context) {
 
-		LessStupidNode workingNode = getNode();
+		NodeWrapper workingNode = getNode();
 		String connId = workingNode.getAttribute("connection-id");
 		if (log.isDebugEnabled()) {
 			log.debug(String.format(
@@ -118,7 +118,7 @@ public abstract class BaseAction implements IAction {
 			}
 
 			if (workingNode.getParentNode() != null) {
-				workingNode = new LessStupidNode(workingNode.getParentNode());
+				workingNode = new NodeWrapper(workingNode.getParentNode());
 				connId = workingNode.getAttribute("connection-id");
 			} else {
 				workingNode = null;
@@ -135,7 +135,7 @@ public abstract class BaseAction implements IAction {
 	}
 
 	@Override
-	public LessStupidNode getNode() {
+	public NodeWrapper getNode() {
 		return node;
 	}
 

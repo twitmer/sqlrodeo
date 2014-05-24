@@ -18,11 +18,11 @@ import org.w3c.dom.UserDataHandler;
 
 import sqlrodeo.SqlRodeoException;
 
-public class LessStupidNode implements Node {
+public class NodeWrapper implements Node {
 
 	private final Node delegate;
 
-	public LessStupidNode(Node node) {
+	public NodeWrapper(Node node) {
 		this.delegate = node;
 	}
 
