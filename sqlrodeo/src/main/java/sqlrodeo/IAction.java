@@ -13,10 +13,10 @@ public interface IAction {
 	 * Execute this action against the given context.
 	 * 
 	 * @param context
-	 *            ISqlRodeoContext to use during execution.
+	 *            Context to use during execution.
 	 * @throws Exception
 	 */
-	void execute(ISqlRodeoContext context) throws Exception;
+	void execute(IExecutionContext context) throws Exception;
 
 	/**
 	 * Retrieve the XML node for which this action was created.
@@ -25,7 +25,7 @@ public interface IAction {
 	 */
 	NodeWrapper getNode();
 
-	boolean isIfConditionTrue(ISqlRodeoContext context);
+	boolean isIfConditionTrue(IExecutionContext context);
 
 	/**
 	 * Retrieve the line number in the SqlRodeo XML file for this action.

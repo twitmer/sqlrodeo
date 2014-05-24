@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.util.StringUtils;
 
@@ -46,7 +46,7 @@ public final class BasicDatasourceAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) throws Exception {
+    public void execute(IExecutionContext context) throws Exception {
         String id = getNode().getAttribute("id");
 
         DataSource dataSource = null;

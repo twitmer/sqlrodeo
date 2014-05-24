@@ -14,7 +14,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import sqlrodeo.IAction;
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.ValidationException;
 import sqlrodeo.util.StringUtils;
@@ -29,7 +29,7 @@ public final class SqlAction extends BaseAction {
 	}
 
 	@Override
-	public void execute(ISqlRodeoContext context) {
+	public void execute(IExecutionContext context) {
 
 		if (log.isDebugEnabled()) {
 			log.debug(String.format("execute: node".replaceAll(", ", "=%s, ")
@@ -97,7 +97,7 @@ public final class SqlAction extends BaseAction {
 		}
 	}
 
-	private void executeSqlLiteral(ISqlRodeoContext context, String sqlText)
+	private void executeSqlLiteral(IExecutionContext context, String sqlText)
 			throws SQLException {
 		if (log.isDebugEnabled()) {
 			log.debug(String.format(

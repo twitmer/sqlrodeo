@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 
 public final class SqlRodeoAction extends BaseAction {
 
@@ -15,7 +15,7 @@ public final class SqlRodeoAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) {
+    public void execute(IExecutionContext context) {
         // if(isIfConditionTrue(context)) {
         log.debug("execute(): " + toString());
         executeChildren(context);

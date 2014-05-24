@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import sqlrodeo.IAction;
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ValidationException;
 import sqlrodeo.xml.Parser;
 
@@ -26,7 +26,7 @@ public final class IncludeAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) throws Exception {
+    public void execute(IExecutionContext context) throws Exception {
 
         if(this.isIfConditionTrue(context)) {
             log.debug("execute(): " + toString());

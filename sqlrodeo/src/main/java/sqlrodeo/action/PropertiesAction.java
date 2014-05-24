@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.ValidationException;
@@ -28,7 +28,7 @@ public final class PropertiesAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) {
+    public void execute(IExecutionContext context) {
 
         String href = getNode().getAttribute("href");
         List<Node> children = getNode().getChildNodesAsList();

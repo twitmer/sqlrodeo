@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 
 public final class RollbackAction extends BaseAction {
@@ -19,7 +19,7 @@ public final class RollbackAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) throws SQLException {
+    public void execute(IExecutionContext context) throws SQLException {
         String connectionId = getNode().getAttribute("connection-id");
         Connection conn = (Connection)context.get(connectionId);
         if(conn == null) {

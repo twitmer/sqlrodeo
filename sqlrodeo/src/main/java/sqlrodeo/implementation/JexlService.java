@@ -10,7 +10,7 @@ import org.apache.commons.jexl2.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 
 final class JexlService {
 
@@ -27,7 +27,7 @@ final class JexlService {
     public JexlService() {
     }
 
-    public Object evaluate(String expressionString, ISqlRodeoContext context) throws JexlEvaluationException {
+    public Object evaluate(String expressionString, IExecutionContext context) throws JexlEvaluationException {
         if(log.isDebugEnabled()) {
             log.debug(String.format("evaluate: expressionString".replaceAll(", ", "=%s, ") + "=%s", expressionString));
         }
@@ -48,7 +48,7 @@ final class JexlService {
         }
     }
 
-    public boolean evaluateBoolean(String expressionString, ISqlRodeoContext context) throws JexlEvaluationException {
+    public boolean evaluateBoolean(String expressionString, IExecutionContext context) throws JexlEvaluationException {
         if(log.isDebugEnabled()) {
             log.debug(String.format("evaluateBoolean: expressionString".replaceAll(", ", "=%s, ") + "=%s", expressionString));
         }
@@ -64,7 +64,7 @@ final class JexlService {
         }
     }
 
-    public String substitute(String source, ISqlRodeoContext context) throws JexlEvaluationException {
+    public String substitute(String source, IExecutionContext context) throws JexlEvaluationException {
         if(log.isDebugEnabled()) {
             log.debug(String.format("substitute: source".replaceAll(", ", "=%s, ") + "=%s", source));
         }

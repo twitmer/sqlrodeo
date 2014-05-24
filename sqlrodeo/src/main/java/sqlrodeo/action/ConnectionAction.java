@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.util.StringUtils;
 
@@ -22,7 +22,7 @@ public final class ConnectionAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) throws SQLException {
+    public void execute(IExecutionContext context) throws SQLException {
 
         String dataSourceId = getNode().getAttribute("datasource-id");
         String id = getNode().getAttribute("id");

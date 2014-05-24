@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 
 public final class CloseBasicDatasourceAction extends BaseAction {
 
@@ -21,7 +21,7 @@ public final class CloseBasicDatasourceAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) {
+    public void execute(IExecutionContext context) {
         // NOTE: Node will be null here.
         log.debug("CloseBasicDatasourceAction: " + datasourceId);
         BasicDataSource ds = (BasicDataSource)context.remove(datasourceId);

@@ -12,7 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import sqlrodeo.IAction;
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.NotFoundException;
@@ -29,7 +29,7 @@ public abstract class BaseAction implements IAction {
 		this.node = new NodeWrapper(node);
 	}
 
-	public void executeChildren(ISqlRodeoContext context) {
+	public void executeChildren(IExecutionContext context) {
 		if (log.isDebugEnabled()) {
 			log.debug(String.format(
 					"executeChildren: node".replaceAll(", ", "=%s, ") + "=%s",
@@ -85,7 +85,7 @@ public abstract class BaseAction implements IAction {
 	}
 
 	// @Override
-	public Connection getConnection(ISqlRodeoContext context) {
+	public Connection getConnection(IExecutionContext context) {
 
 		NodeWrapper workingNode = getNode();
 		String connId = workingNode.getAttribute("connection-id");
@@ -140,7 +140,7 @@ public abstract class BaseAction implements IAction {
 	}
 
 	@Override
-	public boolean isIfConditionTrue(ISqlRodeoContext context) {
+	public boolean isIfConditionTrue(IExecutionContext context) {
 		String condition = getNode().getAttribute("if");
 
 		if (log.isDebugEnabled()) {

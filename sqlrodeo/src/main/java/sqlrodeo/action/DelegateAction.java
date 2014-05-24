@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import sqlrodeo.IDelegate;
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.ValidationException;
 import sqlrodeo.util.StringUtils;
@@ -19,7 +19,7 @@ public final class DelegateAction extends BaseAction {
     }
 
     @Override
-    public void execute(ISqlRodeoContext context) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void execute(IExecutionContext context) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 
         // Text is an optional text node.
         String nodeText = null;

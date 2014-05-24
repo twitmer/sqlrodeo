@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 
 import sqlrodeo.IAction;
 import sqlrodeo.ISqlRodeo;
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 import sqlrodeo.SqlRodeoException;
 import sqlrodeo.action.ExitException;
 import sqlrodeo.xml.Parser;
@@ -29,7 +29,7 @@ public final class SqlRodeo implements ISqlRodeo {
      * @see sqlrodeo.ISqlRodeo#execute(java.net.URL)
      */
     @Override
-    public ISqlRodeoContext execute(URL resourceUrl) {
+    public IExecutionContext execute(URL resourceUrl) {
         return execute(resourceUrl, null);
     }
 
@@ -38,12 +38,12 @@ public final class SqlRodeo implements ISqlRodeo {
      * @see sqlrodeo.ISqlRodeo#execute(java.net.URL, java.util.Map)
      */
     @Override
-    public ISqlRodeoContext execute(URL resourceUrl, Map<String, Object> contextSeed) {
+    public IExecutionContext execute(URL resourceUrl, Map<String, Object> contextSeed) {
         if(log.isDebugEnabled()) {
             log.debug(String.format("execute: resourceUrl, contextSeed".replaceAll(", ", "=%s, ") + "=%s", resourceUrl, contextSeed));
         }
 
-        try (ISqlRodeoContext context = new SqlRodeoContext()) {
+        try (IExecutionContext context = new ExecutionContext()) {
 
             // Validate and parse all XML, generating actions as we go.
             Node root = loadAndValidate(resourceUrl);

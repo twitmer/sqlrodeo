@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import sqlrodeo.IAction;
-import sqlrodeo.ISqlRodeoContext;
+import sqlrodeo.IExecutionContext;
 
-public final class SqlRodeoContext implements ISqlRodeoContext {
+public final class ExecutionContext implements IExecutionContext {
 
     /** Actions to implement upon closure. */
     private final Deque<IAction> closeActions = new ArrayDeque<>();
@@ -29,9 +29,9 @@ public final class SqlRodeoContext implements ISqlRodeoContext {
     private final JexlService jexlService = new JexlService();
 
     /** Logger */
-    private final Logger log = LoggerFactory.getLogger(SqlRodeoContext.class);
+    private final Logger log = LoggerFactory.getLogger(ExecutionContext.class);
 
-    public SqlRodeoContext() {
+    public ExecutionContext() {
         delegateMap.put("sysProps", System.getProperties());
         delegateMap.put("env", System.getenv());
     }
@@ -76,7 +76,7 @@ public final class SqlRodeoContext implements ISqlRodeoContext {
             return false;
         if(getClass() != obj.getClass())
             return false;
-        SqlRodeoContext other = (SqlRodeoContext)obj;
+        ExecutionContext other = (ExecutionContext)obj;
         if(closeActions == null) {
             if(other.closeActions != null)
                 return false;
