@@ -55,7 +55,7 @@ public final class DelegateAction extends BaseAction {
 
         // Out of strategies. No idea how to create your delegate!
         if(delegate == null) {
-            throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(),
+            throw new ExecutionException(this,
                     "Could not find or create delegate: " + toString());
         }
 
@@ -68,7 +68,7 @@ public final class DelegateAction extends BaseAction {
         String delegateClass = getNode().getAttribute("delegate-class");
 
         if(StringUtils.isEmpty(id) && StringUtils.isEmpty(delegateClass)) {
-            throw new ValidationException(resolveResourceUrl(), resolveLineNumber(), getNode(),
+            throw new ValidationException(this,
                     "At least one of 'id' or 'delegate-class' is required: " + toString());
         }
     }

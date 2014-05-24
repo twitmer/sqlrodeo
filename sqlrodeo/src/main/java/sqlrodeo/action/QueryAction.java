@@ -50,7 +50,7 @@ public final class QueryAction extends BaseAction {
             try {
                 queryString = context.substitute(queryString);
             } catch(JexlEvaluationException e) {
-                throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(), e);
+                throw new ExecutionException(this, e);
             }
         }
 
@@ -154,12 +154,12 @@ public final class QueryAction extends BaseAction {
         List<Node> children = getNode().getChildNodesAsList();
 
         if(children.size() < 1) {
-            throw new ValidationException(resolveResourceUrl(), resolveLineNumber(), getNode(), "Query element missing query text.");
+            throw new ValidationException(this, "Query element missing query text.");
         }
 
         if(!(children.get(0) instanceof Text)) {
             String msg = "First child of <query> must be the query text,  not: " + children.get(0).getClass().getName();
-            throw new ValidationException(resolveResourceUrl(), resolveLineNumber(), getNode(), msg);
+            throw new ValidationException(this, msg);
         }
 
         // Verify all subsequent entries are Nodes
@@ -168,7 +168,7 @@ public final class QueryAction extends BaseAction {
             if(!(kid instanceof Node)) {
                 String msg = "Query node " + getNode().toString()
                         + " may not contain Strings after the first element. Invalid value: " + kid.getClass().getName();
-                throw new ValidationException(resolveResourceUrl(), resolveLineNumber(), getNode(), msg);
+                throw new ValidationException(this, msg);
             }
         }
 

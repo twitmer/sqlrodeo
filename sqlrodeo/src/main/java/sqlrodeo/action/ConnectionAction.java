@@ -35,7 +35,7 @@ public final class ConnectionAction extends BaseAction {
 
         DataSource ds = (DataSource)context.get(dataSourceId);
         if(ds == null) {
-            throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(), "Datasource not found: "
+            throw new ExecutionException(this, "Datasource not found: "
                     + dataSourceId);
         }
 
@@ -46,7 +46,7 @@ public final class ConnectionAction extends BaseAction {
             log.debug("Switching connection autocommit to " + autocommit);
             conn.setAutoCommit(autocommit);
             if(conn.getAutoCommit() != autocommit) {
-                throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(), "Could not turn autocommit to "
+                throw new ExecutionException(this, "Could not turn autocommit to "
                         + autocommit + " for connection " + id);
             }
             log.debug("connection " + id + " is autocommit?: " + conn.getAutoCommit());

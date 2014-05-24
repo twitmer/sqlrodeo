@@ -54,7 +54,7 @@ public final class IncludeAction extends BaseAction {
         try {
             new Parser().parse(relativeUrl);
         } catch(Exception e) {
-            throw new ValidationException(resolveResourceUrl(), resolveLineNumber(), getNode(), e);
+            throw new ValidationException(this, e);
         }
         log.debug("Done Parsing included URL: " + relativeUrl);
     }

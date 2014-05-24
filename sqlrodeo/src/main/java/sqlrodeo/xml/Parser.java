@@ -28,6 +28,37 @@ public final class Parser {
 
     private static final URL schemaURL = Parser.class.getResource("/SqlRodeoSchema.xsd");
 
+    public static void display(String indent, Node node) {
+        log.info(indent + "Node: " + new LessStupidNode(node).toString());
+        for(int i = 0; i < node.getChildNodes().getLength(); i++) {
+            Node childNode = node.getChildNodes().item(i);
+            display(indent + "  ", childNode);
+        }
+    }
+
+    /**
+     * Oh this annoys me: https://www.java.net/node/667186f
+     * 
+     * @param e
+     */
+    public static void removeWhitespaceNodes(Element e) {
+
+        NodeList children = e.getChildNodes();
+
+        // Go through the list backwards so we don't affect the element indices
+        // as we cull children.
+
+        for(int i = children.getLength() - 1; i >= 0; i--) {
+            Node child = children.item(i);
+            if(child instanceof Text && ((Text)child).getData().trim().length() == 0) {
+                // log.debug("Removed whitespace node");
+                e.removeChild(child);
+            } else if(child instanceof Element) {
+                removeWhitespaceNodes((Element)child);
+            }
+        }
+    }
+
     public Node parse(URL resourceURL) throws SAXException, IOException, ParserConfigurationException, DOMException,
             URISyntaxException {
 
@@ -84,37 +115,6 @@ public final class Parser {
         log.debug("Validating " + resourceURL);
         validator.validate(new StreamSource(resourceURL.getFile()));
         log.debug("Resource passed schema validation: " + resourceURL.toExternalForm());
-    }
-
-    /**
-     * Oh this annoys me: https://www.java.net/node/667186f
-     * 
-     * @param e
-     */
-    public static void removeWhitespaceNodes(Element e) {
-
-        NodeList children = e.getChildNodes();
-
-        // Go through the list backwards so we don't affect the element indices
-        // as we cull children.
-
-        for(int i = children.getLength() - 1; i >= 0; i--) {
-            Node child = children.item(i);
-            if(child instanceof Text && ((Text)child).getData().trim().length() == 0) {
-                // log.debug("Removed whitespace node");
-                e.removeChild(child);
-            } else if(child instanceof Element) {
-                removeWhitespaceNodes((Element)child);
-            }
-        }
-    }
-
-    public static void display(String indent, Node node) {
-        log.info(indent + "Node: " + new LessStupidNode(node).toString());
-        for(int i = 0; i < node.getChildNodes().getLength(); i++) {
-            Node childNode = node.getChildNodes().item(i);
-            display(indent + "  ", childNode);
-        }
     }
 
 }

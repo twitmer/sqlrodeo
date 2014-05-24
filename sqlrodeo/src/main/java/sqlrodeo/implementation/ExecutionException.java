@@ -1,21 +1,17 @@
 package sqlrodeo.implementation;
 
-import java.net.URL;
-
-import org.w3c.dom.Node;
+import sqlrodeo.IAction;
 
 @SuppressWarnings("serial")
 public class ExecutionException extends LocateableException {
 
-    public ExecutionException(URL url, long lineNumber, Node node, String message, Throwable throwable) {
-        super(url, lineNumber, node, message, throwable);
-    }
+	public ExecutionException(IAction action, Throwable throwable) {
+		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
+				.getNode(), throwable);
+	}
 
-    public ExecutionException(URL url, long lineNumber, Node node, Throwable throwable) {
-        super(url, lineNumber, node, throwable);
-    }
-
-    public ExecutionException(URL url, long lineNumber, Node node, String message) {
-        super(url, lineNumber, node, message);
-    }
+	public ExecutionException(IAction action, String message) {
+		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
+				.getNode(), message);
+	}
 }

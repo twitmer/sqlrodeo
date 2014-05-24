@@ -23,6 +23,10 @@ public final class BasicDatasourceAction extends BaseAction {
 
     private static final Logger log = LoggerFactory.getLogger(BasicDatasourceAction.class);
 
+    public BasicDatasourceAction(Node node) {
+        super(node);
+    }
+
     private DataSource buildBasicDatasource(Properties props) throws Exception {
         BasicDataSource bds = BasicDataSourceFactory.createDataSource(props);
         log.debug("DataSource: " + bds);
@@ -36,13 +40,9 @@ public final class BasicDatasourceAction extends BaseAction {
         if(jndiObject != null && jndiObject instanceof DataSource) {
             return (DataSource)jndiObject;
         } else {
-            throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(),
+            throw new ExecutionException(this,
                     "Cannot create connection with jndiName=" + jndiName);
         }
-    }
-
-    public BasicDatasourceAction(Node node) {
-        super(node);
     }
 
     @Override
@@ -78,7 +78,7 @@ public final class BasicDatasourceAction extends BaseAction {
         }
 
         if(dataSource == null) {
-            throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(), "Cannot create datasource from: "
+            throw new ExecutionException(this, "Cannot create datasource from: "
                     + toString());
         }
 

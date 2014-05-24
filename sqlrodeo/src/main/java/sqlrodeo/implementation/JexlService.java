@@ -16,13 +16,13 @@ final class JexlService {
 
     private static final Logger log = LoggerFactory.getLogger(JexlService.class);
 
-    private final JexlEngine jexl = new JexlEngine();
-
     /**
      * Variable is anything beginning with "${", ending with "}". Anything in between "{" and "}" is valid, except for another "{"
      * or "}".
      */
     public static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{[^{}]+\\}");
+
+    private final JexlEngine jexl = new JexlEngine();
 
     public JexlService() {
     }

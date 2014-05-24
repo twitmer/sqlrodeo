@@ -18,18 +18,18 @@ import sqlrodeo.ISqlRodeoContext;
 
 public final class SqlRodeoContext implements ISqlRodeoContext {
 
-    /** Logger */
-    private final Logger log = LoggerFactory.getLogger(SqlRodeoContext.class);
-
     /** Actions to implement upon closure. */
     private final Deque<IAction> closeActions = new ArrayDeque<>();
-
-    private final JexlService jexlService = new JexlService();
 
     /**
      * Delegate for Map<> implementation.
      */
     private final Map<String, Object> delegateMap = new HashMap<>();
+
+    private final JexlService jexlService = new JexlService();
+
+    /** Logger */
+    private final Logger log = LoggerFactory.getLogger(SqlRodeoContext.class);
 
     public SqlRodeoContext() {
         delegateMap.put("sysProps", System.getProperties());
@@ -51,22 +51,6 @@ public final class SqlRodeoContext implements ISqlRodeoContext {
         }
 
         executeCloseActions();
-    }
-
-    private void executeCloseActions() {
-        if(log.isDebugEnabled()) {
-            log.debug(String.format("executeCloseActions: closeActions".replaceAll(", ", "=%s, ") + "=%s", closeActions.size()));
-        }
-
-        while(closeActions.size() > 0) {
-            IAction closeAction = closeActions.pop();
-            log.debug("Running closeAction: " + closeAction);
-            try {
-                closeAction.execute(this);
-            } catch(Exception e) {
-                log.debug("Ignoring error when executing closeAction (" + closeAction + "): " + e.getMessage());
-            }
-        }
     }
 
     @Override
@@ -109,6 +93,32 @@ public final class SqlRodeoContext implements ISqlRodeoContext {
         } else if(!log.equals(other.log))
             return false;
         return true;
+    }
+
+    @Override
+    public Object evaluate(String jexlExpression) throws JexlEvaluationException {
+        return jexlService.evaluate(jexlExpression, this);
+    }
+
+    @Override
+    public boolean evaluateBoolean(String jexlExpression) throws JexlEvaluationException {
+        return jexlService.evaluateBoolean(jexlExpression, this);
+    }
+
+    private void executeCloseActions() {
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("executeCloseActions: closeActions".replaceAll(", ", "=%s, ") + "=%s", closeActions.size()));
+        }
+
+        while(closeActions.size() > 0) {
+            IAction closeAction = closeActions.pop();
+            log.debug("Running closeAction: " + closeAction);
+            try {
+                closeAction.execute(this);
+            } catch(Exception e) {
+                log.debug("Ignoring error when executing closeAction (" + closeAction + "): " + e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -204,15 +214,5 @@ public final class SqlRodeoContext implements ISqlRodeoContext {
     @Override
     public Collection<Object> values() {
         return delegateMap.values();
-    }
-
-    @Override
-    public Object evaluate(String jexlExpression) throws JexlEvaluationException {
-        return jexlService.evaluate(jexlExpression, this);
-    }
-
-    @Override
-    public boolean evaluateBoolean(String jexlExpression) throws JexlEvaluationException {
-        return jexlService.evaluateBoolean(jexlExpression, this);
     }
 }

@@ -24,7 +24,7 @@ public final class CommitAction extends BaseAction {
         String connectionId = getNode().getAttribute("id");
         Connection conn = (Connection)context.get(connectionId);
         if(conn == null) {
-            throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(), "Connection not found: "
+            throw new ExecutionException(this, "Connection not found: "
                     + connectionId);
         }
 

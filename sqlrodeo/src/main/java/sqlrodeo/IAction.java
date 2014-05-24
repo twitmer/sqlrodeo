@@ -1,23 +1,42 @@
 package sqlrodeo;
 
 import java.net.URL;
-import java.sql.Connection;
 
+import sqlrodeo.xml.LessStupidNode;
+
+/**
+ * Each IAction implements a specific element in the SqlRodeo XML file.
+ */
 public interface IAction {
 
-    void execute(ISqlRodeoContext context) throws Exception;
+	/**
+	 * Execute this action against the given context.
+	 * 
+	 * @param context ISqlRodeoContext to use during execution.
+	 * @throws Exception
+	 */
+	void execute(ISqlRodeoContext context) throws Exception;
 
-    Connection getConnection(ISqlRodeoContext context);
+	/**
+	 * 
+	 * @return
+	 */
+	LessStupidNode getNode();
 
-    boolean isIfConditionTrue(ISqlRodeoContext context);
+	boolean isIfConditionTrue(ISqlRodeoContext context);
 
-    long resolveLineNumber();
+	/**
+	 * Retrieve the line number in the SqlRodeo XML file for this action.
+	 * 
+	 * @return
+	 */
+	long resolveLineNumber();
 
-    URL resolveResourceUrl();
+	URL resolveResourceUrl();
 
-    /**
-     * Evaluate whether the given node contains valid attributes and values for the intended action.
-     */
-    void validate() throws Exception;
-
+	/**
+	 * Evaluate whether this action has sufficient and correct information from
+	 * the SqlRodeo XML file to perform the intended action.
+	 */
+	void validate() throws Exception;
 }

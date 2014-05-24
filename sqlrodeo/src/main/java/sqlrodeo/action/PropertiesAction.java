@@ -55,7 +55,7 @@ public final class PropertiesAction extends BaseAction {
                 context.put(key, props.getProperty(key));
             }
         } catch(IOException | IllegalArgumentException | JexlEvaluationException | URISyntaxException ex) {
-            throw new ExecutionException(resolveResourceUrl(), resolveLineNumber(), getNode(), ex);
+            throw new ExecutionException(this, ex);
 
         }
     }
@@ -70,7 +70,7 @@ public final class PropertiesAction extends BaseAction {
         List<Node> children = getNode().getChildNodesAsList();
 
         if(!StringUtils.isEmpty(href) && children.size() > 0) {
-            throw new ValidationException(resolveResourceUrl(), resolveLineNumber(), getNode(),
+            throw new ValidationException(this,
                     "Properties cannot have content and an href.");
         }
     }
