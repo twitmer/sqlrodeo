@@ -8,7 +8,7 @@
 				<element ref="tns:properties"></element>
 			</choice>
 			<choice minOccurs="1" maxOccurs="unbounded">
-				<element ref="tns:datasource"></element>
+				<element ref="tns:objectFactory"></element>
 				<element ref="tns:connection"></element>
 				<element ref="tns:close"></element>
 				<element ref="tns:query"></element>
@@ -25,7 +25,7 @@
 
 	<complexType name="query" mixed="true">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<element ref="tns:datasource"></element>
+			<element ref="tns:objectFactory"></element>
 			<element ref="tns:connection"></element>
 			<element ref="tns:close"></element>
 			<element ref="tns:query"></element>
@@ -54,7 +54,7 @@
 
 	<complexType name="sql" mixed="true">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<element ref="tns:datasource"></element>
+			<element ref="tns:objectFactory"></element>
 			<element ref="tns:connection"></element>
 			<element ref="tns:close"></element>
 			<element ref="tns:query"></element>
@@ -82,50 +82,15 @@
 		</simpleContent>
 	</complexType>
 
-	<complexType name="datasource">
-		<attribute name="href" type="string"></attribute>
-		<attribute name="id" type="tns:identifier" use="required"></attribute>
-		<attribute name="name" type="string"></attribute>
-		<attribute name="defaultAutoCommit" type="string"></attribute>
-		<attribute name="defaultReadOnly" type="string"></attribute>
-		<attribute name="defaultTransactionIsolation" type="string"></attribute>
-		<attribute name="defaultCatalog" type="string"></attribute>
-		<attribute name="cacheState" type="string"></attribute>
-		<attribute name="driverClassName" type="string"></attribute>
-		<attribute name="lifo" type="string"></attribute>
-		<attribute name="maxTotal" type="string"></attribute>
-		<attribute name="maxIdle" type="string"></attribute>
-		<attribute name="minIdle" type="string"></attribute>
-		<attribute name="initialSize" type="string"></attribute>
-		<attribute name="maxWaitMillis" type="string"></attribute>
-		<attribute name="testOnCreate" type="string"></attribute>
-		<attribute name="testOnBorrow" type="string"></attribute>
-		<attribute name="testOnReturn" type="string"></attribute>
-		<attribute name="timeBetweenEvictionRunsMillis" type="string"></attribute>
-		<attribute name="numTestsPerEvictionRun" type="string"></attribute>
-		<attribute name="minEvictableIdleTimeMillis" type="string"></attribute>
-		<attribute name="softMinEvictableIdleTimeMillis" type="string"></attribute>
-		<attribute name="evictionPolicyClassName" type="string"></attribute>
-		<attribute name="testWhileIdle" type="string"></attribute>
-		<attribute name="password" type="string"></attribute>
-		<attribute name="url" type="string"></attribute>
-		<attribute name="username" type="string"></attribute>
-		<attribute name="validationQuery" type="string"></attribute>
-		<attribute name="validationQueryTimeout" type="string"></attribute>
-		<attribute name="jmxName" type="string"></attribute>
-		<attribute name="connectionInitSqls" type="string"></attribute>
-		<attribute name="accessToUnderlyingConnectionAllowed" type="string"></attribute>
-		<attribute name="removeAbandonedOnBorrow" type="string"></attribute>
-		<attribute name="removeAbandonedOnMaintenance" type="string"></attribute>
-		<attribute name="removeAbandonedTimeout" type="string"></attribute>
-		<attribute name="logAbandoned" type="string"></attribute>
-		<attribute name="poolPreparedStatements" type="string"></attribute>
-		<attribute name="maxOpenPreparedStatements" type="string"></attribute>
-		<attribute name="connectionProperties" type="string"></attribute>
-		<attribute name="maxConnLifetimeMillis" type="string"></attribute>
-		<attribute name="rollbackOnReturn" type="string"></attribute>
-		<attribute name="enableAutoCommitOnReturn" type="string"></attribute>
-		<attribute name="defaultQueryTimeout" type="string"></attribute>
+	<complexType name="objectFactory">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="id" type="tns:identifier" use="required"></attribute>
+				<attribute name="name" type="string" use="optional"></attribute>
+				<attribute name="factoryClassName" type="string" use="required"></attribute>
+				<attribute name="objectClassName" type="string" use="required"></attribute>
+			</extension>
+		</simpleContent>
 	</complexType>
 
 	<complexType name="connection">
@@ -173,7 +138,7 @@
 	<element name="query" type="tns:query"></element>
 	<element name="sql" type="tns:sql"></element>
 	<element name="properties" type="tns:properties"></element>
-	<element name="datasource" type="tns:datasource"></element>
+	<element name="objectFactory" type="tns:objectFactory"></element>
 	<element name="connection" type="tns:connection"></element>
 	<element name="close" type="tns:close"></element>
 	<element name="include" type="tns:include"></element>

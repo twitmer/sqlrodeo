@@ -123,13 +123,6 @@ public final class QueryAction extends BaseAction {
 
 		// Run all the children waiting for this query row.
 		executeChildren(context);
-		// if(queryChildren.size() > 0) {
-		// TreeWalker walker = new TreeWalker();
-		// for(int i = 1; i <= queryChildren.size(); ++i) {
-		// log.debug("Running query child " + i + ": " + queryChildren.get(i));
-		// walker.execute(queryChildren.get(i), context);
-		// }
-		// }
 
 		log.debug("Done Running " + queryChildren.size() + " child actions");
 	}

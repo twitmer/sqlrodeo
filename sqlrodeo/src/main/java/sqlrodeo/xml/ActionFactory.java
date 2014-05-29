@@ -1,15 +1,17 @@
 package sqlrodeo.xml;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import sqlrodeo.IAction;
 import sqlrodeo.action.AssignAction;
-import sqlrodeo.action.BasicDatasourceAction;
 import sqlrodeo.action.CommitAction;
 import sqlrodeo.action.ConnectionAction;
 import sqlrodeo.action.DelegateAction;
 import sqlrodeo.action.ExitAction;
 import sqlrodeo.action.IncludeAction;
+import sqlrodeo.action.ObjectFactoryAction;
 import sqlrodeo.action.PropertiesAction;
 import sqlrodeo.action.QueryAction;
 import sqlrodeo.action.RollbackAction;
@@ -19,11 +21,16 @@ import sqlrodeo.implementation.ValidationException;
 
 final class ActionFactory {
 
+    private static final Logger log = LoggerFactory.getLogger(ActionFactory.class);
+
     public static IAction build(Element element) {
 
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("build: element".replaceAll(", ", "=%s, ") + "=%s", element));
+        }
         switch(element.getNodeName()) {
-            case "datasource":
-                return new BasicDatasourceAction(element);
+            case "objectFactory":
+                return new ObjectFactoryAction(element);
             case "connection":
                 return new ConnectionAction(element);
             case "commit":

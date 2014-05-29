@@ -77,28 +77,12 @@ public final class Parser {
         // TODO: Should I be passing Document instead of a root Element around?
         Element docRoot = document.getDocumentElement();
 
-        // Step 4. Remove useless whitespace nodes
+        // Step: Remove useless whitespace nodes
         log.info("Culling whitespace #text nodes from:" + resourceURL.toExternalForm());
         removeWhitespaceNodes(docRoot);
 
         log.info("Displaying Node tree for " + docRoot.getOwnerDocument().getDocumentURI());
         display("", docRoot);
-
-        // Step 4.5 Preserve the root resourceUrl in the root element as
-        // UserData.
-        // docRoot.setUserData("resourceUrl", resourceURL, null);
-
-        // Preserve the root resourceUrl in the root element as an attribute,
-        // since this gets propagated to the final tree.
-        // Attr attr = document.createAttribute("resourceUrl");
-        // attr.setNodeValue(resourceURL.toString());
-        // docRoot.getAttributes().setNamedItem(attr);
-
-        // Step 5. Traverse the generated tree for debug purposes.
-        // XmlNavigator.navigate("", document.getDocumentElement());
-
-        // Step 6. Walk tree to handle any <include> elements
-        // walkForInclude(docRoot);
 
         return docRoot;
     }

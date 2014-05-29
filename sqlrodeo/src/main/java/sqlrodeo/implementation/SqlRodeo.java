@@ -48,6 +48,8 @@ public final class SqlRodeo implements ISqlRodeo {
             // Validate and parse all XML, generating actions as we go.
             Node root = loadAndValidate(resourceUrl);
 
+            log.info("Done parsing");
+            
             // Populate the initial rodeocontext
             if(null != contextSeed) {
                 context.putAll(contextSeed);
@@ -55,6 +57,7 @@ public final class SqlRodeo implements ISqlRodeo {
 
             // Execute the action tree.
             IAction action = (IAction)root.getUserData("action");
+            log.info("Executing Action: " + action);
             try {
                 action.execute(context);
             } catch(ExitException e) {

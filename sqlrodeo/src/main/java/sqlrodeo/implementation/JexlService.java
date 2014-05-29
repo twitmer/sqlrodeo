@@ -28,9 +28,6 @@ final class JexlService {
     }
 
     public Object evaluate(String expressionString, IExecutionContext context) throws JexlEvaluationException {
-        if(log.isDebugEnabled()) {
-            log.debug(String.format("evaluate: expressionString".replaceAll(", ", "=%s, ") + "=%s", expressionString));
-        }
         try {
             // Create engine and context.
             JexlContext jc = new MapContext(context);
@@ -68,6 +65,11 @@ final class JexlService {
         if(log.isDebugEnabled()) {
             log.debug(String.format("substitute: source".replaceAll(", ", "=%s, ") + "=%s", source));
         }
+
+        if(source == null) {
+            return source;
+        }
+
         try {
             JexlContext jc = new MapContext(context);
 

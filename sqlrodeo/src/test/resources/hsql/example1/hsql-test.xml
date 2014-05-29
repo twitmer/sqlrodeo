@@ -9,12 +9,21 @@
 		c=3
 		d=4
 	</properties>
+	
 	<properties />
 
 	<!-- TODO: Meaningful to have more than 1 connection for a HSQLDB db? -->
-	<datasource id="myConnectionDatasource" name="${hsql_db_name}"
-		maxTotal="${hsql_db_maxTotal}" maxIdle="${hsql_db_maxIdle}" maxWaitMillis="${hsql_db_maxWaitMillis}"
-		url="${hsql_db_url}" username="${hsql_db_username}" password="${hsql_db_password}" />
+	<!-- <datasource id="myConnectionDatasource" name="${hsql_db_name}" -->
+	<!-- maxTotal="${hsql_db_maxTotal}" maxIdle="${hsql_db_maxIdle}" maxWaitMillis="${hsql_db_maxWaitMillis}" -->
+	<!-- url="${hsql_db_url}" username="${hsql_db_username}" password="${hsql_db_password}" 
+		/> -->
+
+	<objectFactory id="myConnectionDatasource" name="${hsql_db_name}"
+	factoryClassName="org.hsqldb.jdbc.JDBCDataSourceFactory" objectClassName="org.hsqldb.jdbc.JDBCDataSource">
+		database=${hsql_db_url}
+		user=${hsql_db_username}
+		password=${hsql_db_password}
+	</objectFactory>
 
 	<connection id="myConnection" datasource-id="myConnectionDatasource" />
 
@@ -62,7 +71,5 @@
 
 	<include if="release le 1" href="release1.xml" />
 	<commit id="myConnection" />
-
-	<exit></exit>
 
 </sql-rodeo>
