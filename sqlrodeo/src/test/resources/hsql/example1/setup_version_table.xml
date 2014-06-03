@@ -2,9 +2,9 @@
 <sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
 
-	<!-- Use HSQL-specific way to determine if the version table even exists. -->
-	<query connection-id="myConnection" rowcount="versionTableCount">
-		SELECT table_name FROM INFORMATION_SCHEMA.SYSTEM_TABLES
+	<!-- Use HSQL-specific way to determine if the version table exists. -->
+	<query connection-id="myConnection" publish-as="versionTableCount">
+		SELECT count(table_name) FROM INFORMATION_SCHEMA.SYSTEM_TABLES
 		WHERE table_name = 'SCHEMA_VERSION'
 	</query>
 
@@ -20,23 +20,5 @@
 
 		INSERT INTO SCHEMA_VERSION(major, minor, patch) VALUES (0, 0, 0);
 	</sql>
-
-	<!-- Determine the current DB version. This could be done in one fancy nested 
-		query, but I'm lazy and this is an easy way to do it. -->
-	<query connection-id="myConnection" publish-as="major">
-		SELECT MAX(major) FROM SCHEMA_VERSION
-	</query>
-
-	<query connection-id="myConnection" publish-as="minor">
-		SELECT MAX(minor) FROM SCHEMA_VERSION WHERE major = ${major}
-	</query>
-
-	<query connection-id="myConnection" publish-as="patch">
-		SELECT MAX(patch) FROM SCHEMA_VERSION
-		WHERE major = ${major} and minor = ${minor}
-	</query>
-
-	<!-- Use special JEXL syntax for instantiating the 'Version' object. -->
-	<assign id="schema_version" value="new('sqlrodeo.version.Version', '${major}.${minor}.${patch}' )" />
 
 </sql-rodeo>
