@@ -19,11 +19,9 @@ public final class AssignAction extends BaseAction {
     @Override
     public void execute(IExecutionContext context) {
 
-        String id = getNode().getAttribute("id");
-        String value = getNode().getAttribute("value");
-
-        // There's actually an if-condition. Process it now.
         try {
+            String id = getNode().getAttribute("id");
+            String value = context.substitute(getNode().getAttribute("value"));
             context.put(id, context.evaluate(value));
         } catch(JexlEvaluationException e) {
             throw new ExecutionException(this, e);
