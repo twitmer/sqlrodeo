@@ -101,6 +101,7 @@ public final class QueryAction extends BaseAction {
             return new String[0];
         }
 
+        // TODO: Split on whitespace and commas.
         String[] result = publishAs.split(",");
         for(int i = 0; i < result.length; ++i) {
             result[i] = result[i].trim();

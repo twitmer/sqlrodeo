@@ -52,7 +52,7 @@ public final class IncludeAction extends BaseAction {
         URL relativeUrl = resolveRelativeUrl(getNode().getAttribute("href"));
         log.debug("Parsing included URL: " + relativeUrl);
         try {
-            new Parser().parse(relativeUrl);
+            new Parser().parseAndValidate(relativeUrl);
         } catch(Exception e) {
             throw new ValidationException(this, e);
         }

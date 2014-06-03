@@ -66,9 +66,6 @@ public final class Parser {
             log.debug(String.format("parse: resourceURL".replaceAll(", ", "=%s, ") + "=%s", resourceURL));
         }
 
-        // Step: Validate the XML
-        validateAgainstSchema(resourceURL);
-
         // Step: Parse the document
         log.info("Parsing resourceURL:" + resourceURL.toExternalForm());
         final InputSource inputSource = new InputSource(resourceURL.toExternalForm());
@@ -85,6 +82,20 @@ public final class Parser {
         display("", docRoot);
 
         return docRoot;
+    }
+
+    public Node parseAndValidate(URL resourceURL) throws SAXException, IOException, ParserConfigurationException, DOMException,
+            URISyntaxException {
+
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("parseAndValidate: resourceURL".replaceAll(", ", "=%s, ") + "=%s", resourceURL));
+        }
+
+        // Step: Validate the XML
+        validateAgainstSchema(resourceURL);
+
+        // Step: Parse the document
+        return parse(resourceURL);
     }
 
     public void validateAgainstSchema(URL resourceURL) throws SAXException, IOException {

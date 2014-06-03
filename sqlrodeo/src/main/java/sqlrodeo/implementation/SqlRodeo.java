@@ -77,7 +77,7 @@ public final class SqlRodeo implements ISqlRodeo {
         }
 
         try {
-            return new Parser().parse(resourceUrl);
+            return new Parser().parseAndValidate(resourceUrl);
         } catch(SqlRodeoException e) {
             throw e;
         } catch(DOMException | SAXException | IOException | ParserConfigurationException | URISyntaxException e) {
