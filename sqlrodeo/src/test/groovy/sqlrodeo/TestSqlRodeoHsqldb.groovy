@@ -23,6 +23,10 @@ class TestSqlRodeoHsqldb extends spock.lang.Specification {
             sqlRodeo.execute(resourceUrl)
         } catch (Exception e) {
             e.printStackTrace()
+            throw e;
+        } catch (Throwable e) {
+            e.printStackTrace()
+            throw e;
         }
 
         then: "All is well."
