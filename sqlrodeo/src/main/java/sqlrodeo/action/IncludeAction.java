@@ -32,7 +32,7 @@ public final class IncludeAction extends BaseAction {
             log.debug("execute(): " + toString());
             // executeChildren(context);
 
-            URL relativeUrl = resolveRelativeUrl(getNode().getAttribute("href"));
+            URL relativeUrl = resolveRelativeUrl(context.substitute(getNode().getAttribute("href")));
 
             log.debug("Parsing included URL: " + relativeUrl);
             Node subRoot = new Parser().parse(relativeUrl);
