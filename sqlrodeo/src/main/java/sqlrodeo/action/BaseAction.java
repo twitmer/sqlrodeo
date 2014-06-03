@@ -58,7 +58,7 @@ public abstract class BaseAction implements IAction {
 				try {
 					if (action.isIfConditionTrue(context)) {
 						log.info("Executing action: " + action.toString()
-								+ " in " + action.resolveResourceUrl());
+								+ " in " + action.resolveResourceUrl() + ", line: " + action.resolveLineNumber());
 						action.execute(context);
 					} else {
 						log.info("Skipping action because 'if' condition is false: "
@@ -67,7 +67,7 @@ public abstract class BaseAction implements IAction {
 								+ action.resolveResourceUrl());
 					}
 				} catch (RuntimeException e) {
-					throw e;
+				    throw new ExecutionException(action, e);
 				} catch (Exception e) {
 					throw new ExecutionException(action, e);
 				}
