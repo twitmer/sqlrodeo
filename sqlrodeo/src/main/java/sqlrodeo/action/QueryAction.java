@@ -20,139 +20,138 @@ import sqlrodeo.util.StringUtils;
 
 public final class QueryAction extends BaseAction {
 
-	Logger log = LoggerFactory.getLogger(QueryAction.class);
+    Logger log = LoggerFactory.getLogger(QueryAction.class);
 
-	public QueryAction(Node node) {
-		super(node);
-	}
+    public QueryAction(Node node) {
+        super(node);
+    }
 
-	@Override
-	public void execute(IExecutionContext context) throws SQLException {
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("execute: node".replaceAll(", ", "=%s, ")
-					+ "=%s", toString()));
-		}
-		String queryString = getNode().getFirstChild().getNodeValue();
-		String[] publishAs = getPublishAs(getNode().getAttribute("publish-as"));
+    @Override
+    public void execute(IExecutionContext context) throws SQLException {
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("execute: node".replaceAll(", ", "=%s, ") + "=%s", toString()));
+        }
+        String queryString = getNode().getFirstChild().getNodeValue();
 
-		boolean substitute = true;
-		String substituteStr = getNode().getAttribute("substitute");
-		if (!StringUtils.isEmpty(substituteStr)) {
-			substitute = Boolean.parseBoolean(substituteStr);
-		}
+        String[] publishAs;
+        try {
+            publishAs = getPublishAs(context.substitute(getNode().getAttribute("publish-as")));
+        } catch(JexlEvaluationException e1) {
+            throw new ExecutionException(this, e1);
+        }
 
-		String rowNumId = getNode().getAttribute("rownum");
+        boolean substitute = true;
+        String substituteStr = getNode().getAttribute("substitute");
+        if(!StringUtils.isEmpty(substituteStr)) {
+            substitute = Boolean.parseBoolean(substituteStr);
+        }
 
-		List<Node> queryChildren = getNode().getChildNodesAsList();
-		queryChildren.remove(0);
+        String rowNumId = getNode().getAttribute("rownum");
 
-		// Variable substitution (i.e. '${release}' -> '1')
-		if (substitute) {
-			try {
-				queryString = context.substitute(queryString);
-			} catch (JexlEvaluationException e) {
-				throw new ExecutionException(this, e);
-			}
-		}
+        List<Node> queryChildren = getNode().getChildNodesAsList();
+        queryChildren.remove(0);
 
-		Connection connection = getConnection(context);
-		long resultCount = 0;
-		long rowCount = 0;
-		try (Statement stmt = connection.createStatement()) {
-			log.info("Executing statement: " + queryString);
-			final String qString = queryString;
-			try (ResultSet result = stmt.executeQuery(qString)) {
-				while (result.next()) {
-					publishRow(queryChildren, result, context, publishAs);
-					if (!StringUtils.isEmpty(rowNumId)) {
-						context.put(rowNumId, rowCount);
-					}
-					++resultCount;
-				}
-			}
-		}
+        // Variable substitution (i.e. '${release}' -> '1')
+        if(substitute) {
+            try {
+                queryString = context.substitute(queryString);
+            } catch(JexlEvaluationException e) {
+                throw new ExecutionException(this, e);
+            }
+        }
 
-		// Optionally publish the number of rows retrieved.
-		String rowCountId = getNode().getAttribute("rowcount");
-		if (!StringUtils.isEmpty(rowCountId)) {
-			context.put(rowCountId, resultCount);
-		}
-	}
+        Connection connection = getConnection(context);
+        long resultCount = 0;
+        long rowCount = 0;
+        try (Statement stmt = connection.createStatement()) {
+            log.info("Executing statement: " + queryString);
+            final String qString = queryString;
+            try (ResultSet result = stmt.executeQuery(qString)) {
+                while(result.next()) {
+                    publishRow(queryChildren, result, context, publishAs);
+                    if(!StringUtils.isEmpty(rowNumId)) {
+                        context.put(rowNumId, rowCount);
+                    }
+                    ++resultCount;
+                }
+            }
+        }
 
-	ResultSet executeQuery(Connection connection, String sqlText)
-			throws SQLException {
+        // Optionally publish the number of rows retrieved.
+        String rowCountId = getNode().getAttribute("rowcount");
+        if(!StringUtils.isEmpty(rowCountId)) {
+            context.put(rowCountId, resultCount);
+        }
+    }
 
-		ResultSet result = null;
+    ResultSet executeQuery(Connection connection, String sqlText) throws SQLException {
 
-		try (Statement stmt = connection.createStatement()) {
-			log.info("Executing statement: " + sqlText);
-			result = stmt.executeQuery(sqlText);
-		}
-		return result;
-	}
+        ResultSet result = null;
 
-	String[] getPublishAs(String publishAs) {
+        try (Statement stmt = connection.createStatement()) {
+            log.info("Executing statement: " + sqlText);
+            result = stmt.executeQuery(sqlText);
+        }
+        return result;
+    }
 
-		if (StringUtils.isEmpty(publishAs)) {
-			return new String[0];
-		}
+    String[] getPublishAs(String publishAs) {
 
-		String[] result = publishAs.split(",");
-		for (int i = 0; i < result.length; ++i) {
-			result[i] = result[i].trim();
-		}
+        if(StringUtils.isEmpty(publishAs)) {
+            return new String[0];
+        }
 
-		return result;
-	}
+        String[] result = publishAs.split(",");
+        for(int i = 0; i < result.length; ++i) {
+            result[i] = result[i].trim();
+        }
 
-	void publishRow(List<Node> queryChildren, ResultSet rs,
-			IExecutionContext context, String[] publishAs) throws SQLException {
+        return result;
+    }
 
-		// Publish each column of this result row to the context.
-		ResultSetMetaData md = rs.getMetaData();
-		int colCount = md.getColumnCount();
+    void publishRow(List<Node> queryChildren, ResultSet rs, IExecutionContext context, String[] publishAs) throws SQLException {
 
-		// TODO: Consider alternative of publishing row as a Map that must be
-		// queried instead, e.g. jexl="row[id] == 'Alan'"
-		// log.info("PublishAs: " + Arrays.asList(publishAs));
-		for (int i = 1; i <= colCount; ++i) {
-			if (publishAs.length >= i) {
-				context.put(publishAs[i - 1], rs.getObject(i));
-			}
-		}
+        // Publish each column of this result row to the context.
+        ResultSetMetaData md = rs.getMetaData();
+        int colCount = md.getColumnCount();
 
-		// Run all the children waiting for this query row.
-		executeChildren(context);
+        // TODO: Consider alternative of publishing row as a Map that must be
+        // queried instead, e.g. jexl="row[id] == 'Alan'"
+        // log.info("PublishAs: " + Arrays.asList(publishAs));
+        for(int i = 1; i <= colCount; ++i) {
+            if(publishAs.length >= i) {
+                context.put(publishAs[i - 1], rs.getObject(i));
+            }
+        }
 
-		log.debug("Done Running " + queryChildren.size() + " child actions");
-	}
+        // Run all the children waiting for this query row.
+        executeChildren(context);
 
-	@Override
-	public void validate() {
-		List<Node> children = getNode().getChildNodesAsList();
+        log.debug("Done Running " + queryChildren.size() + " child actions");
+    }
 
-		if (children.size() < 1) {
-			throw new ValidationException(this,
-					"Query element missing query text.");
-		}
+    @Override
+    public void validate() {
+        List<Node> children = getNode().getChildNodesAsList();
 
-		if (!(children.get(0) instanceof Text)) {
-			String msg = "First child of <query> must be the query text,  not: "
-					+ children.get(0).getClass().getName();
-			throw new ValidationException(this, msg);
-		}
+        if(children.size() < 1) {
+            throw new ValidationException(this, "Query element missing query text.");
+        }
 
-		// Verify all subsequent entries are Nodes
-		for (int i = 1; i < children.size(); ++i) {
-			Object kid = children.get(i);
-			if (!(kid instanceof Node)) {
-				String msg = "Query node "
-						+ getNode().toString()
-						+ " may not contain Strings after the first element. Invalid value: "
-						+ kid.getClass().getName();
-				throw new ValidationException(this, msg);
-			}
-		}
+        if(!(children.get(0) instanceof Text)) {
+            String msg = "First child of <query> must be the query text,  not: " + children.get(0).getClass().getName();
+            throw new ValidationException(this, msg);
+        }
 
-	}
+        // Verify all subsequent entries are Nodes
+        for(int i = 1; i < children.size(); ++i) {
+            Object kid = children.get(i);
+            if(!(kid instanceof Node)) {
+                String msg = "Query node " + getNode().toString()
+                        + " may not contain Strings after the first element. Invalid value: " + kid.getClass().getName();
+                throw new ValidationException(this, msg);
+            }
+        }
+
+    }
 }
