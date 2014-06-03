@@ -67,7 +67,7 @@ public final class SqlRodeo implements ISqlRodeo {
             }
             return context;
         } catch(Exception e) {
-            throw new SqlRodeoException("Failed to execute document at " + resourceUrl, e);
+            throw new SqlRodeoException("Failed to execute document at " + resourceUrl + " because: " + e.getMessage(), e);
         }
     }
 
