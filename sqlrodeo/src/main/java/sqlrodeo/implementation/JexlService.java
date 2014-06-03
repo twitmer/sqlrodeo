@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import sqlrodeo.IExecutionContext;
 
-final class JexlService {
+final public class JexlService {
 
     private static final Logger log = LoggerFactory.getLogger(JexlService.class);
 
@@ -28,6 +28,9 @@ final class JexlService {
     }
 
     public Object evaluate(String expressionString, IExecutionContext context) throws JexlEvaluationException {
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("evaluate: expressionString".replaceAll(", ", "=%s, ") + "=%s", expressionString));
+        }
         try {
             // Create engine and context.
             JexlContext jc = new MapContext(context);
@@ -41,7 +44,7 @@ final class JexlService {
             }
             return o;
         } catch(JexlException je) {
-            throw new JexlEvaluationException(je);
+            throw new JexlEvaluationException("Failed to evaluate: " + expressionString, je);
         }
     }
 
