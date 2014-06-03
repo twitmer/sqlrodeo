@@ -5,12 +5,10 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sqlrodeo.implementation.SqlRodeo;
-
 // NOTE: Cannot use 'lt' 'le', 'gt', 'ge' as method names, because JEXL assumes it means operators, not methods.
 public class Version implements Comparable<Version> {
 
-    private Logger log = LoggerFactory.getLogger(SqlRodeo.class);
+    private Logger log = LoggerFactory.getLogger(Version.class);
 
     private final Integer[] parts;
 
@@ -25,14 +23,6 @@ public class Version implements Comparable<Version> {
         }
 
         this.parts = args;
-    }
-
-    public static Version build(Integer... args) {
-        return new Version(args);
-    }
-
-    public static Version build(String dottedString) {
-        return new Version(dottedString);
     }
 
     public Version(String dottedString) {
