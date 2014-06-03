@@ -19,8 +19,27 @@
 				<element ref="tns:commit"></element>
 				<element ref="tns:rollback"></element>
 				<element ref="tns:exit"></element>
+				<element ref="tns:if"></element>
 			</choice>
 		</sequence>
+	</complexType>
+
+	<complexType name="if">
+		<choice minOccurs="1" maxOccurs="unbounded">
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:connection"></element>
+			<element ref="tns:close"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:assign"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:delegate"></element>
+			<element ref="tns:commit"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:exit"></element>
+			<element ref="tns:if"></element>
+		</choice>
+		<attribute name="condition" type="string" use="required"></attribute>
 	</complexType>
 
 	<complexType name="query" mixed="true">
@@ -135,6 +154,7 @@
 	<complexType name="exit"></complexType>
 
 	<element name="sql-rodeo" type="tns:sql-rodeo"></element>
+	<element name="if" type="tns:if"></element>
 	<element name="query" type="tns:query"></element>
 	<element name="sql" type="tns:sql"></element>
 	<element name="properties" type="tns:properties"></element>

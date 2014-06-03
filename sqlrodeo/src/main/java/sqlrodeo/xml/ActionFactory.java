@@ -10,6 +10,7 @@ import sqlrodeo.action.CommitAction;
 import sqlrodeo.action.ConnectionAction;
 import sqlrodeo.action.DelegateAction;
 import sqlrodeo.action.ExitAction;
+import sqlrodeo.action.IfAction;
 import sqlrodeo.action.IncludeAction;
 import sqlrodeo.action.ObjectFactoryAction;
 import sqlrodeo.action.PropertiesAction;
@@ -31,6 +32,8 @@ final class ActionFactory {
         switch(element.getNodeName()) {
             case "objectFactory":
                 return new ObjectFactoryAction(element);
+            case "if":
+                return new IfAction(element);
             case "connection":
                 return new ConnectionAction(element);
             case "commit":
