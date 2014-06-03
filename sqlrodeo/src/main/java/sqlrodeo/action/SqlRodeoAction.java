@@ -16,12 +16,8 @@ public final class SqlRodeoAction extends BaseAction {
 
     @Override
     public void execute(IExecutionContext context) {
-        // if(isIfConditionTrue(context)) {
         log.debug("execute(): " + toString());
         executeChildren(context);
-        // } else {
-        // log.debug("Not running, because if-condition is false: " + toString());
-        // }
     }
 
     @Override
