@@ -5,9 +5,9 @@ import java.net.URL;
 import sqlrodeo.xml.NodeWrapper;
 
 /**
- * Each IAction implements a specific element in the SqlRodeo XML file.
+ * Each Action implements a specific element in the SqlRodeo XML file.
  */
-public interface IAction {
+public interface Action {
 
 	/**
 	 * Execute this action against the given context.

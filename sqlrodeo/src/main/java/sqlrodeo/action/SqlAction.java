@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.ValidationException;
@@ -82,7 +82,7 @@ public final class SqlAction extends BaseAction {
 					}
 				} else if (child instanceof Element) {
 
-					IAction childAction = (IAction) child.getUserData("action");
+					Action childAction = (Action) child.getUserData("action");
 					try {
 						childAction.execute(context);
 					} catch (RuntimeException e) {

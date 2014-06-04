@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.action.AssignAction;
 import sqlrodeo.action.CommitAction;
 import sqlrodeo.action.ConnectionAction;
@@ -24,7 +24,7 @@ final class ActionFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ActionFactory.class);
 
-    public static IAction build(Element element) {
+    public static Action build(Element element) {
 
         if(log.isDebugEnabled()) {
             log.debug(String.format("build: element".replaceAll(", ", "=%s, ") + "=%s", element));

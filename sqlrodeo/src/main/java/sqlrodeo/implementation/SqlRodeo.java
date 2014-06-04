@@ -13,7 +13,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.ISqlRodeo;
 import sqlrodeo.IExecutionContext;
 import sqlrodeo.SqlRodeoException;
@@ -56,7 +56,7 @@ public final class SqlRodeo implements ISqlRodeo {
             }
 
             // Execute the action tree.
-            IAction action = (IAction)root.getUserData("action");
+            Action action = (Action)root.getUserData("action");
             log.info("Executing Action: " + action);
             try {
                 action.execute(context);

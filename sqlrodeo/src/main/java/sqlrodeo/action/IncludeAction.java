@@ -12,7 +12,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ValidationException;
 import sqlrodeo.xml.Parser;
@@ -39,7 +39,7 @@ public final class IncludeAction extends BaseAction {
             log.debug("Done Parsing included URL: " + relativeUrl);
 
             log.debug("Executing included URL: " + relativeUrl);
-            IAction action = (IAction)subRoot.getUserData("action");
+            Action action = (Action)subRoot.getUserData("action");
             // TODO: Check for NPE.
             action.execute(context);
         } else {

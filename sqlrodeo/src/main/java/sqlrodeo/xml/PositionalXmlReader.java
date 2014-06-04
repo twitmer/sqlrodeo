@@ -23,7 +23,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.SqlRodeoException;
 import sqlrodeo.implementation.ValidationException;
 
@@ -95,7 +95,7 @@ class PositionalXmlReader {
                 }
 
                 // Create and validate action that corresponds to this element.
-                IAction action = ActionFactory.build(closedEl);
+                Action action = ActionFactory.build(closedEl);
                 closedEl.setUserData("action", action, null);
                 try {
                     log.debug("Validating: " + action);

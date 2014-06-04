@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.IExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
@@ -19,7 +19,7 @@ import sqlrodeo.implementation.NotFoundException;
 import sqlrodeo.util.StringUtils;
 import sqlrodeo.xml.NodeWrapper;
 
-public abstract class BaseAction implements IAction {
+public abstract class BaseAction implements Action {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseAction.class);
 
@@ -52,7 +52,7 @@ public abstract class BaseAction implements IAction {
 			// log.debug("NODE: " + kids.get(i).getClass().getName());
 			// com.sun.org.apache.xerces.internal.dom.DeferredElementImpl impl;
 			if (kids.get(i) instanceof Element) {
-				IAction action = (IAction) kid.getUserData("action");
+				Action action = (Action) kid.getUserData("action");
 				log.debug("Action is " + action + " for node: " + kid);
 				// TODO: Check for NPE.
 				try {

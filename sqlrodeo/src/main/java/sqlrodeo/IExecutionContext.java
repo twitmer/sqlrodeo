@@ -56,7 +56,7 @@ public interface IExecutionContext extends Map<String, Object>, AutoCloseable {
 	 * @param closeAction
 	 *            Action to execute when this context is closed.
 	 */
-	void pushCloseAction(IAction closeAction);
+	void pushCloseAction(Action closeAction);
 
 	/**
 	 * Substitute variable phrases in the given expression. Example: if the

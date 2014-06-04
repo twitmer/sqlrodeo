@@ -13,13 +13,13 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 import sqlrodeo.IExecutionContext;
 
 public final class ExecutionContext implements IExecutionContext {
 
     /** Actions to implement upon closure. */
-    private final Deque<IAction> closeActions = new ArrayDeque<>();
+    private final Deque<Action> closeActions = new ArrayDeque<>();
 
     /**
      * Delegate for Map<> implementation.
@@ -111,7 +111,7 @@ public final class ExecutionContext implements IExecutionContext {
         }
 
         while(closeActions.size() > 0) {
-            IAction closeAction = closeActions.pop();
+            Action closeAction = closeActions.pop();
             log.debug("Running closeAction: " + closeAction);
             try {
                 closeAction.execute(this);
@@ -179,7 +179,7 @@ public final class ExecutionContext implements IExecutionContext {
      * @param closeAction Action to execute when this context is closed.
      */
     @Override
-    public void pushCloseAction(IAction closeAction) {
+    public void pushCloseAction(Action closeAction) {
         closeActions.push(closeAction);
     }
 

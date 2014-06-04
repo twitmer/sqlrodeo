@@ -4,17 +4,17 @@ import java.net.URL;
 
 import org.w3c.dom.Node;
 
-import sqlrodeo.IAction;
+import sqlrodeo.Action;
 
 @SuppressWarnings("serial")
 public class ValidationException extends LocateableException {
 
-	public ValidationException(IAction action, String message) {
+	public ValidationException(Action action, String message) {
 		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
 				.getNode(), message);
 	}
 
-	public ValidationException(IAction action, Throwable throwable) {
+	public ValidationException(Action action, Throwable throwable) {
 		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
 				.getNode(), throwable);
 	}
