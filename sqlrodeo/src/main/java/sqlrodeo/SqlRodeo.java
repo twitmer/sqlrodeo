@@ -1,4 +1,4 @@
-package sqlrodeo.implementation;
+package sqlrodeo;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,31 +13,46 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import sqlrodeo.Action;
-import sqlrodeo.ISqlRodeo;
-import sqlrodeo.IExecutionContext;
-import sqlrodeo.SqlRodeoException;
 import sqlrodeo.action.ExitException;
+import sqlrodeo.implementation.ExecutionContext;
 import sqlrodeo.xml.Parser;
 
-public final class SqlRodeo implements ISqlRodeo {
+/**
+ * Main entrance to the SqlRodeo library. Implementations of this class can
+ * validate and execute SqlRodeo XML documents.
+ */
+
+public final class SqlRodeo  {
 
     private Logger log = LoggerFactory.getLogger(SqlRodeo.class);
 
-    /*
-     * (non-Javadoc)
-     * @see sqlrodeo.ISqlRodeo#execute(java.net.URL)
-     */
-    @Override
+	/**
+	 * Execute the XML document at the given URL, including any child documents
+	 * referenced via include actions.
+	 * 
+	 * @param resourceUrl
+	 *            URL referencing XML document to execute.
+	 * @return context after processing is complete.
+	 * @throws SqlRodeoException
+	 *             Any error.
+	 */
     public IExecutionContext execute(URL resourceUrl) {
         return execute(resourceUrl, null);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see sqlrodeo.ISqlRodeo#execute(java.net.URL, java.util.Map)
-     */
-    @Override
+	/**
+	 * Execute the XML document at the given URL, including any child documents
+	 * referenced via include actions.
+	 * 
+	 * @param resourceUrl
+	 *            URL referencing XML document to execute.
+	 * @param contextSeed
+	 *            Map of items to add to the context before executing the given
+	 *            XML document.
+	 * @return context after processing is complete.
+	 * @throws SqlRodeoException
+	 *             Any error.
+	 */
     public IExecutionContext execute(URL resourceUrl, Map<String, Object> contextSeed) {
         if(log.isDebugEnabled()) {
             log.debug(String.format("execute: resourceUrl, contextSeed".replaceAll(", ", "=%s, ") + "=%s", resourceUrl, contextSeed));
@@ -85,11 +100,15 @@ public final class SqlRodeo implements ISqlRodeo {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see sqlrodeo.ISqlRodeo#validate(java.net.URL)
-     */
-    @Override
+	/**
+	 * Validate the XML document at the given URL, including any child documents
+	 * referenced via include actions.
+	 * 
+	 * @param resourceUrl
+	 *            URL referencing XML document to validate.
+	 * @throws SqlRodeoException
+	 *             Any error.
+	 */
     public void validate(URL resourceUrl) {
         if(log.isDebugEnabled()) {
             log.debug(String.format("validate: resourceUrl".replaceAll(", ", "=%s, ") + "=%s", resourceUrl));
