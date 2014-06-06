@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- Use HSQL-specific way to determine if the version table exists. -->
+	<query connection-id="myConnection" publish-as="versionTableCount">
+		SELECT count(table_name) FROM INFORMATION_SCHEMA.SYSTEM_TABLES
+		WHERE table_name = 'SCHEMA_VERSION'
+	</query>
+
+	<!-- If version table doesn't exist, create it now. Initialize it to version '0.0.0' -->
+	<sql if="versionTableCount == 0" connection-id="myConnection">
+		CREATE TABLE SCHEMA_VERSION (
+			major INT NOT NULL,
+			minor INT NOT NULL,
+			patch INT NOT NULL,
+			created TIMESTAMP DEFAULT SYSDATE NOT NULL,
+			PRIMARY KEY (major, minor, patch)
+		);
+
+		INSERT INTO SCHEMA_VERSION(major, minor, patch) VALUES (0, 0, 0);
+	</sql>
+
+</sql-rodeo>

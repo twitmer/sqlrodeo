@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/SqlRodeoSchema"
+	elementFormDefault="unqualified" xmlns:tns="http://www.example.org/SqlRodeoSchema">
+
+	<complexType name="sql-rodeo">
+		<sequence>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element ref="tns:properties"></element>
+			</choice>
+			<choice minOccurs="1" maxOccurs="unbounded">
+				<element ref="tns:objectFactory"></element>
+				<element ref="tns:connection"></element>
+				<element ref="tns:close"></element>
+				<element ref="tns:query"></element>
+				<element ref="tns:assign"></element>
+				<element ref="tns:sql"></element>
+				<element ref="tns:include"></element>
+				<element ref="tns:delegate"></element>
+				<element ref="tns:commit"></element>
+				<element ref="tns:rollback"></element>
+				<element ref="tns:exit"></element>
+				<element ref="tns:if"></element>
+			</choice>
+		</sequence>
+	</complexType>
+
+	<complexType name="if">
+		<choice minOccurs="1" maxOccurs="unbounded">
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:connection"></element>
+			<element ref="tns:close"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:assign"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:delegate"></element>
+			<element ref="tns:commit"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:exit"></element>
+			<element ref="tns:if"></element>
+		</choice>
+		<attribute name="condition" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="query" mixed="true">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:connection"></element>
+			<element ref="tns:close"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:assign"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:delegate"></element>
+			<element ref="tns:commit"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:exit"></element>
+		</choice>
+		<attribute name="if" type="string"></attribute>
+		<attribute name="connection-id" type="string"></attribute>
+		<attribute name="publish-as" type="string"></attribute>
+		<attribute name="rownum" type="string"></attribute>
+		<attribute name="rowcount" type="string"></attribute>
+		<attribute name="substitute" type="boolean" default="true"
+			use="optional"></attribute>
+	</complexType>
+
+	<simpleType name="identifier">
+		<restriction base="string">
+			<pattern value="[A-Za-z_]([A-Za-z_0-9])*"></pattern>
+		</restriction>
+	</simpleType>
+
+	<complexType name="sql" mixed="true">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:connection"></element>
+			<element ref="tns:close"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:assign"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:delegate"></element>
+			<element ref="tns:commit"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:exit"></element>
+		</choice>
+		<attribute name="if" type="string"></attribute>
+		<attribute name="connection-id" type="string"></attribute>
+		<attribute name="href" type="string"></attribute>
+		<attribute name="substitute" type="boolean" default="true"></attribute>
+		<attribute name="oneStatement" type="boolean" default="false"></attribute>
+	</complexType>
+
+	<complexType name="properties">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="if" type="string"></attribute>
+				<attribute name="href" type="string"></attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<complexType name="objectFactory">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="id" type="tns:identifier" use="required"></attribute>
+				<attribute name="name" type="string" use="optional"></attribute>
+				<attribute name="factoryClassName" type="string" use="required"></attribute>
+				<attribute name="objectClassName" type="string" use="required"></attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<complexType name="connection">
+		<attribute name="id" type="tns:identifier" use="required"></attribute>
+		<attribute name="datasource-id" type="tns:identifier" use="required"></attribute>
+		<attribute name="autocommit" type="boolean" default="true"></attribute>
+	</complexType>
+
+	<complexType name="close">
+		<attribute name="id" type="tns:identifier" use="required"></attribute>
+	</complexType>
+
+	<complexType name="include">
+		<attribute name="if" type="string"></attribute>
+		<attribute name="href" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="delegate">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="if" type="string"></attribute>
+				<attribute name="id" type="tns:identifier" use="required"></attribute>
+				<attribute name="delegate-class" type="string"></attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<complexType name="commit">
+		<attribute name="id" type="tns:identifier" use="required"></attribute>
+	</complexType>
+
+	<complexType name="rollback">
+		<attribute name="id" type="tns:identifier" use="required"></attribute>
+	</complexType>
+
+	<complexType name="assign">
+		<attribute name="if" type="string"></attribute>
+		<attribute name="id" type="tns:identifier" use="required"></attribute>
+		<attribute name="value" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="exit"></complexType>
+
+	<element name="sql-rodeo" type="tns:sql-rodeo"></element>
+	<element name="if" type="tns:if"></element>
+	<element name="query" type="tns:query"></element>
+	<element name="sql" type="tns:sql"></element>
+	<element name="properties" type="tns:properties"></element>
+	<element name="objectFactory" type="tns:objectFactory"></element>
+	<element name="connection" type="tns:connection"></element>
+	<element name="close" type="tns:close"></element>
+	<element name="include" type="tns:include"></element>
+	<element name="delegate" type="tns:delegate"></element>
+	<element name="commit" type="tns:commit"></element>
+	<element name="rollback" type="tns:rollback"></element>
+	<element name="assign" type="tns:assign"></element>
+
+	<element name="exit" type="tns:exit"></element>
+
+</schema>

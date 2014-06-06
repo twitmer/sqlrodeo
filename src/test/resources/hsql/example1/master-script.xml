@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- Read property files -->
+	<properties href="datasource.properties" />
+
+	<!-- Define our datasource and 1 connection. -->
+	<objectFactory id="myConnectionDatasource" name="${hsql_db_name}"
+		factoryClassName="org.hsqldb.jdbc.JDBCDataSourceFactory"
+		objectClassName="org.hsqldb.jdbc.JDBCDataSource">
+		database=${hsql_db_url}
+		user=${hsql_db_username}
+		password=${hsql_db_password}
+	</objectFactory>
+
+	<connection id="myConnection" datasource-id="myConnectionDatasource" />
+
+	<!-- Determine current schema version. This will create the 
+	'schema_version' table if it doesn't already exist. -->
+	<include href="setup_version_table.xml" />
+
+	<!-- Determine the current DB version. -->
+	<query connection-id="myConnection" publish-as="major, minor, patch">
+		SELECT major, minor, patch FROM SCHEMA_VERSION
+		ORDER BY major desc, minor desc, patch desc
+		LIMIT 1
+
+		<!-- Use JEXL syntax for instantiating the 'Version' object. -->
+		<assign id="schema_version" value="new('sqlrodeo.version.Version', '${major}.${minor}.${patch}' )" />
+	</query>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<include if='schema_version.lessThan( "2.0.0" )' href="1.x/schema_1.x.xml" />
+
+	<!-- Execute all upgrades for the 2.x line of schema changes -->
+	<include if='schema_version.lessThan( "3.0.0" )' href="2.x/schema_2.x.xml" />
+
+</sql-rodeo>

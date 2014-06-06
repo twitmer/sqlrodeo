@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns="http://www.example.org/SqlRodeoSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- Sequences -->
+	<sql href="ddl/APP_USER_SEQ.sql" />
+	<sql href="ddl/DEPARTMENT_SEQ.sql" />
+
+	<!-- Tables -->
+	<sql href="ddl/APP_USER.sql" />
+	<sql href="ddl/DEPARTMENT.sql" />
+
+	<!-- TODO: Initial data (dml) -->
+
+	<sql>
+		INSERT INTO SCHEMA_VERSION(major, minor, patch) VALUES (1, 0, 0);
+	</sql>
+
+	<!-- Not needed, but what the hey? -->
+	<commit id="myConnection" />
+
+</sql-rodeo>
