@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 
 public final class ExitAction extends BaseAction {
 
@@ -15,7 +15,7 @@ public final class ExitAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context) {
+    public void execute(ExecutionContext context) {
 	throw new ExitException();
     }
 

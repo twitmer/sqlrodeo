@@ -22,6 +22,8 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import sqlrodeo.SqlRodeoException;
+
 public final class Parser {
 
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
@@ -123,7 +125,9 @@ public final class Parser {
 	Schema schema = sf.newSchema(schemaURL);
 	Validator validator = schema.newValidator();
 	log.debug("Validating " + resourceURL);
-	validator.validate(new StreamSource(resourceURL.getFile()));
+
+	StreamSource source = new StreamSource(resourceURL.getFile());
+	validator.validate(source);
 	log.debug("Resource passed schema validation: "
 		+ resourceURL.toExternalForm());
     }

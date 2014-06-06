@@ -16,7 +16,7 @@ public interface Action {
      *            Context to use during execution.
      * @throws Exception
      */
-    void execute(IExecutionContext context) throws Exception;
+    void execute(ExecutionContext context) throws Exception;
 
     /**
      * Retrieve the XML node for which this action was created.
@@ -25,7 +25,7 @@ public interface Action {
      */
     NodeWrapper getNode();
 
-    boolean isIfConditionTrue(IExecutionContext context);
+    boolean isIfConditionTrue(ExecutionContext context);
 
     /**
      * Retrieve the line number in the SqlRodeo XML file for this action.

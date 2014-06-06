@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- Import datasource definition. -->
+	<properties href="datasource.properties" />
+
+	<!-- Define our datasource and 1 connection. -->
+	<objectFactory id="myDataSource" factoryClassName="${db_factoryClassName}"
+		objectClassName="${db_objectClassName}">
+		database=${db_url}
+		user=${db_username}
+		password=${db_password}
+	</objectFactory>
+
+	<!-- Check out a connection from our DataSource. -->
+	<connection id="myConnection" datasource-id="myDataSource" />
+
+	<!-- Determine current schema version. This will create the 'schema_version' 
+		table if it doesn't already exist. -->
+	<!-- Use HSQL-specific way to determine if the version table exists. -->
+	<query connection-id="myConnection" publish-as="versionTableCount">
+		SELECT count(table_name) FROM INFORMATION_SCHEMA.SYSTEM_TABLES
+		WHERE table_name = 'SCHEMA_VERSION'
+	</query>
+
+	<!-- Initialize schema_version table, if it doesn't yet exist. -->
+	<sql if="versionTableCount == 0" connection-id="myConnection">
+		CREATE TABLE SCHEMA_VERSION (
+			version INT NOT NULL,
+			PRIMARY KEY (version)
+		);
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 0 );
+	</sql>
+
+	<!-- Determine the current DB version. -->
+	<query connection-id="myConnection" publish-as="version">
+		SELECT MAX(version) FROM SCHEMA_VERSION
+	</query>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<sql if="version lt 1">
+		CREATE TABLE USER
+		(
+  			ID INTEGER    NOT NULL,
+  			NAME VARCHAR(70)  NOT NULL
+		);
+
+		CREATE TABLE DEPARTMENT
+		(
+  			ID INTEGER    NOT NULL,
+  			NAME VARCHAR(70)  NOT NULL
+		);
+		
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 1 );
+	</sql>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<sql if="version lt 2">
+		ALTER TABLE USER ADD COLUMN EMAIL VARCHAR(70);
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 2 );
+	</sql>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<sql if="version lt 3">
+		ALTER TABLE USER ADD COLUMN NICKNAME VARCHAR(20);
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 3 );
+	</sql>
+
+</sql-rodeo>

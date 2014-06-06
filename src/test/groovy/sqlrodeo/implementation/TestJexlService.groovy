@@ -3,7 +3,7 @@ package sqlrodeo.implementation;
 import java.util.regex.Matcher
 
 import spock.lang.Specification
-import sqlrodeo.IExecutionContext
+import sqlrodeo.ExecutionContext
 
 public class TestJexlService extends Specification {
 

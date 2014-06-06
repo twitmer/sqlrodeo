@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.ValidationException;
@@ -27,7 +27,7 @@ public final class QueryAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context) throws SQLException {
+    public void execute(ExecutionContext context) throws SQLException {
 	if (log.isDebugEnabled()) {
 	    log.debug(String.format("execute: node".replaceAll(", ", "=%s, ")
 		    + "=%s", toString()));
@@ -114,7 +114,7 @@ public final class QueryAction extends BaseAction {
     }
 
     void publishRow(List<Node> queryChildren, ResultSet rs,
-	    IExecutionContext context, String[] publishAs) throws SQLException {
+	    ExecutionContext context, String[] publishAs) throws SQLException {
 
 	// Publish each column of this result row to the context.
 	ResultSetMetaData md = rs.getMetaData();

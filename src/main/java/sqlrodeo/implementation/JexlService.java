@@ -10,7 +10,7 @@ import org.apache.commons.jexl2.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 
 final public class JexlService {
 
@@ -29,7 +29,7 @@ final public class JexlService {
     public JexlService() {
     }
 
-    public Object evaluate(String expressionString, IExecutionContext context)
+    public Object evaluate(String expressionString, ExecutionContext context)
 	    throws JexlEvaluationException {
 	if (log.isDebugEnabled()) {
 	    log.debug(String.format(
@@ -57,7 +57,7 @@ final public class JexlService {
     }
 
     public boolean evaluateBoolean(String expressionString,
-	    IExecutionContext context) throws JexlEvaluationException {
+	    ExecutionContext context) throws JexlEvaluationException {
 	if (log.isDebugEnabled()) {
 	    log.debug(String.format(
 		    "evaluateBoolean: expressionString".replaceAll(", ",
@@ -76,7 +76,7 @@ final public class JexlService {
 	}
     }
 
-    public String substitute(String source, IExecutionContext context)
+    public String substitute(String source, ExecutionContext context)
 	    throws JexlEvaluationException {
 	if (log.isDebugEnabled()) {
 	    log.debug(String.format(

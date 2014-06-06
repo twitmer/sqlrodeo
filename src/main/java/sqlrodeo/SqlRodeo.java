@@ -14,14 +14,13 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import sqlrodeo.action.ExitException;
-import sqlrodeo.implementation.ExecutionContext;
+import sqlrodeo.implementation.ExecutionContextImplementation;
 import sqlrodeo.xml.Parser;
 
 /**
  * Main entrance to the SqlRodeo library. Implementations of this class can
  * validate and execute SqlRodeo XML documents.
  */
-
 public final class SqlRodeo {
 
     private Logger log = LoggerFactory.getLogger(SqlRodeo.class);
@@ -58,13 +57,13 @@ public final class SqlRodeo {
 		    "execute: resourceUrl, contextSeed".replaceAll(", ",
 			    "=%s, ") + "=%s", resourceUrl, contextSeed));
 	}
+	
+	
 
-	try (IExecutionContext context = new ExecutionContext()) {
+	try (ExecutionContext context = new ExecutionContextImplementation()) {
 
 	    // Validate and parse all XML, generating actions as we go.
-	    Node root = loadAndValidate(resourceUrl);
-
-	    log.info("Done parsing");
+	    Node root = validateAndLoad(resourceUrl);
 
 	    // Populate the initial rodeocontext
 	    if (null != contextSeed) {
@@ -72,8 +71,8 @@ public final class SqlRodeo {
 	    }
 
 	    // Execute the action tree.
+	    log.info("Executing document at: " + resourceUrl);
 	    Action action = (Action) root.getUserData("action");
-	    log.info("Executing Action: " + action);
 	    try {
 		action.execute(context);
 	    } catch (ExitException e) {
@@ -84,24 +83,6 @@ public final class SqlRodeo {
 	} catch (Exception e) {
 	    throw new SqlRodeoException("Failed to execute document at "
 		    + resourceUrl + " because: " + e.getMessage(), e);
-	}
-    }
-
-    private Node loadAndValidate(URL resourceUrl) {
-	if (log.isDebugEnabled()) {
-	    log.debug(String.format(
-		    "loadAndValidate: resourceUrl".replaceAll(", ", "=%s, ")
-			    + "=%s", resourceUrl));
-	}
-
-	try {
-	    return new Parser().parseAndValidate(resourceUrl);
-	} catch (SqlRodeoException e) {
-	    throw e;
-	} catch (DOMException | SAXException | IOException
-		| ParserConfigurationException | URISyntaxException e) {
-	    throw new SqlRodeoException("Failed to validate document at "
-		    + resourceUrl, e);
 	}
     }
 
@@ -120,6 +101,24 @@ public final class SqlRodeo {
 		    "validate: resourceUrl".replaceAll(", ", "=%s, ") + "=%s",
 		    resourceUrl));
 	}
-	loadAndValidate(resourceUrl);
+	validateAndLoad(resourceUrl);
+    }
+
+    private Node validateAndLoad(URL resourceUrl) {
+	if (log.isDebugEnabled()) {
+	    log.debug(String.format(
+		    "validateAndLoad: resourceUrl".replaceAll(", ", "=%s, ")
+			    + "=%s", resourceUrl));
+	}
+
+	try {
+	    return new Parser().parseAndValidate(resourceUrl);
+	} catch (SqlRodeoException e) {
+	    throw e;
+	} catch (DOMException | SAXException | IOException
+		| ParserConfigurationException | URISyntaxException e) {
+	    throw new SqlRodeoException("Failed to validate document at "
+		    + resourceUrl, e);
+	}
     }
 }

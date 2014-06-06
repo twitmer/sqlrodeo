@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.ValidationException;
+import sqlrodeo.network.UrlRetriever;
 import sqlrodeo.util.StringUtils;
-import sqlrodeo.util.UrlRetriever;
 
 public final class PropertiesAction extends BaseAction {
 
@@ -28,7 +28,7 @@ public final class PropertiesAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context) {
+    public void execute(ExecutionContext context) {
 
 	String href = getNode().getAttribute("href");
 	List<Node> children = getNode().getChildNodesAsList();

@@ -12,7 +12,7 @@ import sqlrodeo.implementation.NotFoundException;
  * functions used by the IActions to work with JEXL expressions and publish
  * 'close' actions.
  */
-public interface IExecutionContext extends Map<String, Object>, AutoCloseable {
+public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
 
     /**
      * Evaluate the given expression with the JEXL engine.

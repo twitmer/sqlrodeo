@@ -1,7 +1,5 @@
 package sqlrodeo.xml;
 
-//PositionalXMLReader.java
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Stack;

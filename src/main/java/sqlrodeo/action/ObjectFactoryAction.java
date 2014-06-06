@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 import sqlrodeo.util.StringUtils;
 
 public final class ObjectFactoryAction extends BaseAction {
@@ -47,7 +47,7 @@ public final class ObjectFactoryAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context) throws Exception {
+    public void execute(ExecutionContext context) throws Exception {
 
 	DataSource dataSource = null;
 

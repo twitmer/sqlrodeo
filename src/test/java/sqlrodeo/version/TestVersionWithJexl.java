@@ -4,7 +4,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import sqlrodeo.implementation.ExecutionContext;
+import sqlrodeo.implementation.ExecutionContextImplementation;
 import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.JexlService;
 
@@ -15,7 +15,7 @@ public class TestVersionWithJexl {
 
 	JexlService jexl = new JexlService();
 
-	ExecutionContext context = new ExecutionContext();
+	ExecutionContextImplementation context = new ExecutionContextImplementation();
 	context.put("version", new Version("1.0.1"));
 
 	try {

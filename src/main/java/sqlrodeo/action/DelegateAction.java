@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.IDelegate;
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.Delegate;
+import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.ValidationException;
 import sqlrodeo.util.StringUtils;
@@ -19,7 +19,7 @@ public final class DelegateAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context)
+    public void execute(ExecutionContext context)
 	    throws InstantiationException, IllegalAccessException,
 	    ClassNotFoundException {
 
@@ -32,23 +32,23 @@ public final class DelegateAction extends BaseAction {
 	String id = getNode().getAttribute("id");
 	String delegateClass = getNode().getAttribute("delegate-class");
 
-	IDelegate delegate = null;
+	Delegate delegate = null;
 
 	// First try to find an existing instance of the delegate in the
 	// context.
 	if (!StringUtils.isEmpty(id)) {
-	    delegate = (IDelegate) context.get(id);
+	    delegate = (Delegate) context.get(id);
 	}
 
 	// If the delegate wasn't found in the context, we'll need to create it.
 	if (delegate == null && !StringUtils.isEmpty(delegateClass)) {
 
 	    // println "Using thread context classloader"
-	    delegate = (IDelegate) Class.forName(delegateClass, true,
+	    delegate = (Delegate) Class.forName(delegateClass, true,
 		    Thread.currentThread().getContextClassLoader())
 		    .newInstance();
 
-	    // delegate = (IDelegate)Class.forName(delegateClass).newInstance()
+	    // delegate = (Delegate)Class.forName(delegateClass).newInstance()
 
 	    // Delegate created. If an 'id' is specified, publish to context to
 	    // allow for future use.

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 
 public final class CommitAction extends BaseAction {
@@ -19,7 +19,7 @@ public final class CommitAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context) throws SQLException {
+    public void execute(ExecutionContext context) throws SQLException {
 
 	String connectionId = getNode().getAttribute("id");
 	Connection conn = (Connection) context.get(connectionId);

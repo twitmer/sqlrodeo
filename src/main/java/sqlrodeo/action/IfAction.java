@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import sqlrodeo.IExecutionContext;
+import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.JexlEvaluationException;
 
@@ -17,7 +17,7 @@ public final class IfAction extends BaseAction {
     }
 
     @Override
-    public void execute(IExecutionContext context) {
+    public void execute(ExecutionContext context) {
 
 	String condition = getNode().getAttribute("condition");
 

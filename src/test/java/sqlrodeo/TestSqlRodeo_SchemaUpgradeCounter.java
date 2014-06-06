@@ -6,13 +6,13 @@ import java.net.URL;
 
 import org.junit.Test;
 
-public class TestSqlRodeo_withHsqlDb {
+public class TestSqlRodeo_SchemaUpgradeCounter {
 
     @Test
     public void test() {
 
 	URL resourceUrl = this.getClass().getResource(
-		"/example1/master-script.xml");
+		"/schema_upgrade_counter/master-script.xml");
 	SqlRodeo sqlRodeo = new SqlRodeo();
 
 	try {

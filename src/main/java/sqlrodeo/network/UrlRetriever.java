@@ -1,4 +1,4 @@
-package sqlrodeo.util;
+package sqlrodeo.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
