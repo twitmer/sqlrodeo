@@ -22,70 +22,76 @@ import sqlrodeo.util.StringUtils;
 
 public final class ObjectFactoryAction extends BaseAction {
 
-    private static final Logger log = LoggerFactory.getLogger(ObjectFactoryAction.class);
+    private static final Logger log = LoggerFactory
+	    .getLogger(ObjectFactoryAction.class);
 
     public ObjectFactoryAction(Node node) {
-        super(node);
+	super(node);
     }
 
     private DataSource buildJndiConnection(String jndiName) {
-        try {
-            Context initCtx = new InitialContext();
-            Object jndiObject = initCtx.lookup("java:comp/env/" + jndiName);
+	try {
+	    Context initCtx = new InitialContext();
+	    Object jndiObject = initCtx.lookup("java:comp/env/" + jndiName);
 
-            if(jndiObject != null && jndiObject instanceof DataSource) {
-                return (DataSource)jndiObject;
-            }
-        } catch(NamingException e) {
-            log.debug("Ignoring error from JNDI lookup: " + e.getMessage() + ", " + e.getClass().getName());
-        }
+	    if (jndiObject != null && jndiObject instanceof DataSource) {
+		return (DataSource) jndiObject;
+	    }
+	} catch (NamingException e) {
+	    log.debug("Ignoring error from JNDI lookup: " + e.getMessage()
+		    + ", " + e.getClass().getName());
+	}
 
-        // Fallthrough
-        return null;
+	// Fallthrough
+	return null;
     }
 
     @Override
     public void execute(IExecutionContext context) throws Exception {
 
-        DataSource dataSource = null;
+	DataSource dataSource = null;
 
-        String jndiName = context.substitute(getNode().getAttribute("name"));
-        if(!StringUtils.isEmpty(jndiName)) {
-            dataSource = buildJndiConnection(jndiName);
-            if(dataSource != null) {
-                log.debug("Datasource " + jndiName + " resolved.");
-                return;
-            }
-        }
+	String jndiName = context.substitute(getNode().getAttribute("name"));
+	if (!StringUtils.isEmpty(jndiName)) {
+	    dataSource = buildJndiConnection(jndiName);
+	    if (dataSource != null) {
+		log.debug("Datasource " + jndiName + " resolved.");
+		return;
+	    }
+	}
 
-        // Expand text properties, and store in the Reference.
-        Properties props = new Properties();
+	// Expand text properties, and store in the Reference.
+	Properties props = new Properties();
 
-        String text = context.substitute(getNode().getTextContent());
-        if(text != null) {
-            props.load(new StringReader(text));
-        }
-        log.info("ObjectFactory Props: " + props);
-        Reference ref = new Reference(context.substitute(getNode().getAttribute("objectClassName")));
-        for(String key : props.stringPropertyNames()) {
-            ref.add(new StringRefAddr(key, props.getProperty(key)));
-        }
+	String text = context.substitute(getNode().getTextContent());
+	if (text != null) {
+	    props.load(new StringReader(text));
+	}
+	log.info("ObjectFactory Props: " + props);
+	Reference ref = new Reference(context.substitute(getNode()
+		.getAttribute("objectClassName")));
+	for (String key : props.stringPropertyNames()) {
+	    ref.add(new StringRefAddr(key, props.getProperty(key)));
+	}
 
-        // Create an instance of the ObjectFactory.
-        ObjectFactory of = (ObjectFactory)Class.forName(context.substitute(getNode().getAttribute("factoryClassName"))).newInstance();
+	// Create an instance of the ObjectFactory.
+	ObjectFactory of = (ObjectFactory) Class.forName(
+		context.substitute(getNode().getAttribute("factoryClassName")))
+		.newInstance();
 
-        // Define other variables we don't actually care about.
-        InitialContext initialContext = new InitialContext();
-        Name name = null;
-        Hashtable<?,?> env = new Hashtable<>();
+	// Define other variables we don't actually care about.
+	InitialContext initialContext = new InitialContext();
+	Name name = null;
+	Hashtable<?, ?> env = new Hashtable<>();
 
-        // Invoke the ObjectFactory to create the desired object.
-        Object product = of.getObjectInstance(ref, name, initialContext, env);
+	// Invoke the ObjectFactory to create the desired object.
+	Object product = of.getObjectInstance(ref, name, initialContext, env);
 
-        // TODO: There is no "close()" method on DataSources, so it'll be up to users of this library to correctly close a
-        // datasource, if that's needed.
+	// TODO: There is no "close()" method on DataSources, so it'll be up to
+	// users of this library to correctly close a
+	// datasource, if that's needed.
 
-        context.put(getNode().getAttribute("id"), product);
+	context.put(getNode().getAttribute("id"), product);
     }
 
     /**
@@ -93,7 +99,7 @@ public final class ObjectFactoryAction extends BaseAction {
      */
     @Override
     public void validate() {
-        // Nothing to do here.
+	// Nothing to do here.
     }
 
 }

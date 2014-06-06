@@ -15,61 +15,66 @@ public final class DelegateAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(DelegateAction.class);
 
     public DelegateAction(Node node) {
-        super(node);
+	super(node);
     }
 
     @Override
-    public void execute(IExecutionContext context) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void execute(IExecutionContext context)
+	    throws InstantiationException, IllegalAccessException,
+	    ClassNotFoundException {
 
-        // Text is an optional text node.
-        String nodeText = null;
-        Node childNode = getNode().getFirstChild();
-        if(childNode != null) {
-            nodeText = childNode.getNodeValue();
-        }
-        String id = getNode().getAttribute("id");
-        String delegateClass = getNode().getAttribute("delegate-class");
+	// Text is an optional text node.
+	String nodeText = null;
+	Node childNode = getNode().getFirstChild();
+	if (childNode != null) {
+	    nodeText = childNode.getNodeValue();
+	}
+	String id = getNode().getAttribute("id");
+	String delegateClass = getNode().getAttribute("delegate-class");
 
-        IDelegate delegate = null;
+	IDelegate delegate = null;
 
-        // First try to find an existing instance of the delegate in the
-        // context.
-        if(!StringUtils.isEmpty(id)) {
-            delegate = (IDelegate)context.get(id);
-        }
+	// First try to find an existing instance of the delegate in the
+	// context.
+	if (!StringUtils.isEmpty(id)) {
+	    delegate = (IDelegate) context.get(id);
+	}
 
-        // If the delegate wasn't found in the context, we'll need to create it.
-        if(delegate == null && !StringUtils.isEmpty(delegateClass)) {
+	// If the delegate wasn't found in the context, we'll need to create it.
+	if (delegate == null && !StringUtils.isEmpty(delegateClass)) {
 
-            // println "Using thread context classloader"
-            delegate = (IDelegate)Class.forName(delegateClass, true, Thread.currentThread().getContextClassLoader()).newInstance();
+	    // println "Using thread context classloader"
+	    delegate = (IDelegate) Class.forName(delegateClass, true,
+		    Thread.currentThread().getContextClassLoader())
+		    .newInstance();
 
-            // delegate = (IDelegate)Class.forName(delegateClass).newInstance()
+	    // delegate = (IDelegate)Class.forName(delegateClass).newInstance()
 
-            // Delegate created. If an 'id' is specified, publish to context to
-            // allow for future use.
-            if(!StringUtils.isEmpty(id)) {
-                context.put(id, delegate);
-            }
-        }
+	    // Delegate created. If an 'id' is specified, publish to context to
+	    // allow for future use.
+	    if (!StringUtils.isEmpty(id)) {
+		context.put(id, delegate);
+	    }
+	}
 
-        // Out of strategies. No idea how to create your delegate!
-        if(delegate == null) {
-            throw new ExecutionException(this,
-                    "Could not find or create delegate: " + toString());
-        }
+	// Out of strategies. No idea how to create your delegate!
+	if (delegate == null) {
+	    throw new ExecutionException(this,
+		    "Could not find or create delegate: " + toString());
+	}
 
-        delegate.execute(context, nodeText);
+	delegate.execute(context, nodeText);
     }
 
     @Override
     public void validate() {
-        String id = getNode().getAttribute("id");
-        String delegateClass = getNode().getAttribute("delegate-class");
+	String id = getNode().getAttribute("id");
+	String delegateClass = getNode().getAttribute("delegate-class");
 
-        if(StringUtils.isEmpty(id) && StringUtils.isEmpty(delegateClass)) {
-            throw new ValidationException(this,
-                    "At least one of 'id' or 'delegate-class' is required: " + toString());
-        }
+	if (StringUtils.isEmpty(id) && StringUtils.isEmpty(delegateClass)) {
+	    throw new ValidationException(this,
+		    "At least one of 'id' or 'delegate-class' is required: "
+			    + toString());
+	}
     }
 }

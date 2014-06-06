@@ -5,14 +5,14 @@ package sqlrodeo;
  */
 public interface IDelegate {
 
-	/**
-	 * Execute user-defined action.
-	 * 
-	 * @param context
-	 *            The current context for execution.
-	 * @param text
-	 *            Optional text contained in <delegate> element in XML document.
-	 */
-	void execute(IExecutionContext context, String text);
+    /**
+     * Execute user-defined action.
+     *
+     * @param context
+     *            The current context for execution.
+     * @param text
+     *            Optional text contained in <delegate> element in XML document.
+     */
+    void execute(IExecutionContext context, String text);
 
 }

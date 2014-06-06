@@ -13,19 +13,19 @@ public final class AssignAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(AssignAction.class);
 
     public AssignAction(Node node) {
-        super(node);
+	super(node);
     }
 
     @Override
     public void execute(IExecutionContext context) {
 
-        try {
-            String id = getNode().getAttribute("id");
-            String value = context.substitute(getNode().getAttribute("value"));
-            context.put(id, context.evaluate(value));
-        } catch(JexlEvaluationException e) {
-            throw new ExecutionException(this, e);
-        }
+	try {
+	    String id = getNode().getAttribute("id");
+	    String value = context.substitute(getNode().getAttribute("value"));
+	    context.put(id, context.evaluate(value));
+	} catch (JexlEvaluationException e) {
+	    throw new ExecutionException(this, e);
+	}
     }
 
     /**
@@ -33,6 +33,6 @@ public final class AssignAction extends BaseAction {
      */
     @Override
     public void validate() {
-        // Nothing to do here.
+	// Nothing to do here.
     }
 }

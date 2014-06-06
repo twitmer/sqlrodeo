@@ -24,40 +24,41 @@ public final class PropertiesAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(PropertiesAction.class);
 
     public PropertiesAction(Node node) {
-        super(node);
+	super(node);
     }
 
     @Override
     public void execute(IExecutionContext context) {
 
-        String href = getNode().getAttribute("href");
-        List<Node> children = getNode().getChildNodesAsList();
+	String href = getNode().getAttribute("href");
+	List<Node> children = getNode().getChildNodesAsList();
 
-        Properties props = new Properties();
-        String text = "";
-        try {
-            if(!StringUtils.isEmpty(href)) {
-                URL relUrl = resolveRelativeUrl(href);
-                text = UrlRetriever.retrieveTextForUrl(relUrl);
-            }
+	Properties props = new Properties();
+	String text = "";
+	try {
+	    if (!StringUtils.isEmpty(href)) {
+		URL relUrl = resolveRelativeUrl(href);
+		text = UrlRetriever.retrieveTextForUrl(relUrl);
+	    }
 
-            else {
-                // We should have a text node child.
-                if(children.size() == 1 && children.get(0) instanceof Text) {
-                    text = children.get(0).getNodeValue();
-                }
-            }
+	    else {
+		// We should have a text node child.
+		if (children.size() == 1 && children.get(0) instanceof Text) {
+		    text = children.get(0).getNodeValue();
+		}
+	    }
 
-            text = context.substitute(text);
-            props.load(new StringReader(text));
+	    text = context.substitute(text);
+	    props.load(new StringReader(text));
 
-            for(String key : props.stringPropertyNames()) {
-                context.put(key, props.getProperty(key));
-            }
-        } catch(IOException | IllegalArgumentException | JexlEvaluationException | URISyntaxException ex) {
-            throw new ExecutionException(this, ex);
+	    for (String key : props.stringPropertyNames()) {
+		context.put(key, props.getProperty(key));
+	    }
+	} catch (IOException | IllegalArgumentException
+		| JexlEvaluationException | URISyntaxException ex) {
+	    throw new ExecutionException(this, ex);
 
-        }
+	}
     }
 
     /**
@@ -65,13 +66,13 @@ public final class PropertiesAction extends BaseAction {
      */
     @Override
     public void validate() {
-        // If href is specified, children are not allowed.
-        String href = getNode().getAttribute("href");
-        List<Node> children = getNode().getChildNodesAsList();
+	// If href is specified, children are not allowed.
+	String href = getNode().getAttribute("href");
+	List<Node> children = getNode().getChildNodesAsList();
 
-        if(!StringUtils.isEmpty(href) && children.size() > 0) {
-            throw new ValidationException(this,
-                    "Properties cannot have content and an href.");
-        }
+	if (!StringUtils.isEmpty(href) && children.size() > 0) {
+	    throw new ValidationException(this,
+		    "Properties cannot have content and an href.");
+	}
     }
 }

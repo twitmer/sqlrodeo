@@ -9,18 +9,18 @@ import sqlrodeo.Action;
 @SuppressWarnings("serial")
 public class ValidationException extends LocateableException {
 
-	public ValidationException(Action action, String message) {
-		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
-				.getNode(), message);
-	}
+    public ValidationException(Action action, String message) {
+	super(action.resolveResourceUrl(), action.resolveLineNumber(), action
+		.getNode(), message);
+    }
 
-	public ValidationException(Action action, Throwable throwable) {
-		super(action.resolveResourceUrl(), action.resolveLineNumber(), action
-				.getNode(), throwable);
-	}
+    public ValidationException(Action action, Throwable throwable) {
+	super(action.resolveResourceUrl(), action.resolveLineNumber(), action
+		.getNode(), throwable);
+    }
 
-	public ValidationException(URL url, long lineNumber, Node node,
-			String message) {
-		super(url, lineNumber, node, message);
-	}
+    public ValidationException(URL url, long lineNumber, Node node,
+	    String message) {
+	super(url, lineNumber, node, message);
+    }
 }

@@ -11,16 +11,16 @@ public final class ExitAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(ExitAction.class);
 
     public ExitAction(Node node) {
-        super(node);
+	super(node);
     }
 
     @Override
     public void execute(IExecutionContext context) {
-        throw new ExitException();
+	throw new ExitException();
     }
 
     @Override
     public void validate() {
-        // Nothing to do here.
+	// Nothing to do here.
     }
 }

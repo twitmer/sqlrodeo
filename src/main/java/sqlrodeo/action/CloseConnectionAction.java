@@ -16,41 +16,42 @@ public final class CloseConnectionAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(CloseConnectionAction.class);
 
     public CloseConnectionAction(Node node) {
-        super(node);
-        connectionId = getNode().getAttribute("id");
+	super(node);
+	connectionId = getNode().getAttribute("id");
     }
 
     @Override
     public void execute(IExecutionContext context) throws SQLException {
-        // NOTE: Node will be null here.
-        log.debug("CloseConnectionAction: " + connectionId);
-        Connection connection = (Connection)context.remove(connectionId);
+	// NOTE: Node will be null here.
+	log.debug("CloseConnectionAction: " + connectionId);
+	Connection connection = (Connection) context.remove(connectionId);
 
-        if(connection == null) {
-            log.debug("Connection not found, doing nothing.");
-            return;
-        }
+	if (connection == null) {
+	    log.debug("Connection not found, doing nothing.");
+	    return;
+	}
 
-        // If connection isn't autocommit, rollback.
-        // TODO: getAutoCommit() throws a SQL Exception?!
-        if(!connection.getAutoCommit()) {
-            try {
-                log.debug("Rolling back non-autocommit connection " + connectionId);
-                connection.rollback();
-            } catch(Exception e) {
-                log.debug("Ignore error with rollback: " + e.getMessage());
-            }
-        }
+	// If connection isn't autocommit, rollback.
+	// TODO: getAutoCommit() throws a SQL Exception?!
+	if (!connection.getAutoCommit()) {
+	    try {
+		log.debug("Rolling back non-autocommit connection "
+			+ connectionId);
+		connection.rollback();
+	    } catch (Exception e) {
+		log.debug("Ignore error with rollback: " + e.getMessage());
+	    }
+	}
 
-        // TODO: isClosed() throws a SQL Exception?!
-        if(!connection.isClosed()) {
-            log.debug("Closing Connection " + connectionId);
-            try {
-                connection.close();
-            } catch(Exception e) {
-                log.debug("Ignore error with close: " + e.getMessage());
-            }
-        }
+	// TODO: isClosed() throws a SQL Exception?!
+	if (!connection.isClosed()) {
+	    log.debug("Closing Connection " + connectionId);
+	    try {
+		connection.close();
+	    } catch (Exception e) {
+		log.debug("Ignore error with close: " + e.getMessage());
+	    }
+	}
     }
 
     /**
@@ -58,7 +59,7 @@ public final class CloseConnectionAction extends BaseAction {
      */
     @Override
     public void validate() {
-        // Nothing to do here.
+	// Nothing to do here.
     }
 
 }
