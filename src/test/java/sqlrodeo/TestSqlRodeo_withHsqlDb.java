@@ -12,7 +12,7 @@ public class TestSqlRodeo_withHsqlDb {
     public void test() {
 
 	URL resourceUrl = this.getClass().getResource(
-		"/hsql/example1/master-script.xml");
+		"/example1/master-script.xml");
 	SqlRodeo sqlRodeo = new SqlRodeo();
 
 	try {
@@ -21,7 +21,5 @@ public class TestSqlRodeo_withHsqlDb {
 	    e.printStackTrace();
 	    fail(e.getMessage());
 	}
-
     }
-
 }
