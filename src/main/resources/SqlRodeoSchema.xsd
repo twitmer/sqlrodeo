@@ -8,53 +8,54 @@
 				<element ref="tns:properties"></element>
 			</choice>
 			<choice minOccurs="1" maxOccurs="unbounded">
-				<element ref="tns:objectFactory"></element>
-				<element ref="tns:connection"></element>
-				<element ref="tns:close"></element>
-				<element ref="tns:query"></element>
 				<element ref="tns:assign"></element>
-				<element ref="tns:sql"></element>
-				<element ref="tns:include"></element>
-				<element ref="tns:delegate"></element>
+				<element ref="tns:close"></element>
 				<element ref="tns:commit"></element>
-				<element ref="tns:rollback"></element>
+				<element ref="tns:connection"></element>
 				<element ref="tns:exit"></element>
 				<element ref="tns:if"></element>
+				<element ref="tns:include"></element>
+				<element ref="tns:objectFactory"></element>
+				<element ref="tns:query"></element>
+				<element ref="tns:rollback"></element>
+				<element ref="tns:sql"></element>
+				<element ref="tns:script"></element>
 			</choice>
 		</sequence>
 	</complexType>
 
 	<complexType name="if">
 		<choice minOccurs="1" maxOccurs="unbounded">
-			<element ref="tns:objectFactory"></element>
-			<element ref="tns:connection"></element>
-			<element ref="tns:close"></element>
-			<element ref="tns:query"></element>
 			<element ref="tns:assign"></element>
-			<element ref="tns:sql"></element>
-			<element ref="tns:include"></element>
-			<element ref="tns:delegate"></element>
+			<element ref="tns:close"></element>
 			<element ref="tns:commit"></element>
-			<element ref="tns:rollback"></element>
+			<element ref="tns:connection"></element>
 			<element ref="tns:exit"></element>
 			<element ref="tns:if"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:script"></element>
 		</choice>
 		<attribute name="condition" type="string" use="required"></attribute>
 	</complexType>
 
 	<complexType name="query" mixed="true">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<element ref="tns:objectFactory"></element>
-			<element ref="tns:connection"></element>
-			<element ref="tns:close"></element>
-			<element ref="tns:query"></element>
 			<element ref="tns:assign"></element>
-			<element ref="tns:sql"></element>
-			<element ref="tns:include"></element>
-			<element ref="tns:delegate"></element>
+			<element ref="tns:close"></element>
 			<element ref="tns:commit"></element>
-			<element ref="tns:rollback"></element>
+			<element ref="tns:connection"></element>
 			<element ref="tns:exit"></element>
+			<element ref="tns:if"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:script"></element>
 		</choice>
 		<attribute name="if" type="string"></attribute>
 		<attribute name="connection-id" type="string"></attribute>
@@ -73,17 +74,18 @@
 
 	<complexType name="sql" mixed="true">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<element ref="tns:objectFactory"></element>
-			<element ref="tns:connection"></element>
-			<element ref="tns:close"></element>
-			<element ref="tns:query"></element>
 			<element ref="tns:assign"></element>
-			<element ref="tns:sql"></element>
-			<element ref="tns:include"></element>
-			<element ref="tns:delegate"></element>
+			<element ref="tns:close"></element>
 			<element ref="tns:commit"></element>
-			<element ref="tns:rollback"></element>
+			<element ref="tns:connection"></element>
 			<element ref="tns:exit"></element>
+			<element ref="tns:if"></element>
+			<element ref="tns:include"></element>
+			<element ref="tns:objectFactory"></element>
+			<element ref="tns:query"></element>
+			<element ref="tns:rollback"></element>
+			<element ref="tns:sql"></element>
+			<element ref="tns:script"></element>
 		</choice>
 		<attribute name="if" type="string"></attribute>
 		<attribute name="connection-id" type="string"></attribute>
@@ -127,12 +129,10 @@
 		<attribute name="href" type="string" use="required"></attribute>
 	</complexType>
 
-	<complexType name="delegate">
+	<complexType name="script">
 		<simpleContent>
 			<extension base="string">
 				<attribute name="if" type="string"></attribute>
-				<attribute name="id" type="tns:identifier" use="required"></attribute>
-				<attribute name="delegate-class" type="string"></attribute>
 			</extension>
 		</simpleContent>
 	</complexType>
@@ -153,20 +153,19 @@
 
 	<complexType name="exit"></complexType>
 
-	<element name="sql-rodeo" type="tns:sql-rodeo"></element>
-	<element name="if" type="tns:if"></element>
-	<element name="query" type="tns:query"></element>
-	<element name="sql" type="tns:sql"></element>
-	<element name="properties" type="tns:properties"></element>
-	<element name="objectFactory" type="tns:objectFactory"></element>
-	<element name="connection" type="tns:connection"></element>
-	<element name="close" type="tns:close"></element>
-	<element name="include" type="tns:include"></element>
-	<element name="delegate" type="tns:delegate"></element>
-	<element name="commit" type="tns:commit"></element>
-	<element name="rollback" type="tns:rollback"></element>
 	<element name="assign" type="tns:assign"></element>
-
+	<element name="if" type="tns:if"></element>
+	<element name="close" type="tns:close"></element>
+	<element name="commit" type="tns:commit"></element>
+	<element name="connection" type="tns:connection"></element>
 	<element name="exit" type="tns:exit"></element>
+	<element name="include" type="tns:include"></element>
+	<element name="objectFactory" type="tns:objectFactory"></element>
+	<element name="properties" type="tns:properties"></element>
+	<element name="query" type="tns:query"></element>
+	<element name="rollback" type="tns:rollback"></element>
+	<element name="script" type="tns:script"></element>
+	<element name="sql" type="tns:sql"></element>
+	<element name="sql-rodeo" type="tns:sql-rodeo"></element>
 
 </schema>
