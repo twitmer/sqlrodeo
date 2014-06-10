@@ -47,7 +47,7 @@ final public class JexlService {
 		log.debug(String.format(
 			"evaluate: expressionString, result, resultClass"
 				.replaceAll(", ", "=%s, ") + "=%s",
-			expressionString, o, o.getClass().getName()));
+			expressionString, o, (o!=null?o.getClass().getName():"null")));
 	    }
 	    return o;
 	} catch (JexlException je) {
