@@ -43,9 +43,7 @@ public final class PropertiesAction extends BaseAction {
 
 	    else {
 		// We should have a text node child.
-		if (children.size() == 1 && children.get(0) instanceof Text) {
-		    text = children.get(0).getNodeValue();
-		}
+		text = getNodeText();
 	    }
 
 	    text = context.substitute(text);

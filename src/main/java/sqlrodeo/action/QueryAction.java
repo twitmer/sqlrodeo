@@ -32,7 +32,7 @@ public final class QueryAction extends BaseAction {
 	    log.debug(String.format("execute: node".replaceAll(", ", "=%s, ")
 		    + "=%s", toString()));
 	}
-	String queryString = getNode().getFirstChild().getNodeValue();
+	String queryString = getNodeText();
 
 	String[] publishAs;
 	try {
