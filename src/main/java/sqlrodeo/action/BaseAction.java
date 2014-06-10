@@ -76,6 +76,16 @@ public abstract class BaseAction implements Action {
 	}
     }
 
+    protected String getNodeText() {
+	String nodeText = null;
+	Node childNode = getNode().getFirstChild();
+	if (childNode != null) {
+	    nodeText = childNode.getNodeValue();
+	}
+
+	return nodeText;
+    }
+
     protected boolean getAttributeAsBoolean(String name, boolean defaultValue) {
 	String valueAsStr = getNode().getAttribute(name);
 	if (!StringUtils.isEmpty(valueAsStr)) {
