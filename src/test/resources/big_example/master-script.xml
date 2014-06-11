@@ -35,5 +35,17 @@
 
 	<!-- Execute all upgrades for the 2.x line of schema changes -->
 	<include if='schema_version.lessThan( "3.0.0" )' href="2.x/schema_2.x.xml" />
+	
+	<script>
+	var x = 8;
+	var y = 0;
+	while (x lt 100) {
+		x = x + 2;
+		y = y + 1; 
+	}
+	var z = x + y;
+	return x;
+	
+	</script>
 
 </sql-rodeo>

@@ -23,6 +23,8 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      * @throws JexlEvaluationException
      */
     Object evaluate(String jexlExpression) throws JexlEvaluationException;
+    
+    Object evaluateScript(String jexlExpression) throws JexlEvaluationException;
 
     /**
      * A convenience wrapper around the other evaluate() method in this class

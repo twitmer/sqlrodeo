@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- This action file demonstrates what can be done with the -->
+	<!-- 'properties' action. Each key-value pair in the properties -->
+	<!-- are added to the context, and can be referenced by -->
+	<!-- subsequent actions. -->
+
+	<!-- Read property files with relative pathing -->
+	<properties href="../datasource.properties" />
+
+	<!-- Define properties with inline literals -->
+	<properties>
+		a=10
+		b=20
+		some.dotted.value=15
+		props_path=..
+	</properties>
+
+	<!-- Read property files with relative pathing and inline variables -->
+	<properties href="${props_path}/datasource.properties" />
+
+	<!-- Define properties with inline literals and variables -->
+	<!-- NOTE: -->
+	<!-- 1) ${a} + ${b} evaluates to the literal "10 + 20" -->
+	<!-- 2) ${a + b} evaluates to the literal "30". JEXL evaluates -->
+	<!-- the contents inside ${}. -->
+	<properties>
+		# Simple assignment of previously defined properties.
+		a_new=${a}
+		b_new=${b}
+
+		# This line results in the literal value "10 + 20 + 5"
+		c_new=${a} + ${b} + 5
+
+		# Results in the literal value "35".
+		a_b_evaluated=${a + b + 5}
+	</properties>
+
+</sql-rodeo>

@@ -24,12 +24,11 @@ public final class ScriptAction extends BaseAction {
 	String nodeText = getNodeText();
 
 	log.debug("Evaluating: " + nodeText);
-	Object result = context.evaluate(nodeText);
+	Object result = context.evaluateScript(nodeText);
 	log.debug("result: "
 		+ result
 		+ (result != null ? ", class=" + result.getClass().getName()
 			: ""));
-
     }
 
     @Override

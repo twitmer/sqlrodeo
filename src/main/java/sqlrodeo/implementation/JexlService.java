@@ -38,21 +38,48 @@ final public class JexlService {
 	}
 	try {
 	    // Create engine and context.
-	    JexlContext jc = new MapContext(context);
+	    JexlContext jexlContext = new MapContext(context);
 
 	    // Create and evaluate expression
-	    Object o = jexl.createExpression(expressionString).evaluate(jc);
+	    Object result = jexl.createExpression(expressionString).evaluate(
+		    jexlContext);
 
 	    if (log.isDebugEnabled()) {
 		log.debug(String.format(
 			"evaluate: expressionString, result, resultClass"
 				.replaceAll(", ", "=%s, ") + "=%s",
-			expressionString, o, (o!=null?o.getClass().getName():"null")));
+			expressionString, result, (result != null ? result
+				.getClass().getName() : "null")));
 	    }
-	    return o;
+	    return result;
 	} catch (JexlException je) {
 	    throw new JexlEvaluationException("Failed to evaluate: "
 		    + expressionString, je);
+	}
+    }
+
+    public Object script(String script, ExecutionContext context)
+	    throws JexlEvaluationException {
+	if (log.isDebugEnabled()) {
+	    log.debug(String.format("script: script".replaceAll(", ", "=%s, ")
+		    + "=%s", script));
+	}
+	try {
+	    // Create engine and context.
+	    JexlContext jexlContext = new MapContext(context);
+
+	    // Create and evaluate script
+	    Object result = jexl.createScript(script).execute(jexlContext);
+	    if (log.isDebugEnabled()) {
+		log.debug(String.format(
+			"script: script, result, resultClass".replaceAll(", ",
+				"=%s, ") + "=%s", script, result,
+			(result != null ? result.getClass().getName() : "null")));
+	    }
+	    return result;
+	} catch (JexlException je) {
+	    throw new JexlEvaluationException("Failed to execute: " + script,
+		    je);
 	}
     }
 
@@ -89,7 +116,7 @@ final public class JexlService {
 	}
 
 	try {
-	    JexlContext jc = new MapContext(context);
+	    JexlContext jexlContext = new MapContext(context);
 
 	    String workingSource = source;
 	    Matcher matcher = VARIABLE_PATTERN.matcher(workingSource);
@@ -103,7 +130,8 @@ final public class JexlService {
 		term = term.substring(2, term.length() - 1);
 
 		// Evaluate the term inside the "${" and "}"
-		Object o = jexl.createExpression(term).evaluate(jc);
+		Object result = jexl.createExpression(term).evaluate(
+			jexlContext);
 
 		// log.debug("evaluated " + term + " to " + o);
 		// Now replace all instances of the variable with its evaluated
@@ -111,13 +139,13 @@ final public class JexlService {
 		// does not expand
 		// regexes.
 		String newWorkingSource = workingSource.replace("${" + term
-			+ "}", o.toString());
+			+ "}", result.toString());
 
 		// log.debug("New workingSource = " + workingSource);
 
 		if (newWorkingSource.equals(workingSource)) {
 		    throw new JexlEvaluationException("Failed to replace "
-			    + term + " with " + o + " in " + workingSource);
+			    + term + " with " + result + " in " + workingSource);
 		}
 		workingSource = newWorkingSource;
 
@@ -126,7 +154,7 @@ final public class JexlService {
 	    }
 
 	    if (log.isDebugEnabled()) {
-		log.debug("Converted " + source + " to " + workingSource);
+		log.debug("Produced " + workingSource);
 	    }
 
 	    return workingSource;

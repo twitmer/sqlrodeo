@@ -4,9 +4,6 @@
 
 	<complexType name="sql-rodeo">
 		<sequence>
-			<choice minOccurs="0" maxOccurs="unbounded">
-				<element ref="tns:properties"></element>
-			</choice>
 			<choice minOccurs="1" maxOccurs="unbounded">
 				<element ref="tns:assign"></element>
 				<element ref="tns:close"></element>
@@ -16,6 +13,7 @@
 				<element ref="tns:if"></element>
 				<element ref="tns:include"></element>
 				<element ref="tns:objectFactory"></element>
+				<element ref="tns:properties"></element>
 				<element ref="tns:query"></element>
 				<element ref="tns:rollback"></element>
 				<element ref="tns:sql"></element>
@@ -34,6 +32,7 @@
 			<element ref="tns:if"></element>
 			<element ref="tns:include"></element>
 			<element ref="tns:objectFactory"></element>
+			<element ref="tns:properties"></element>
 			<element ref="tns:query"></element>
 			<element ref="tns:rollback"></element>
 			<element ref="tns:sql"></element>
@@ -52,6 +51,7 @@
 			<element ref="tns:if"></element>
 			<element ref="tns:include"></element>
 			<element ref="tns:objectFactory"></element>
+			<element ref="tns:properties"></element>
 			<element ref="tns:query"></element>
 			<element ref="tns:rollback"></element>
 			<element ref="tns:sql"></element>
@@ -82,6 +82,7 @@
 			<element ref="tns:if"></element>
 			<element ref="tns:include"></element>
 			<element ref="tns:objectFactory"></element>
+			<element ref="tns:properties"></element>
 			<element ref="tns:query"></element>
 			<element ref="tns:rollback"></element>
 			<element ref="tns:sql"></element>

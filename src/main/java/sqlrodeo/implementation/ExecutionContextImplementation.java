@@ -29,7 +29,8 @@ public final class ExecutionContextImplementation implements ExecutionContext {
     private final JexlService jexlService = new JexlService();
 
     /** Logger */
-    private final Logger log = LoggerFactory.getLogger(ExecutionContextImplementation.class);
+    private final Logger log = LoggerFactory
+	    .getLogger(ExecutionContextImplementation.class);
 
     public ExecutionContextImplementation() {
 	delegateMap.put("sysProps", System.getProperties());
@@ -102,6 +103,12 @@ public final class ExecutionContextImplementation implements ExecutionContext {
     }
 
     @Override
+    public Object evaluateScript(String jexlExpression)
+	    throws JexlEvaluationException {
+	return jexlService.script(jexlExpression, this);
+    }
+
+    @Override
     public boolean evaluateBoolean(String jexlExpression)
 	    throws JexlEvaluationException {
 	return jexlService.evaluateBoolean(jexlExpression, this);
@@ -129,7 +136,7 @@ public final class ExecutionContextImplementation implements ExecutionContext {
     @Override
     public Object get(Object key) {
 	Object value = delegateMap.get(key);
-	log.debug("CONTEXT get: " + key + " = " + value + " ("
+	log.debug("get: " + key + " = " + value + " ("
 		+ (value != null ? value.getClass().getName() : "null") + ")");
 	return value;
     }
@@ -196,7 +203,7 @@ public final class ExecutionContextImplementation implements ExecutionContext {
 
     @Override
     public Object put(String key, Object value) {
-	log.debug("CONTEXT put: " + key + " = " + value + " ("
+	log.info("put: " + key + " = " + value + " ("
 		+ (value != null ? value.getClass().getName() : "null") + ")");
 	return delegateMap.put(key, value);
     }

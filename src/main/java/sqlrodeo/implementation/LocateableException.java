@@ -17,7 +17,7 @@ public abstract class LocateableException extends SqlRodeoException {
 
     public LocateableException(URL url, long lineNumber, Node node,
 	    String message) {
-	super(message);
+	super(asString(message, url, lineNumber, node));
 	this.url = url;
 	this.lineNumber = lineNumber;
 	this.node = node;
@@ -25,7 +25,7 @@ public abstract class LocateableException extends SqlRodeoException {
 
     public LocateableException(URL url, long lineNumber, Node node,
 	    String message, Throwable throwable) {
-	super(message, throwable);
+	super(asString(message, url, lineNumber, node), throwable);
 	this.url = url;
 	this.lineNumber = lineNumber;
 	this.node = node;
@@ -33,10 +33,15 @@ public abstract class LocateableException extends SqlRodeoException {
 
     public LocateableException(URL url, long lineNumber, Node node,
 	    Throwable throwable) {
-	super(throwable);
+	super(asString("", url, lineNumber, node), throwable);
 	this.url = url;
 	this.lineNumber = lineNumber;
 	this.node = node;
+    }
+
+    static String asString(String message, URL url, long lineNumber, Node node) {
+	return message + " Url=" + url + ", lineNumber=" + lineNumber
+		+ (node != null ? ", node=" + node : "");
     }
 
     public long getLineNumber() {
@@ -51,11 +56,11 @@ public abstract class LocateableException extends SqlRodeoException {
 	return url;
     }
 
-    @Override
-    public String toString() {
-	return super.toString() + (url != null ? ", url=" + url : "")
-		+ ", lineNumber=" + lineNumber
-		+ (node != null ? ", node=" + node : "") + "]";
-    }
+    // @Override
+    // public String toString() {
+    // return super.toString() + (url != null ? ", url=" + url : "")
+    // + ", lineNumber=" + lineNumber
+    // + (node != null ? ", node=" + node : "") + "]";
+    // }
 
 }

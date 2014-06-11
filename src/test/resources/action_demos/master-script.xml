@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+
+	<!-- Execute all the demos for the 'properties' action. -->
+	<include href="demos/properties.xml" />
+
+
+
+
+</sql-rodeo>
