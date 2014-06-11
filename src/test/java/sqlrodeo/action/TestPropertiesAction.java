@@ -23,7 +23,8 @@ import sqlrodeo.implementation.ExecutionException;
 import sqlrodeo.implementation.ValidationException;
 
 /**
- *
+ * Test for the PropertiesAction class.
+ * @see PropertiesAction
  */
 public class TestPropertiesAction {
 
