@@ -36,7 +36,7 @@ public class TestPropertiesAction {
      * @throws IOException
      * @throws SAXException
      */
-    // @Test
+    @Test
     public void testValidate() throws SAXException, IOException, ParserConfigurationException {
 
         // Happy path, properties content.
