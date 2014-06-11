@@ -55,7 +55,7 @@ public class Version implements Comparable<Version> {
 	while (k < lim) {
 	    Integer c1 = v1[k];
 	    Integer c2 = v2[k];
-	    if (c1 != c2) {
+	    if (c1.intValue() != c2.intValue()) {
 		return c1 - c2;
 	    }
 	    k++;
