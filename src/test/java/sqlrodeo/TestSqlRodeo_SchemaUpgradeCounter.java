@@ -11,15 +11,14 @@ public class TestSqlRodeo_SchemaUpgradeCounter {
     @Test
     public void test() {
 
-	URL resourceUrl = this.getClass().getResource(
-		"/schema_upgrade_counter/master-script.xml");
-	SqlRodeo sqlRodeo = new SqlRodeo();
+        URL resourceUrl = this.getClass().getResource("/schema_upgrade_counter/master-script.xml");
+        SqlRodeo sqlRodeo = new SqlRodeo();
 
-	try {
-	    sqlRodeo.execute(resourceUrl);
-	} catch (Throwable e) {
-	    e.printStackTrace();
-	    fail(e.getMessage());
-	}
+        try {
+            sqlRodeo.execute(resourceUrl);
+        } catch(Throwable e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 }

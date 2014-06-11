@@ -15,45 +15,41 @@ public abstract class LocateableException extends SqlRodeoException {
 
     private final URL url;
 
-    public LocateableException(URL url, long lineNumber, Node node,
-	    String message) {
-	super(asString(message, url, lineNumber, node));
-	this.url = url;
-	this.lineNumber = lineNumber;
-	this.node = node;
+    public LocateableException(URL url, long lineNumber, Node node, String message) {
+        super(asString(message, url, lineNumber, node));
+        this.url = url;
+        this.lineNumber = lineNumber;
+        this.node = node;
     }
 
-    public LocateableException(URL url, long lineNumber, Node node,
-	    String message, Throwable throwable) {
-	super(asString(message, url, lineNumber, node), throwable);
-	this.url = url;
-	this.lineNumber = lineNumber;
-	this.node = node;
+    public LocateableException(URL url, long lineNumber, Node node, String message, Throwable throwable) {
+        super(asString(message, url, lineNumber, node), throwable);
+        this.url = url;
+        this.lineNumber = lineNumber;
+        this.node = node;
     }
 
-    public LocateableException(URL url, long lineNumber, Node node,
-	    Throwable throwable) {
-	super(asString("", url, lineNumber, node), throwable);
-	this.url = url;
-	this.lineNumber = lineNumber;
-	this.node = node;
+    public LocateableException(URL url, long lineNumber, Node node, Throwable throwable) {
+        super(asString("", url, lineNumber, node), throwable);
+        this.url = url;
+        this.lineNumber = lineNumber;
+        this.node = node;
     }
 
     static String asString(String message, URL url, long lineNumber, Node node) {
-	return message + " Url=" + url + ", lineNumber=" + lineNumber
-		+ (node != null ? ", node=" + node : "");
+        return message + " Url=" + url + ", lineNumber=" + lineNumber + (node != null ? ", node=" + node : "");
     }
 
     public long getLineNumber() {
-	return lineNumber;
+        return lineNumber;
     }
 
     public Node getNode() {
-	return node;
+        return node;
     }
 
     public URL getUrl() {
-	return url;
+        return url;
     }
 
     // @Override

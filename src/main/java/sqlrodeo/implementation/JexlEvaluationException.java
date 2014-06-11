@@ -7,19 +7,18 @@ public class JexlEvaluationException extends Exception {
     }
 
     public JexlEvaluationException(String message) {
-	super(message);
+        super(message);
     }
 
     public JexlEvaluationException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
-    public JexlEvaluationException(String message, Throwable cause,
-	    boolean enableSuppression, boolean writableStackTrace) {
-	super(message, cause, enableSuppression, writableStackTrace);
+    public JexlEvaluationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
     public JexlEvaluationException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 }

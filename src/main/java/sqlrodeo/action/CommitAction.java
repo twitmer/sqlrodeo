@@ -15,20 +15,19 @@ public final class CommitAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(CommitAction.class);
 
     public CommitAction(Node node) {
-	super(node);
+        super(node);
     }
 
     @Override
     public void execute(ExecutionContext context) throws SQLException {
 
-	String connectionId = getNode().getAttribute("id");
-	Connection conn = (Connection) context.get(connectionId);
-	if (conn == null) {
-	    throw new ExecutionException(this, "Connection not found: "
-		    + connectionId);
-	}
+        String connectionId = getNode().getAttribute("id");
+        Connection conn = (Connection)context.get(connectionId);
+        if(conn == null) {
+            throw new ExecutionException(this, "Connection not found: " + connectionId);
+        }
 
-	conn.commit();
+        conn.commit();
     }
 
     /**
@@ -36,6 +35,6 @@ public final class CommitAction extends BaseAction {
      */
     @Override
     public void validate() {
-	// Nothing to do here.
+        // Nothing to do here.
     }
 }

@@ -6,7 +6,7 @@ import sqlrodeo.SqlRodeoException;
 public class ExitException extends SqlRodeoException {
 
     public ExitException() {
-	super("Immediate exit requested.");
+        super("Immediate exit requested.");
     }
 
 }

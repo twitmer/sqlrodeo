@@ -7,11 +7,9 @@ public interface Delegate {
 
     /**
      * Execute user-defined action.
-     *
-     * @param context
-     *            The current context for execution.
-     * @param text
-     *            Optional text contained in <delegate> element in XML document.
+     * 
+     * @param context The current context for execution.
+     * @param text Optional text contained in <delegate> element in XML document.
      */
     void execute(ExecutionContext context, String text);
 

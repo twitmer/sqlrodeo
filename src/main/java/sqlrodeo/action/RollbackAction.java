@@ -15,19 +15,18 @@ public final class RollbackAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(RollbackAction.class);
 
     public RollbackAction(Node node) {
-	super(node);
+        super(node);
     }
 
     @Override
     public void execute(ExecutionContext context) throws SQLException {
-	String connectionId = getNode().getAttribute("connection-id");
-	Connection conn = (Connection) context.get(connectionId);
-	if (conn == null) {
-	    throw new ExecutionException(this, "Connection not found: "
-		    + connectionId);
-	}
+        String connectionId = getNode().getAttribute("connection-id");
+        Connection conn = (Connection)context.get(connectionId);
+        if(conn == null) {
+            throw new ExecutionException(this, "Connection not found: " + connectionId);
+        }
 
-	conn.rollback();
+        conn.rollback();
     }
 
     /**
@@ -35,6 +34,6 @@ public final class RollbackAction extends BaseAction {
      */
     @Override
     public void validate() {
-	// Nothing to do here.
+        // Nothing to do here.
     }
 }

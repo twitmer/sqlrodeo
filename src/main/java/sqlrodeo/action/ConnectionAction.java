@@ -18,48 +18,44 @@ public final class ConnectionAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(ConnectionAction.class);
 
     public ConnectionAction(Node node) {
-	super(node);
+        super(node);
     }
 
     @Override
     public void execute(ExecutionContext context) throws SQLException {
 
-	String dataSourceId = getNode().getAttribute("datasource-id");
-	String id = getNode().getAttribute("id");
+        String dataSourceId = getNode().getAttribute("datasource-id");
+        String id = getNode().getAttribute("id");
 
-	boolean autocommit = true;
-	String autocommitStr = getNode().getAttribute("autocommit");
-	if (!StringUtils.isEmpty(autocommitStr)) {
-	    autocommit = Boolean.parseBoolean(autocommitStr);
-	}
+        boolean autocommit = true;
+        String autocommitStr = getNode().getAttribute("autocommit");
+        if(!StringUtils.isEmpty(autocommitStr)) {
+            autocommit = Boolean.parseBoolean(autocommitStr);
+        }
 
-	DataSource ds = (DataSource) context.get(dataSourceId);
-	if (ds == null) {
-	    throw new ExecutionException(this, "Datasource not found: "
-		    + dataSourceId);
-	}
+        DataSource ds = (DataSource)context.get(dataSourceId);
+        if(ds == null) {
+            throw new ExecutionException(this, "Datasource not found: " + dataSourceId);
+        }
 
-	Connection conn = ds.getConnection();
+        Connection conn = ds.getConnection();
 
-	// Update autocommit setting, if needed.
-	if (conn.getAutoCommit() != autocommit) {
-	    log.debug("Switching connection autocommit to " + autocommit);
-	    conn.setAutoCommit(autocommit);
-	    if (conn.getAutoCommit() != autocommit) {
-		throw new ExecutionException(this,
-			"Could not turn autocommit to " + autocommit
-				+ " for connection " + id);
-	    }
-	    log.debug("connection " + id + " is autocommit?: "
-		    + conn.getAutoCommit());
-	}
+        // Update autocommit setting, if needed.
+        if(conn.getAutoCommit() != autocommit) {
+            log.debug("Switching connection autocommit to " + autocommit);
+            conn.setAutoCommit(autocommit);
+            if(conn.getAutoCommit() != autocommit) {
+                throw new ExecutionException(this, "Could not turn autocommit to " + autocommit + " for connection " + id);
+            }
+            log.debug("connection " + id + " is autocommit?: " + conn.getAutoCommit());
+        }
 
-	context.put(id, conn);
+        context.put(id, conn);
 
-	// Since we created this connection, we'll take responsibility for
-	// closing it.
-	log.debug("Pushing close action");
-	context.pushCloseAction(new CloseConnectionAction(getNode()));
+        // Since we created this connection, we'll take responsibility for
+        // closing it.
+        log.debug("Pushing close action");
+        context.pushCloseAction(new CloseConnectionAction(getNode()));
     }
 
     /**
@@ -67,6 +63,6 @@ public final class ConnectionAction extends BaseAction {
      */
     @Override
     public void validate() {
-	// Nothing to do here.
+        // Nothing to do here.
     }
 }

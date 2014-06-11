@@ -14,29 +14,24 @@ public final class ScriptAction extends BaseAction {
     Logger log = LoggerFactory.getLogger(ScriptAction.class);
 
     public ScriptAction(Node node) {
-	super(node);
+        super(node);
     }
 
     @Override
-    public void execute(ExecutionContext context)
-	    throws JexlEvaluationException {
+    public void execute(ExecutionContext context) throws JexlEvaluationException {
 
-	String nodeText = getNodeText();
+        String nodeText = getNodeText();
 
-	log.debug("Evaluating: " + nodeText);
-	Object result = context.evaluateScript(nodeText);
-	log.debug("result: "
-		+ result
-		+ (result != null ? ", class=" + result.getClass().getName()
-			: ""));
+        log.debug("Evaluating: " + nodeText);
+        Object result = context.evaluateScript(nodeText);
+        log.debug("result: " + result + (result != null ? ", class=" + result.getClass().getName() : ""));
     }
 
     @Override
     public void validate() {
-	String nodeText = getNodeText();
-	if (StringUtils.isEmpty(nodeText)) {
-	    throw new ValidationException(this, "No text in script node: "
-		    + toString());
-	}
+        String nodeText = getNodeText();
+        if(StringUtils.isEmpty(nodeText)) {
+            throw new ValidationException(this, "No text in script node: " + toString());
+        }
     }
 }

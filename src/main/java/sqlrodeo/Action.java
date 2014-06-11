@@ -12,8 +12,7 @@ public interface Action {
     /**
      * Execute this action against the given context.
      * 
-     * @param context
-     *            Context to use during execution.
+     * @param context Context to use during execution.
      * @throws Exception
      */
     void execute(ExecutionContext context) throws Exception;
@@ -30,22 +29,20 @@ public interface Action {
     /**
      * Retrieve the line number in the SqlRodeo XML file for this action.
      * 
-     * @return Line number in the SqlRodeo XML file that resulted in the
-     *         creation of this action.
+     * @return Line number in the SqlRodeo XML file that resulted in the creation of this action.
      */
     long resolveLineNumber();
 
     /**
      * Retrieve the URL of the SqlRodeo XML file for this action.
      * 
-     * @return URL of the SqlRodeo XML file that resulted in the creation of
-     *         this action.
+     * @return URL of the SqlRodeo XML file that resulted in the creation of this action.
      */
     URL resolveResourceUrl();
 
     /**
-     * Evaluate whether this action has sufficient and correct information from
-     * the SqlRodeo XML file to perform the intended action.
+     * Evaluate whether this action has sufficient and correct information from the SqlRodeo XML file to perform the intended
+     * action.
      */
     void validate() throws Exception;
 }
