@@ -24,8 +24,6 @@ public interface Action {
      */
     NodeWrapper getNode();
 
-    boolean isIfConditionTrue(ExecutionContext context);
-
     /**
      * Retrieve the line number in the SqlRodeo XML file for this action.
      * 

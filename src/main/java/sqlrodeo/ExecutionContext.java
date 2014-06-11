@@ -41,14 +41,6 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
     Connection getDefaultConnection() throws NotFoundException;
 
     /**
-     * Push a close action onto the stack. Close acctions are executed when the context is closed.
-     * 
-     * @see AutoCloseable
-     * @param closeAction Action to execute when this context is closed.
-     */
-    void pushCloseAction(Action closeAction);
-
-    /**
      * Substitute variable phrases in the given expression. Example: if the expression is "${user} has ${count} emails", the return
      * may be "Luke has 7 emails", provided "user" and "count" are defined in this context with those values.
      * 

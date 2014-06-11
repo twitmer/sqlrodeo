@@ -68,7 +68,8 @@ final public class JexlService {
         }
     }
 
-    public boolean evaluateBoolean(String expressionString, ExecutionContext context) throws JexlEvaluationException {
+    public boolean evaluateBoolean(String expressionString, ExecutionContext context)
+            throws JexlEvaluationException {
         if(log.isDebugEnabled()) {
             log.debug(String.format("evaluateBoolean: expressionString".replaceAll(", ", "=%s, ") + "=%s", expressionString));
         }

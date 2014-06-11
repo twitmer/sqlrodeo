@@ -28,7 +28,8 @@ public final class IncludeAction extends BaseAction {
     @Override
     public void execute(ExecutionContext context) throws Exception {
 
-        if(this.isIfConditionTrue(context)) {
+        String condition = getNode().getAttribute("if");
+        if(condition == null || context.evaluateBoolean(condition)) {
             log.debug("execute(): " + toString());
             // executeChildren(context);
 

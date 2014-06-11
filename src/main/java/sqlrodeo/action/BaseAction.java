@@ -14,7 +14,6 @@ import org.w3c.dom.Node;
 import sqlrodeo.Action;
 import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
-import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.implementation.NotFoundException;
 import sqlrodeo.util.StringUtils;
 import sqlrodeo.xml.NodeWrapper;
@@ -35,10 +34,11 @@ public abstract class BaseAction implements Action {
         }
 
         // Evaluate possible 'if' condition.
-        if(!isIfConditionTrue(context)) {
-            log.debug("Not executing: 'if' condition is false: " + getNode().getAttribute("if"));
-            return;
-        }
+        // String condition = getNode().getAttribute("if");
+        // if(!isIfConditionTrue(condition, context)) {
+        // log.debug("Not executing: 'if' condition is false: " + getNode().getAttribute("if"));
+        // return;
+        // }
 
         // Run each child of type 'Node'. (Strings are values, typically
         // consumed by their parent.)
@@ -53,7 +53,10 @@ public abstract class BaseAction implements Action {
                 log.debug("Action is " + action + " for node: " + kid);
                 // TODO: Check for NPE.
                 try {
-                    if(action.isIfConditionTrue(context)) {
+                    
+                    String condition = action.getNode().getAttribute("if");
+                    log.debug("Condition: " + condition);
+                    if ( condition == null || StringUtils.isEmpty(condition) || context.evaluateBoolean(condition)){
                         log.info("Executing action: " + action.toString() + " in " + action.resolveResourceUrl() + ", line: "
                                 + action.resolveLineNumber());
                         action.execute(context);
@@ -140,24 +143,14 @@ public abstract class BaseAction implements Action {
         return node;
     }
 
-    @Override
-    public boolean isIfConditionTrue(ExecutionContext context) {
-        String condition = getNode().getAttribute("if");
-
-        if(log.isDebugEnabled()) {
-            log.debug(String.format("isIfConditionTrue: condition".replaceAll(", ", "=%s, ") + "=%s", condition));
-        }
-
-        if(StringUtils.isEmpty(condition)) {
-            return true;
-        }
-
-        try {
-            return context.evaluateBoolean(condition);
-        } catch(JexlEvaluationException e) {
-            throw new ExecutionException(this, e);
-        }
-    }
+//    boolean isIfConditionTrue(String condition, ExecutionContext context) throws JexlEvaluationException {
+//
+//        if(log.isDebugEnabled()) {
+//            log.debug(String.format("isIfConditionTrue: condition".replaceAll(", ", "=%s, ") + "=%s", condition));
+//        }
+//
+//        return StringUtils.isEmpty(condition) || context.evaluateBoolean(condition);
+//    }
 
     @Override
     public long resolveLineNumber() {

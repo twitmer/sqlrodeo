@@ -1,11 +1,11 @@
 package sqlrodeo.implementation;
 
 import java.sql.Connection;
-import java.util.ArrayDeque;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,13 +13,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sqlrodeo.Action;
 import sqlrodeo.ExecutionContext;
 
 public final class ExecutionContextImplementation implements ExecutionContext {
-
-    /** Actions to implement upon closure. */
-    private final Deque<Action> closeActions = new ArrayDeque<>();
 
     /**
      * Delegate for Map<> implementation.
@@ -50,7 +46,20 @@ public final class ExecutionContextImplementation implements ExecutionContext {
             log.debug("close()");
         }
 
-        executeCloseActions();
+        // Close all connections.
+        Iterator<Entry<String, Object>> iter = delegateMap.entrySet().iterator();
+        while(iter.hasNext()) {
+            Entry<String, Object> entry = (Entry<String, Object>)iter.next();
+            if(entry.getValue() instanceof Connection) {
+                Connection conn = (Connection)entry.getValue();
+                log.info("Closing connection: " + entry.getKey());
+                try {
+                    conn.close();
+                } catch(SQLException e) {
+                    log.info("Ignoring error when closing connection: " + entry.getKey() + " : " + e.getMessage());
+                }
+            }
+        }
     }
 
     @Override
@@ -77,11 +86,6 @@ public final class ExecutionContextImplementation implements ExecutionContext {
         if(getClass() != obj.getClass())
             return false;
         ExecutionContextImplementation other = (ExecutionContextImplementation)obj;
-        if(closeActions == null) {
-            if(other.closeActions != null)
-                return false;
-        } else if(!closeActions.equals(other.closeActions))
-            return false;
         if(delegateMap == null) {
             if(other.delegateMap != null)
                 return false;
@@ -108,22 +112,6 @@ public final class ExecutionContextImplementation implements ExecutionContext {
     @Override
     public boolean evaluateBoolean(String jexlExpression) throws JexlEvaluationException {
         return jexlService.evaluateBoolean(jexlExpression, this);
-    }
-
-    private void executeCloseActions() {
-        if(log.isDebugEnabled()) {
-            log.debug(String.format("executeCloseActions: closeActions".replaceAll(", ", "=%s, ") + "=%s", closeActions.size()));
-        }
-
-        while(closeActions.size() > 0) {
-            Action closeAction = closeActions.pop();
-            log.debug("Running closeAction: " + closeAction);
-            try {
-                closeAction.execute(this);
-            } catch(Exception e) {
-                log.debug("Ignoring error when executing closeAction (" + closeAction + "): " + e.getMessage());
-            }
-        }
     }
 
     @Override
@@ -162,7 +150,6 @@ public final class ExecutionContextImplementation implements ExecutionContext {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((closeActions == null) ? 0 : closeActions.hashCode());
         result = prime * result + ((delegateMap == null) ? 0 : delegateMap.hashCode());
         result = prime * result + ((log == null) ? 0 : log.hashCode());
         return result;
@@ -176,16 +163,6 @@ public final class ExecutionContextImplementation implements ExecutionContext {
     @Override
     public Set<String> keySet() {
         return delegateMap.keySet();
-    }
-
-    /**
-     * Push a close action onto the stack.
-     * 
-     * @param closeAction Action to execute when this context is closed.
-     */
-    @Override
-    public void pushCloseAction(Action closeAction) {
-        closeActions.push(closeAction);
     }
 
     @Override

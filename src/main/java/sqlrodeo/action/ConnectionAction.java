@@ -51,11 +51,6 @@ public final class ConnectionAction extends BaseAction {
         }
 
         context.put(id, conn);
-
-        // Since we created this connection, we'll take responsibility for
-        // closing it.
-        log.debug("Pushing close action");
-        context.pushCloseAction(new CloseConnectionAction(getNode()));
     }
 
     /**
