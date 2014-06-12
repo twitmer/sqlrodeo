@@ -18,9 +18,7 @@ import sqlrodeo.implementation.ExecutionContextImplementation;
 import sqlrodeo.implementation.ExecutionException;
 
 /**
- * Test for the PropertiesAction class.
- * 
- * @see PropertiesAction
+ * Test for the RollbackAction class.
  */
 public class TestRollbackAction {
 
