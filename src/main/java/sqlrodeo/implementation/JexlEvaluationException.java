@@ -1,5 +1,8 @@
 package sqlrodeo.implementation;
 
+/**
+ * Exception thrown when a JEXL expression or script is rejected by the JEXL engine.
+ */
 @SuppressWarnings("serial")
 public class JexlEvaluationException extends Exception {
 
