@@ -27,12 +27,6 @@ public final class ConnectionAction extends BaseAction {
         String dataSourceId = getNode().getAttribute("datasource-id");
         String id = getNode().getAttribute("id");
 
-        boolean autocommit = true;
-        String autocommitStr = getNode().getAttribute("autocommit");
-        if(!StringUtils.isEmpty(autocommitStr)) {
-            autocommit = Boolean.parseBoolean(autocommitStr);
-        }
-
         DataSource ds = (DataSource)context.get(dataSourceId);
         if(ds == null) {
             throw new ExecutionException(this, "Datasource not found: " + dataSourceId);
@@ -41,15 +35,19 @@ public final class ConnectionAction extends BaseAction {
         Connection conn = ds.getConnection();
 
         // Update autocommit setting, if needed.
-        if(conn.getAutoCommit() != autocommit) {
-            log.debug("Switching connection autocommit to " + autocommit);
-            conn.setAutoCommit(autocommit);
-            if(conn.getAutoCommit() != autocommit) {
-                throw new ExecutionException(this, "Could not turn autocommit to " + autocommit + " for connection " + id);
+        String autocommitStr = getNode().getAttribute("autocommit");
+        if(!StringUtils.isEmpty(autocommitStr)) {
+            boolean desiredAutocommitValue = Boolean.parseBoolean(autocommitStr);
+            if(conn.getAutoCommit() != desiredAutocommitValue) {
+                conn.setAutoCommit(desiredAutocommitValue);
+                if(conn.getAutoCommit() != desiredAutocommitValue) {
+                    throw new ExecutionException(this, "Could not turn autocommit to " + desiredAutocommitValue
+                            + " for connection " + id);
+                }
             }
-            log.debug("connection " + id + " is autocommit?: " + conn.getAutoCommit());
         }
 
+        // Put the connection into the context.
         context.put(id, conn);
     }
 
