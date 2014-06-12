@@ -66,9 +66,9 @@ public abstract class BaseAction implements Action {
                                 + action.resolveResourceUrl());
                     }
                 } catch(RuntimeException e) {
-                    throw new ExecutionException(action, e);
+                    throw new ExecutionException(action, e.getMessage(), e);
                 } catch(Exception e) {
-                    throw new ExecutionException(action, e);
+                    throw new ExecutionException(action, e.getMessage(), e);
                 }
             }
         }
@@ -137,7 +137,7 @@ public abstract class BaseAction implements Action {
         } catch(ExecutionException e) {
             throw e;
         } catch(Exception e) {
-            throw new ExecutionException(this, e);
+            throw new ExecutionException(this,e.getMessage(), e);
         }
     }
 

@@ -37,7 +37,7 @@ public final class QueryAction extends BaseAction {
         try {
             publishAs = getPublishAs(context.substitute(getNode().getAttribute("publish-as")));
         } catch(JexlEvaluationException e1) {
-            throw new ExecutionException(this, e1);
+            throw new ExecutionException(this, e1.getMessage(), e1);
         }
 
         boolean substitute = true;
@@ -56,7 +56,7 @@ public final class QueryAction extends BaseAction {
             try {
                 queryString = context.substitute(queryString);
             } catch(JexlEvaluationException e) {
-                throw new ExecutionException(this, e);
+                throw new ExecutionException(this, e.getMessage(), e);
             }
         }
 

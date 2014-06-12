@@ -66,7 +66,7 @@ public final class PropertiesAction extends BaseAction {
             }
 
         } catch(IOException | IllegalArgumentException | JexlEvaluationException | URISyntaxException ex) {
-            throw new ExecutionException(this, ex);
+            throw new ExecutionException(this, ex.getMessage(), ex);
         }
     }
 

@@ -54,7 +54,7 @@ public final class SqlAction extends BaseAction {
             } catch(RuntimeException e) {
                 throw e;
             } catch(Exception e) {
-                throw new ExecutionException(this, e);
+                throw new ExecutionException(this, e.getMessage(), e);
             }
         }
 
@@ -77,7 +77,7 @@ public final class SqlAction extends BaseAction {
                     } catch(RuntimeException e) {
                         throw e;
                     } catch(Exception e) {
-                        throw new ExecutionException(this, e);
+                        throw new ExecutionException(this, e.getMessage(), e);
                     }
                 } else if(child instanceof Element) {
 
@@ -87,7 +87,7 @@ public final class SqlAction extends BaseAction {
                     } catch(RuntimeException e) {
                         throw e;
                     } catch(Exception e) {
-                        throw new ExecutionException(childAction, e);
+                        throw new ExecutionException(childAction, e.getMessage(), e);
                     }
                 }
             }

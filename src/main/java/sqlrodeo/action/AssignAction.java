@@ -24,7 +24,7 @@ public final class AssignAction extends BaseAction {
             String value = context.substitute(getNode().getAttribute("value"));
             context.put(id, context.evaluate(value));
         } catch(JexlEvaluationException e) {
-            throw new ExecutionException(this, e);
+            throw new ExecutionException(this, e.getMessage(), e);
         }
     }
 
