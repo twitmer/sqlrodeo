@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,6 @@ import org.w3c.dom.Node;
 import sqlrodeo.Action;
 import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
-import sqlrodeo.implementation.NotFoundException;
 import sqlrodeo.util.StringUtils;
 import sqlrodeo.xml.NodeWrapper;
 
@@ -53,10 +54,10 @@ public abstract class BaseAction implements Action {
                 log.debug("Action is " + action + " for node: " + kid);
                 // TODO: Check for NPE.
                 try {
-                    
+
                     String condition = action.getNode().getAttribute("if");
                     log.debug("Condition: " + condition);
-                    if ( condition == null || StringUtils.isEmpty(condition) || context.evaluateBoolean(condition)){
+                    if(condition == null || StringUtils.isEmpty(condition) || context.evaluateBoolean(condition)) {
                         log.info("Executing action: " + action.toString() + " in " + action.resolveResourceUrl() + ", line: "
                                 + action.resolveLineNumber());
                         action.execute(context);
@@ -132,10 +133,33 @@ public abstract class BaseAction implements Action {
         // Didn't find connection-id on parent node, so see if the context knows
         // which it is.
         try {
-            return context.getDefaultConnection();
-        } catch(NotFoundException e) {
+            return getDefaultConnection(context);
+        } catch(ExecutionException e) {
+            throw e;
+        } catch(Exception e) {
             throw new ExecutionException(this, e);
         }
+    }
+
+    /**
+     * Find the default database connection. This only works if there is only one Connection in the context.
+     * 
+     * @return Existing connection object from context, but only if only 1 connection is found.
+     * @throws NotFoundException If 0, 2, or more Connections exist in the context.
+     */
+    private Connection getDefaultConnection(ExecutionContext context) {
+
+        Iterator<Entry<String, Object>> iter = context.entrySet().iterator();
+        while(iter.hasNext()) {
+            Entry<String, Object> entry = (Entry<String, Object>)iter.next();
+            Object value = entry.getValue();
+            if(value != null && value instanceof Connection) {
+                return (Connection)value;
+            }
+        }
+
+        // Fallthrough: Could not find default connection.
+        throw new IllegalArgumentException("Could not identify default connecton.");
     }
 
     @Override
@@ -143,14 +167,14 @@ public abstract class BaseAction implements Action {
         return node;
     }
 
-//    boolean isIfConditionTrue(String condition, ExecutionContext context) throws JexlEvaluationException {
-//
-//        if(log.isDebugEnabled()) {
-//            log.debug(String.format("isIfConditionTrue: condition".replaceAll(", ", "=%s, ") + "=%s", condition));
-//        }
-//
-//        return StringUtils.isEmpty(condition) || context.evaluateBoolean(condition);
-//    }
+    // boolean isIfConditionTrue(String condition, ExecutionContext context) throws JexlEvaluationException {
+    //
+    // if(log.isDebugEnabled()) {
+    // log.debug(String.format("isIfConditionTrue: condition".replaceAll(", ", "=%s, ") + "=%s", condition));
+    // }
+    //
+    // return StringUtils.isEmpty(condition) || context.evaluateBoolean(condition);
+    // }
 
     @Override
     public long resolveLineNumber() {

@@ -17,16 +17,18 @@ import sqlrodeo.ExecutionContext;
 
 public final class ExecutionContextImplementation implements ExecutionContext {
 
-    /**
-     * Delegate for Map<> implementation.
-     */
+    /** Delegate for Map<> implementation. */
     private final Map<String, Object> delegateMap = new HashMap<>();
 
+    /** Service for implementing JEXL functionality. */
     private final JexlService jexlService = new JexlService();
 
     /** Logger */
     private final Logger log = LoggerFactory.getLogger(ExecutionContextImplementation.class);
 
+    /**
+     * Constructor that initializes the context with the contents of System.getProperties() and System.getEnv().
+     */
     public ExecutionContextImplementation() {
         delegateMap.put("sysProps", System.getProperties());
         delegateMap.put("env", System.getenv());
@@ -119,31 +121,6 @@ public final class ExecutionContextImplementation implements ExecutionContext {
         Object value = delegateMap.get(key);
         log.debug("get: " + key + " = " + value + " (" + (value != null ? value.getClass().getName() : "null") + ")");
         return value;
-    }
-
-    /**
-     * Find the default connection in the context. This only works if there is only one Connection in the context.
-     * 
-     * @param context
-     * @return
-     * @throws NotFoundException
-     */
-    @Override
-    public Connection getDefaultConnection() throws NotFoundException {
-
-        List<Connection> connections = new ArrayList<>();
-        for(Object value : delegateMap.values()) {
-            if(value instanceof Connection) {
-                connections.add((Connection)value);
-            }
-        }
-
-        if(connections.size() == 1) {
-            return connections.get(0);
-        } else {
-            throw new NotFoundException("Could not identify default connecton from collection of " + connections.size()
-                    + " connections");
-        }
     }
 
     @Override

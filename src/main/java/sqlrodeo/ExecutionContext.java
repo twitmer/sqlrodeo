@@ -1,14 +1,13 @@
 package sqlrodeo;
 
-import java.sql.Connection;
 import java.util.Map;
 
 import sqlrodeo.implementation.JexlEvaluationException;
-import sqlrodeo.implementation.NotFoundException;
 
 /**
  * The context containing all variables and objects created and used during processing of SqlRodeo XML files. This also provides a
- * number of convenience functions used by the IActions to work with JEXL expressions and publish 'close' actions.
+ * number of convenience functions used by the IActions to work with JEXL expressions and publish 'close' actions. It extends the
+ * Map interface to simplify the integration with JEXL.
  */
 public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
 
@@ -21,7 +20,14 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      */
     Object evaluate(String jexlExpression) throws JexlEvaluationException;
 
-    Object evaluateScript(String jexlExpression) throws JexlEvaluationException;
+    /**
+     * Evaluate the given script with the JEXL engine.
+     * 
+     * @param scriptText Script to evaluate.
+     * @return Result provided by JEXL, which may be void.
+     * @throws JexlEvaluationException
+     */
+    Object evaluateScript(String scriptText) throws JexlEvaluationException;
 
     /**
      * A convenience wrapper around the other evaluate() method in this class that evaluates the given expression as a boolean.
@@ -31,14 +37,6 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      * @throws JexlEvaluationException
      */
     boolean evaluateBoolean(String jexlExpression) throws JexlEvaluationException;
-
-    /**
-     * Find the default database connection. This only works if there is only one Connection in the context.
-     * 
-     * @return Existing connection object from context, but only if only 1 connection is found.
-     * @throws NotFoundException If 0, 2, or more Connections exist in the context.
-     */
-    Connection getDefaultConnection() throws NotFoundException;
 
     /**
      * Substitute variable phrases in the given expression. Example: if the expression is "${user} has ${count} emails", the return
