@@ -61,7 +61,7 @@ public class TestObjectFactory {
         // Given: an empty ExecutionContext.
         ExecutionContext context = new ExecutionContextImplementation();
 
-        // Given: Before execution, JNDI object is not in context.
+        // Expect: Before execution, JNDI object is not in context.
         assertNull(context.get("myDataSource"));
 
         // When: The ObjectFactoryAction is executed.
