@@ -12,7 +12,6 @@ import javax.naming.NamingException;
 import javax.naming.Reference;
 import javax.naming.StringRefAddr;
 import javax.naming.spi.ObjectFactory;
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,11 @@ public final class ObjectFactoryAction extends BaseAction {
     private static final Logger log = LoggerFactory.getLogger(ObjectFactoryAction.class);
 
     /**
+     * Initial context to use for JNDI and ObjectFactory invocations.
+     */
+    private Context initialContext;
+
+    /**
      * Constructor.
      * 
      * @param node
@@ -47,15 +51,14 @@ public final class ObjectFactoryAction extends BaseAction {
      */
     private Object retrieveJndiObject(String jndiName) {
 
-        if(jndiName == null || StringUtils.isEmpty(jndiName)) {
+        if(StringUtils.isEmpty(jndiName)) {
             return null;
         }
 
         try {
-            Context initialContext = new InitialContext();
-            Object jndiObject = initialContext.lookup("java:comp/env/" + jndiName);
+            Object jndiObject = getInitialContext().lookup("java:comp/env/" + jndiName);
 
-            if(jndiObject != null && jndiObject instanceof DataSource) {
+            if(jndiObject != null) {
                 return jndiObject;
             }
         } catch(NamingException e) {
@@ -114,19 +117,22 @@ public final class ObjectFactoryAction extends BaseAction {
         if(text != null) {
             props.load(new StringReader(text));
         }
-        log.info("ObjectFactory Props: " + props);
+        
+        if(log.isDebugEnabled()) {
+            log.debug("ObjectFactory Properties: " + props);
+        }
+
         Reference ref = new Reference(context.substitute(getNode().getAttribute("objectClassName")));
         for(String key : props.stringPropertyNames()) {
             ref.add(new StringRefAddr(key, props.getProperty(key)));
         }
 
         // Define other variables we don't actually care about.
-        InitialContext initialContext = new InitialContext();
         Name name = null;
         Hashtable<?, ?> env = new Hashtable<>();
 
         // Invoke the ObjectFactory to create the desired object.
-        Object theObject = objectFactory.getObjectInstance(ref, name, initialContext, env);
+        Object theObject = objectFactory.getObjectInstance(ref, name, getInitialContext(), env);
         return theObject;
     }
 
@@ -137,5 +143,29 @@ public final class ObjectFactoryAction extends BaseAction {
     @Override
     public void validate() {
         // Nothing to do. The XSD enforces things well enough.
+    }
+
+    /**
+     * Getter that lazily initializes the initialContext if one hasn't already been provided. Lazy initialization was chosen here
+     * mainly to allow unit tests to inject a mock InitialContext.
+     * 
+     * @return InitialContext.
+     * @throws NamingException
+     */
+    public Context getInitialContext() throws NamingException {
+        // Lazy initialization of context so that unit tests can inject mock contexts.
+        if(null == initialContext) {
+            initialContext = new InitialContext();
+        }
+        return initialContext;
+    }
+
+    /**
+     * Setter for initialContext.
+     * 
+     * @param initialContext
+     */
+    public void setInitialContext(Context initialContext) {
+        this.initialContext = initialContext;
     }
 }
