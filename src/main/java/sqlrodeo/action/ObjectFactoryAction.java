@@ -43,32 +43,6 @@ public final class ObjectFactoryAction extends BaseAction {
         super(node);
     }
 
-    /**
-     * Attempt to retrieve an object by name from JNDI.
-     * 
-     * @param jndiName Name of object within the JNDI context.
-     * @return The object, if found, otherwise null.
-     */
-    private Object retrieveJndiObject(String jndiName) {
-
-        if(StringUtils.isEmpty(jndiName)) {
-            return null;
-        }
-
-        try {
-            Object jndiObject = getInitialContext().lookup("java:comp/env/" + jndiName);
-
-            if(jndiObject != null) {
-                return jndiObject;
-            }
-        } catch(NamingException e) {
-            log.debug("Ignoring error from JNDI lookup: " + e.getMessage() + ", " + e.getClass().getName());
-        }
-
-        // Fallthrough
-        return null;
-    }
-
     /*
      * (non-Javadoc)
      * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
@@ -90,6 +64,21 @@ public final class ObjectFactoryAction extends BaseAction {
         theObject = invokeObjectFactory(context, objectFactory);
         log.debug("ObjectFactory created instance of " + theObject.getClass().getName());
         context.put(getNode().getAttribute("id"), theObject);
+    }
+
+    /**
+     * Getter that lazily initializes the initialContext if one hasn't already been provided. Lazy initialization was chosen here
+     * mainly to allow unit tests to inject a mock InitialContext.
+     * 
+     * @return InitialContext.
+     * @throws NamingException
+     */
+    public Context getInitialContext() throws NamingException {
+        // Lazy initialization of context so that unit tests can inject mock contexts.
+        if(null == initialContext) {
+            initialContext = new InitialContext();
+        }
+        return initialContext;
     }
 
     /**
@@ -136,28 +125,30 @@ public final class ObjectFactoryAction extends BaseAction {
         return theObject;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see sqlrodeo.Action#validate()
-     */
-    @Override
-    public void validate() {
-        // Nothing to do. The XSD enforces things well enough.
-    }
-
     /**
-     * Getter that lazily initializes the initialContext if one hasn't already been provided. Lazy initialization was chosen here
-     * mainly to allow unit tests to inject a mock InitialContext.
+     * Attempt to retrieve an object by name from JNDI.
      * 
-     * @return InitialContext.
-     * @throws NamingException
+     * @param jndiName Name of object within the JNDI context.
+     * @return The object, if found, otherwise null.
      */
-    public Context getInitialContext() throws NamingException {
-        // Lazy initialization of context so that unit tests can inject mock contexts.
-        if(null == initialContext) {
-            initialContext = new InitialContext();
+    private Object retrieveJndiObject(String jndiName) {
+
+        if(StringUtils.isEmpty(jndiName)) {
+            return null;
         }
-        return initialContext;
+
+        try {
+            Object jndiObject = getInitialContext().lookup("java:comp/env/" + jndiName);
+
+            if(jndiObject != null) {
+                return jndiObject;
+            }
+        } catch(NamingException e) {
+            log.debug("Ignoring error from JNDI lookup: " + e.getMessage() + ", " + e.getClass().getName());
+        }
+
+        // Fallthrough
+        return null;
     }
 
     /**
@@ -167,5 +158,14 @@ public final class ObjectFactoryAction extends BaseAction {
      */
     public void setInitialContext(Context initialContext) {
         this.initialContext = initialContext;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see sqlrodeo.Action#validate()
+     */
+    @Override
+    public void validate() {
+        // Nothing to do. The XSD enforces things well enough.
     }
 }
