@@ -143,7 +143,6 @@ public final class SqlAction extends BaseAction {
     @Override
     public void validate() {
 
-        // boolean substitute = getAttributeAsBoolean("substitute", true);
         boolean oneStatement = getAttributeAsBoolean("oneStatement", false);
         String href = getNode().getAttribute("href");
         List<Node> children = getNode().getChildNodesAsList();
