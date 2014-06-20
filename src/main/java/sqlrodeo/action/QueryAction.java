@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
@@ -31,7 +32,9 @@ public final class QueryAction extends BaseAction {
         if(log.isDebugEnabled()) {
             log.debug(String.format("execute: node".replaceAll(", ", "=%s, ") + "=%s", toString()));
         }
-        String queryString = getNodeText();
+
+        // Get the query string. This should be the first child of the query, which should also be a text node.
+        String queryString = retrieveQueryString();
 
         String[] publishAs;
         try {
@@ -131,6 +134,15 @@ public final class QueryAction extends BaseAction {
         log.debug("Done Running " + queryChildren.size() + " child actions");
     }
 
+    private String retrieveQueryString() {
+        String queryString = null;
+        Node childNode = getNode().getFirstChild();
+        if(childNode != null) {
+            queryString = childNode.getNodeValue();
+        }
+        return queryString;
+    }
+
     @Override
     public void validate() {
         List<Node> children = getNode().getChildNodesAsList();
@@ -144,12 +156,12 @@ public final class QueryAction extends BaseAction {
             throw new ValidationException(this, msg);
         }
 
-        // Verify all subsequent entries are Nodes
+        // Verify all subsequent entries are Elements
         for(int i = 1; i < children.size(); ++i) {
-            Object kid = children.get(i);
-            if(!(kid instanceof Node)) {
-                String msg = "Query node " + getNode().toString()
-                        + " may not contain Strings after the first element. Invalid value: " + kid.getClass().getName();
+            Node kid = children.get(i);
+            if(!(kid instanceof Element)) {
+                String msg = "<query> element " + getNode().toString()
+                        + " may not contain text nodes after the query. Invalid element: " + kid.getClass().getName();
                 throw new ValidationException(this, msg);
             }
         }

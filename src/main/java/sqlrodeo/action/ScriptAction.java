@@ -20,7 +20,7 @@ public final class ScriptAction extends BaseAction {
     @Override
     public void execute(ExecutionContext context) throws JexlEvaluationException {
 
-        String nodeText = getNodeText();
+        String nodeText = getNode().getTextContent();
 
         log.debug("Evaluating: " + nodeText);
         Object result = context.evaluateScript(nodeText);
@@ -29,7 +29,7 @@ public final class ScriptAction extends BaseAction {
 
     @Override
     public void validate() {
-        String nodeText = getNodeText();
+        String nodeText = getNode().getTextContent();
         if(StringUtils.isEmpty(nodeText)) {
             throw new ValidationException(this, "No text in script node: " + toString());
         }

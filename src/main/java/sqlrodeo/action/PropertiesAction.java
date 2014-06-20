@@ -53,7 +53,7 @@ public final class PropertiesAction extends BaseAction {
                 URL relUrl = resolveRelativeUrl(href);
                 text = context.substitute(UrlRetriever.retrieveTextForUrl(relUrl));
             } else {
-                text = context.substitute(getNodeText());
+                text = context.substitute(getNode().getTextContent());
             }
 
             // Load the contents into a Properties object.
