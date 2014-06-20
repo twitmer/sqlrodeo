@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import sqlrodeo.Action;
 import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ValidationException;
+import sqlrodeo.util.StringUtils;
 import sqlrodeo.xml.Parser;
 
 public final class IncludeAction extends BaseAction {
@@ -29,20 +30,13 @@ public final class IncludeAction extends BaseAction {
     public void execute(ExecutionContext context) throws Exception {
 
         String condition = getNode().getAttribute("if");
-        if(condition == null || context.evaluateBoolean(condition)) {
-            log.debug("execute(): " + toString());
-            // executeChildren(context);
+        if(StringUtils.isEmpty(condition) || context.evaluateBoolean(condition)) {
 
             URL relativeUrl = resolveRelativeUrl(context.substitute(getNode().getAttribute("href")));
-
-            log.debug("Parsing included URL: " + relativeUrl);
-            Node subRoot = new Parser().parse(relativeUrl);
-            log.debug("Done Parsing included URL: " + relativeUrl);
-
-            log.debug("Executing included URL: " + relativeUrl);
-            Action action = (Action)subRoot.getUserData("action");
-            // TODO: Check for NPE.
+            Node rootFromReferencedFile = new Parser().parse(relativeUrl);
+            Action action = (Action)rootFromReferencedFile.getUserData("action");
             action.execute(context);
+
         } else {
             log.debug("Not running, because if-condition is false: " + toString());
         }
