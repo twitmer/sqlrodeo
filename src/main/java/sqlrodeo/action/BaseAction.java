@@ -16,72 +16,89 @@ import org.w3c.dom.Node;
 import sqlrodeo.Action;
 import sqlrodeo.ExecutionContext;
 import sqlrodeo.implementation.ExecutionException;
+import sqlrodeo.implementation.JexlEvaluationException;
 import sqlrodeo.util.StringUtils;
 import sqlrodeo.xml.NodeWrapper;
 
+/**
+ * Base class that provides common functions for all Actions.
+ */
 public abstract class BaseAction implements Action {
 
+    /** Logger */
     private static final Logger log = LoggerFactory.getLogger(BaseAction.class);
 
+    /** The XML Node to which this action is attached. */
     private final NodeWrapper node;
 
+    /**
+     * Constructor.
+     * 
+     * @param node The XML Node to which this action is attached.
+     */
     public BaseAction(Node node) {
         this.node = new NodeWrapper(node);
     }
 
+    private boolean conditionIsTrueOrEmpty(String condition, ExecutionContext context) throws JexlEvaluationException {
+
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("conditionIsTrueOrEmpty: condition".replaceAll(", ", "=%s, ") + "=%s", condition));
+        }
+
+        // Assume false until proven otherwise.
+        boolean isTrue = (StringUtils.isEmpty(condition) || context.evaluateBoolean(condition));
+
+        if(log.isInfoEnabled()) {
+            log.info("Condition '" + condition + "' is " + isTrue);
+        }
+
+        return isTrue;
+    }
+
+    /**
+     * Run the child actions of this action, based on the child nodes of this action's node.
+     * 
+     * @param context The executionContext to use during execution.
+     */
     public void executeChildren(ExecutionContext context) {
         if(log.isDebugEnabled()) {
             log.debug(String.format("executeChildren: node".replaceAll(", ", "=%s, ") + "=%s", getNode().toString()));
         }
 
-        // Evaluate possible 'if' condition.
-        // String condition = getNode().getAttribute("if");
-        // if(!isIfConditionTrue(condition, context)) {
-        // log.debug("Not executing: 'if' condition is false: " + getNode().getAttribute("if"));
-        // return;
-        // }
-
-        // Run each child of type 'Node'. (Strings are values, typically
-        // consumed by their parent.)
+        // Find each element and run it.
         List<Node> kids = getNode().getChildNodesAsList();
         for(int i = 0; i < kids.size(); ++i) {
             NodeWrapper kid = new NodeWrapper(kids.get(i));
 
-            // log.debug("NODE: " + kids.get(i).getClass().getName());
-            // com.sun.org.apache.xerces.internal.dom.DeferredElementImpl impl;
             if(kids.get(i) instanceof Element) {
                 Action action = (Action)kid.getUserData("action");
-                log.debug("Action is " + action + " for node: " + kid);
-                // TODO: Check for NPE.
+                if(log.isDebugEnabled()) {
+                    log.debug("Action is " + action + " for node: " + kid);
+                }
                 try {
 
-                    String condition = action.getNode().getAttribute("if");
-                    log.debug("Condition: " + condition);
-                    if(condition == null || StringUtils.isEmpty(condition) || context.evaluateBoolean(condition)) {
-                        log.info("Executing action: " + action.toString() + " in " + action.resolveResourceUrl() + ", line: "
-                                + action.resolveLineNumber());
+                    if(conditionIsTrueOrEmpty(action.getNode().getAttribute("if"), context)) {
+                        if(log.isInfoEnabled()) {
+                            log.info("Executing action: " + action.toString() + " in " + action.resolveResourceUrl() + ", line: "
+                                    + action.resolveLineNumber());
+                        }
                         action.execute(context);
                     } else {
-                        log.info("Skipping action because 'if' condition is false: " + action.toString() + " in "
-                                + action.resolveResourceUrl());
+                        if(log.isInfoEnabled()) {
+                            log.info("Skipping action: " + action.toString() + " in " + action.resolveResourceUrl() + ", line: "
+                                    + action.resolveLineNumber() + " because 'if' condition is false.");
+                        }
                     }
-                } catch(RuntimeException e) {
-                    throw new ExecutionException(action, e.getMessage(), e);
+                } catch(ExecutionException e) {
+                    throw e;
+                    // } catch(RuntimeException e) {
+                    // throw new ExecutionException(action, e.getMessage(), e);
                 } catch(Exception e) {
                     throw new ExecutionException(action, e.getMessage(), e);
                 }
             }
         }
-    }
-
-    protected String getNodeText() {
-        String nodeText = null;
-        Node childNode = getNode().getFirstChild();
-        if(childNode != null) {
-            nodeText = childNode.getNodeValue();
-        }
-
-        return nodeText;
     }
 
     protected boolean getAttributeAsBoolean(String name, boolean defaultValue) {
@@ -93,8 +110,7 @@ public abstract class BaseAction implements Action {
         return defaultValue;
     }
 
-    // @Override
-    public Connection getConnection(ExecutionContext context) {
+    protected Connection getConnection(ExecutionContext context) {
 
         NodeWrapper workingNode = getNode();
         String connId = workingNode.getAttribute("connection-id");
@@ -137,7 +153,7 @@ public abstract class BaseAction implements Action {
         } catch(ExecutionException e) {
             throw e;
         } catch(Exception e) {
-            throw new ExecutionException(this,e.getMessage(), e);
+            throw new ExecutionException(this, e.getMessage(), e);
         }
     }
 
@@ -167,21 +183,12 @@ public abstract class BaseAction implements Action {
         return node;
     }
 
-    // boolean isIfConditionTrue(String condition, ExecutionContext context) throws JexlEvaluationException {
-    //
-    // if(log.isDebugEnabled()) {
-    // log.debug(String.format("isIfConditionTrue: condition".replaceAll(", ", "=%s, ") + "=%s", condition));
-    // }
-    //
-    // return StringUtils.isEmpty(condition) || context.evaluateBoolean(condition);
-    // }
-
     @Override
     public long resolveLineNumber() {
         return getNode().resolveLineNumber();
     }
 
-    public URL resolveRelativeUrl(String href) throws MalformedURLException, URISyntaxException {
+    protected URL resolveRelativeUrl(String href) throws MalformedURLException, URISyntaxException {
         URL resourceUrl = getNode().resolveResourceUrl();
         return resourceUrl.toURI().resolve(".").resolve(href).toURL();
     }
