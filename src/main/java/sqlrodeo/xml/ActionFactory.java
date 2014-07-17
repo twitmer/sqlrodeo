@@ -29,6 +29,7 @@ final class ActionFactory {
         if(log.isDebugEnabled()) {
             log.debug(String.format("build: element".replaceAll(", ", "=%s, ") + "=%s", element));
         }
+
         switch(element.getNodeName()) {
             case "assign":
                 return new AssignAction(element);

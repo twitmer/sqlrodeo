@@ -17,8 +17,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -36,28 +34,6 @@ public final class Parser {
         }
     }
 
-    /**
-     * Oh this annoys me: https://www.java.net/node/667186f
-     * 
-     * @param e
-     */
-    public static void removeWhitespaceNodes(Element e) {
-
-        NodeList children = e.getChildNodes();
-
-        // Go through the list backwards so we don't affect the element indices
-        // as we cull children.
-
-        for(int i = children.getLength() - 1; i >= 0; i--) {
-            Node child = children.item(i);
-            if(child instanceof Text && ((Text)child).getData().trim().length() == 0) {
-                // log.debug("Removed whitespace node");
-                e.removeChild(child);
-            } else if(child instanceof Element) {
-                removeWhitespaceNodes((Element)child);
-            }
-        }
-    }
 
     public Node parse(URL resourceURL) throws SAXException, IOException, ParserConfigurationException, DOMException,
             URISyntaxException {
@@ -73,10 +49,6 @@ public final class Parser {
 
         // TODO: Should I be passing Document instead of a root Element around?
         Element docRoot = document.getDocumentElement();
-
-        // Step: Remove useless whitespace nodes
-        log.info("Culling whitespace #text nodes from:" + resourceURL.toExternalForm());
-        removeWhitespaceNodes(docRoot);
 
         log.info("Displaying Node tree for " + docRoot.getOwnerDocument().getDocumentURI());
         display("", docRoot);

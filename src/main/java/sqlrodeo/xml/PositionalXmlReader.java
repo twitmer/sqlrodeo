@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -85,6 +87,11 @@ class PositionalXmlReader {
                 }
                 addTextIfNeeded();
                 final Element closedEl = elementStack.pop();
+
+                // Cull whitespace nodes from this element.
+                removeWhitespaceNodes(closedEl);
+
+                // Add element to parent, which could be the document if this is the root element.
                 if(elementStack.isEmpty()) { // Is this the root element?
                     doc.appendChild(closedEl);
                 } else {
@@ -138,4 +145,41 @@ class PositionalXmlReader {
         parser.parse(is, handler);
         return doc;
     }
+    
+    /**
+     * Oh this annoys me: https://www.java.net/node/667186f
+     * 
+     * @param e
+     */
+    public static void removeWhitespaceNodes(Element e) {
+
+        if(log.isDebugEnabled()) {
+            log.debug("removeWhitespaceNodes " + e.getTagName());
+        }
+
+        NodeList children = e.getChildNodes();
+
+        // Go through the list backwards so we don't affect the element indices
+        // as we cull children.
+
+        boolean removed= false;
+        for(int i = children.getLength() - 1; i >= 0; i--) {
+            Node child = children.item(i);
+            if(child instanceof Text && ((Text)child).getData().trim().length() == 0) {
+                e.removeChild(child);
+                removed = true;
+//				log.debug("Removed whitespace node from " + e.getTagName()
+//						+ ": [" + child.getTextContent() + "]: ["
+//						+ e.getTextContent() + "]");
+            } else if(child instanceof Element) {
+                removeWhitespaceNodes((Element)child);
+            }
+        }
+        if ( removed ){
+			log.debug("Removed whitespace node from " + e.getTagName() + ": ["
+					+ e.getTextContent() + "]");
+        }
+
+    }
+
 }

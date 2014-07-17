@@ -161,7 +161,9 @@ public final class QueryAction extends BaseAction {
             Node kid = children.get(i);
             if(!(kid instanceof Element)) {
                 String msg = "<query> element " + getNode().toString()
-                        + " may not contain text nodes after the query. Invalid element: " + kid.getClass().getName();
+                        + " may not contain text nodes after the query. Invalid element: " + kid.getClass().getName() + ", content:["
+                        + kid.getTextContent()
+                        		+ "]";
                 throw new ValidationException(this, msg);
             }
         }
