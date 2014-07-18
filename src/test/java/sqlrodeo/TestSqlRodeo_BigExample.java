@@ -8,17 +8,18 @@ import org.junit.Test;
 
 public class TestSqlRodeo_BigExample {
 
-    @Test
-    public void test() {
+	@Test
+	public void test() {
 
-        URL resourceUrl = this.getClass().getResource("/big_example/master-script.xml");
-        SqlRodeo sqlRodeo = new SqlRodeo();
+		URL resourceUrl = this.getClass().getResource(
+				"/big_example/master-script.xml");
+		SqlRodeo sqlRodeo = new SqlRodeo();
 
-        try {
-            sqlRodeo.execute(resourceUrl);
-        } catch(Throwable e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-    }
+		try {
+			sqlRodeo.execute(resourceUrl);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
 }

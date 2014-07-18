@@ -12,36 +12,36 @@ import sqlrodeo.ExecutionContext;
  */
 public final class SqlRodeoAction extends BaseAction {
 
-    /** Logger */
-    Logger log = LoggerFactory.getLogger(SqlRodeoAction.class);
+	/** Logger */
+	Logger log = LoggerFactory.getLogger(SqlRodeoAction.class);
 
-    /**
-     * Constructor.
-     * 
-     * @param node
-     *            The XML Node to which this action is attached.
-     */
-    public SqlRodeoAction(Node node) {
-	super(node);
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param node
+	 *            The XML Node to which this action is attached.
+	 */
+	public SqlRodeoAction(Node node) {
+		super(node);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
-     */
-    @Override
-    public void execute(ExecutionContext context) {
-	log.debug("execute(): " + toString());
-	executeChildren(context);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
+	 */
+	@Override
+	public void execute(ExecutionContext context) {
+		log.debug("execute(): " + toString());
+		executeChildren(context);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see sqlrodeo.Action#validate()
-     */
-    @Override
-    public void validate() {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sqlrodeo.Action#validate()
+	 */
+	@Override
+	public void validate() {
+	}
 }

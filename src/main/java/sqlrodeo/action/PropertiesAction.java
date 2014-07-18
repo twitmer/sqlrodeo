@@ -24,76 +24,76 @@ import sqlrodeo.util.StringUtils;
  */
 public final class PropertiesAction extends BaseAction {
 
-    /** Logger */
-    Logger log = LoggerFactory.getLogger(PropertiesAction.class);
+	/** Logger */
+	Logger log = LoggerFactory.getLogger(PropertiesAction.class);
 
-    /**
-     * Constructor.
-     * 
-     * @param node
-     *            XML Node for which this action exists.
-     */
-    public PropertiesAction(Node node) {
-	super(node);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
-     */
-    @Override
-    public void execute(ExecutionContext context) {
-	if (log.isDebugEnabled()) {
-	    log.debug(String.format(
-		    "execute: context".replaceAll(", ", "=%s, ") + "=%s",
-		    context));
+	/**
+	 * Constructor.
+	 * 
+	 * @param node
+	 *            XML Node for which this action exists.
+	 */
+	public PropertiesAction(Node node) {
+		super(node);
 	}
 
-	try {
-	    // Get the contents of either the HREF or the embedded text.
-	    String href = context.substitute(getNode().getAttribute("href"));
-	    String text = "";
-	    if (!StringUtils.isEmpty(href)) {
-		URL relUrl = resolveRelativeUrl(href);
-		text = context.substitute(UrlRetriever
-			.retrieveTextForUrl(relUrl));
-	    } else {
-		text = context.substitute(getNode().getTextContent());
-	    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
+	 */
+	@Override
+	public void execute(ExecutionContext context) {
+		if (log.isDebugEnabled()) {
+			log.debug(String.format(
+					"execute: context".replaceAll(", ", "=%s, ") + "=%s",
+					context));
+		}
 
-	    // Load the contents into a Properties object.
-	    Properties props = new Properties();
-	    props.load(new StringReader(text));
+		try {
+			// Get the contents of either the HREF or the embedded text.
+			String href = context.substitute(getNode().getAttribute("href"));
+			String text = "";
+			if (!StringUtils.isEmpty(href)) {
+				URL relUrl = resolveRelativeUrl(href);
+				text = context.substitute(UrlRetriever
+						.retrieveTextForUrl(relUrl));
+			} else {
+				text = context.substitute(getNode().getTextContent());
+			}
 
-	    // Propagate all contents of the Properties object into the context.
-	    for (String key : props.stringPropertyNames()) {
-		context.put(key, props.getProperty(key));
-	    }
+			// Load the contents into a Properties object.
+			Properties props = new Properties();
+			props.load(new StringReader(text));
 
-	} catch (IOException | IllegalArgumentException
-		| JexlEvaluationException | URISyntaxException ex) {
-	    throw new ExecutionException(this, ex.getMessage(), ex);
+			// Propagate all contents of the Properties object into the context.
+			for (String key : props.stringPropertyNames()) {
+				context.put(key, props.getProperty(key));
+			}
+
+		} catch (IOException | IllegalArgumentException
+				| JexlEvaluationException | URISyntaxException ex) {
+			throw new ExecutionException(this, ex.getMessage(), ex);
+		}
 	}
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see sqlrodeo.Action#validate()
-     */
-    @Override
-    public void validate() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sqlrodeo.Action#validate()
+	 */
+	@Override
+	public void validate() {
 
-	if (log.isDebugEnabled()) {
-	    log.debug("validate()");
+		if (log.isDebugEnabled()) {
+			log.debug("validate()");
+		}
+
+		// If href is specified, children are not allowed.
+		if (!StringUtils.isEmpty(getNode().getAttribute("href"))
+				&& getNode().getChildNodesAsList().size() > 0) {
+			throw new ValidationException(this,
+					"Properties cannot have content and an href.");
+		}
 	}
-
-	// If href is specified, children are not allowed.
-	if (!StringUtils.isEmpty(getNode().getAttribute("href"))
-		&& getNode().getChildNodesAsList().size() > 0) {
-	    throw new ValidationException(this,
-		    "Properties cannot have content and an href.");
-	}
-    }
 }

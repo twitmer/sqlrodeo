@@ -11,33 +11,36 @@ import sqlrodeo.ExecutionContext;
  */
 public final class ExitAction extends BaseAction {
 
-    /** Logger */
-    Logger log = LoggerFactory.getLogger(ExitAction.class);
+	/** Logger */
+	Logger log = LoggerFactory.getLogger(ExitAction.class);
 
-    /**
-     * Constructor.
-     * 
-     * @param node The XML Node to which this action is attached.
-     */
-    public ExitAction(Node node) {
-        super(node);
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param node
+	 *            The XML Node to which this action is attached.
+	 */
+	public ExitAction(Node node) {
+		super(node);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
-     */
-    @Override
-    public void execute(ExecutionContext context) {
-        throw new ExitException();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sqlrodeo.Action#execute(sqlrodeo.ExecutionContext)
+	 */
+	@Override
+	public void execute(ExecutionContext context) {
+		throw new ExitException();
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see sqlrodeo.Action#validate()
-     */
-    @Override
-    public void validate() {
-        // Nothing to do here.
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sqlrodeo.Action#validate()
+	 */
+	@Override
+	public void validate() {
+		// Nothing to do here.
+	}
 }

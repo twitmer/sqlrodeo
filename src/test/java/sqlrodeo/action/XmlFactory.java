@@ -18,43 +18,47 @@ import org.xml.sax.SAXException;
 
 public class XmlFactory {
 
-    private static final Logger log = LoggerFactory.getLogger(XmlFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(XmlFactory.class);
 
-    private XmlFactory() {
-    }
+	private XmlFactory() {
+	}
 
-    public static Document build(String content) throws SAXException, IOException, ParserConfigurationException {
+	public static Document build(String content) throws SAXException,
+			IOException, ParserConfigurationException {
 
-        if(log.isDebugEnabled()) {
-            log.debug(String.format("build: content".replaceAll(", ", "=%s, ") + "=%s", content));
-        }
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("build: content".replaceAll(", ", "=%s, ")
+					+ "=%s", content));
+		}
 
-        String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + content;
+		String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ content;
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        builder = factory.newDocumentBuilder();
-        Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		builder = factory.newDocumentBuilder();
+		Document document = builder.parse(new InputSource(new StringReader(
+				xmlString)));
 
-        // Set Document URI to point to the Class that invoked this method.
-        StackTraceElement[] stes = Thread.currentThread().getStackTrace();
+		// Set Document URI to point to the Class that invoked this method.
+		StackTraceElement[] stes = Thread.currentThread().getStackTrace();
 
-        String path = "/" + stes[2].getClassName().replace(".", "/") + ".class";
-        log.debug("path=" + path);
-        URL resourceUrl = XmlFactory.class.getResource(path);
-        log.debug("resourceUrl1 = " + resourceUrl);
+		String path = "/" + stes[2].getClassName().replace(".", "/") + ".class";
+		log.debug("path=" + path);
+		URL resourceUrl = XmlFactory.class.getResource(path);
+		log.debug("resourceUrl1 = " + resourceUrl);
 
-        document.setDocumentURI(resourceUrl.toExternalForm());
-        log.info("Doc URI=" + document.getDocumentURI());
+		document.setDocumentURI(resourceUrl.toExternalForm());
+		log.info("Doc URI=" + document.getDocumentURI());
 
-        // Put line number on all elements in document.
-        NodeList list = document.getElementsByTagName("*");
-        Long lineNumber = Long.valueOf(stes[2].getLineNumber());
-        for(int i = 0; i < list.getLength(); i++) {
-            Element element = (Element)list.item(i);
-            element.setUserData("lineNumber", lineNumber, null);
-        }
+		// Put line number on all elements in document.
+		NodeList list = document.getElementsByTagName("*");
+		Long lineNumber = Long.valueOf(stes[2].getLineNumber());
+		for (int i = 0; i < list.getLength(); i++) {
+			Element element = (Element) list.item(i);
+			element.setUserData("lineNumber", lineNumber, null);
+		}
 
-        return document;
-    }
+		return document;
+	}
 }
