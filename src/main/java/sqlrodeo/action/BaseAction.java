@@ -47,7 +47,7 @@ public abstract class BaseAction implements Action {
         }
 
         // Assume false until proven otherwise.
-        boolean isTrue = (StringUtils.isEmpty(condition) || context.evaluateBoolean(condition));
+        boolean isTrue = StringUtils.isEmpty(condition) || context.evaluateBoolean(condition);
 
         if(log.isInfoEnabled()) {
             log.info("Condition '" + condition + "' is " + isTrue);

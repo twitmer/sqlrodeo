@@ -39,7 +39,6 @@ public final class SqlRodeo {
      * 
      * @param resourceUrl URL referencing XML document to execute.
      * @param contextSeed Map of items to add to the context before executing the given XML document.
-     * @return context after processing is complete.
      * @throws SqlRodeoException Any error.
      */
     public void execute(URL resourceUrl, Map<String, Object> contextSeed) {

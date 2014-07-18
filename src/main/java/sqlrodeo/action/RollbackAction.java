@@ -23,7 +23,7 @@ public final class RollbackAction extends BaseAction {
     /**
      * Constructor.
      * 
-     * @param node
+     * @param node The XML Node to which this action is attached.
      */
     public RollbackAction(Node node) {
         super(node);

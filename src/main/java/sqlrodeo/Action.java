@@ -2,6 +2,7 @@ package sqlrodeo;
 
 import java.net.URL;
 
+import sqlrodeo.implementation.ValidationException;
 import sqlrodeo.xml.NodeWrapper;
 
 /**
@@ -13,7 +14,7 @@ public interface Action {
      * Execute this action against the given context.
      * 
      * @param context Context to use during execution.
-     * @throws Exception
+     * @throws Exception Something has gone wrong.
      */
     void execute(ExecutionContext context) throws Exception;
 
@@ -41,6 +42,7 @@ public interface Action {
     /**
      * Evaluate whether this action has sufficient and correct information from the SqlRodeo XML file to perform the intended
      * action.
+     * @throws ValidationException if Validation has failed.
      */
-    void validate() throws Exception;
+    void validate() throws ValidationException;
 }

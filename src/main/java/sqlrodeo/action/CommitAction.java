@@ -12,29 +12,36 @@ import sqlrodeo.implementation.ExecutionException;
 
 public final class CommitAction extends BaseAction {
 
-    Logger log = LoggerFactory.getLogger(CommitAction.class);
+	Logger log = LoggerFactory.getLogger(CommitAction.class);
 
-    public CommitAction(Node node) {
-        super(node);
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param node
+	 *            The XML Node to which this action is attached.
+	 */
+	public CommitAction(Node node) {
+		super(node);
+	}
 
-    @Override
-    public void execute(ExecutionContext context) throws SQLException {
+	@Override
+	public void execute(ExecutionContext context) throws SQLException {
 
-        String connectionId = getNode().getAttribute("id");
-        Connection conn = (Connection)context.get(connectionId);
-        if(conn == null) {
-            throw new ExecutionException(this, "Connection not found: " + connectionId);
-        }
+		String connectionId = getNode().getAttribute("id");
+		Connection conn = (Connection) context.get(connectionId);
+		if (conn == null) {
+			throw new ExecutionException(this, "Connection not found: "
+					+ connectionId);
+		}
 
-        conn.commit();
-    }
+		conn.commit();
+	}
 
-    /**
-     * Default implementation of validate(). Does nothing.
-     */
-    @Override
-    public void validate() {
-        // Nothing to do here.
-    }
+	/**
+	 * Default implementation of validate(). Does nothing.
+	 */
+	@Override
+	public void validate() {
+		// Nothing to do here.
+	}
 }

@@ -17,7 +17,7 @@ public final class ExitAction extends BaseAction {
     /**
      * Constructor.
      * 
-     * @param node
+     * @param node The XML Node to which this action is attached.
      */
     public ExitAction(Node node) {
         super(node);

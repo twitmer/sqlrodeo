@@ -16,7 +16,7 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      * 
      * @param jexlExpression Expression to evaluate.
      * @return Result provided by JEXL.
-     * @throws JexlEvaluationException
+     * @throws JexlEvaluationException Error evaluating JEXL expression.
      */
     Object evaluate(String jexlExpression) throws JexlEvaluationException;
 
@@ -25,7 +25,7 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      * 
      * @param scriptText Script to evaluate.
      * @return Result provided by JEXL, which may be void.
-     * @throws JexlEvaluationException
+     * @throws JexlEvaluationException Error evaluating JEXL script.
      */
     Object evaluateScript(String scriptText) throws JexlEvaluationException;
 
@@ -34,7 +34,7 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      * 
      * @param jexlExpression Expression to evaluate.
      * @return Result provided by JEXL, cast to a boolean.
-     * @throws JexlEvaluationException
+     * @throws JexlEvaluationException Error evaluating JEXL expression.
      */
     boolean evaluateBoolean(String jexlExpression) throws JexlEvaluationException;
 
@@ -44,7 +44,7 @@ public interface ExecutionContext extends Map<String, Object>, AutoCloseable {
      * 
      * @param sourceWithJexlExpressions String expression containing ${} phrases.
      * @return Expression with all known ${} values replaced with their actual values.
-     * @throws JexlEvaluationException
+     * @throws JexlEvaluationException Error evaluating JEXL expression.
      */
     String substitute(String sourceWithJexlExpressions) throws JexlEvaluationException;
 }

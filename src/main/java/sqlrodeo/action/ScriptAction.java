@@ -11,27 +11,38 @@ import sqlrodeo.util.StringUtils;
 
 public final class ScriptAction extends BaseAction {
 
-    Logger log = LoggerFactory.getLogger(ScriptAction.class);
+	Logger log = LoggerFactory.getLogger(ScriptAction.class);
 
-    public ScriptAction(Node node) {
-        super(node);
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param node
+	 *            The XML Node to which this action is attached.
+	 */
+	public ScriptAction(Node node) {
+		super(node);
+	}
 
-    @Override
-    public void execute(ExecutionContext context) throws JexlEvaluationException {
+	@Override
+	public void execute(ExecutionContext context)
+			throws JexlEvaluationException {
 
-        String nodeText = getNode().getTextContent();
+		String nodeText = getNode().getTextContent();
 
-        log.debug("Evaluating: " + nodeText);
-        Object result = context.evaluateScript(nodeText);
-        log.debug("result: " + result + (result != null ? ", class=" + result.getClass().getName() : ""));
-    }
+		log.debug("Evaluating: " + nodeText);
+		Object result = context.evaluateScript(nodeText);
+		log.debug("result: "
+				+ result
+				+ (result != null ? ", class=" + result.getClass().getName()
+						: ""));
+	}
 
-    @Override
-    public void validate() {
-        String nodeText = getNode().getTextContent();
-        if(StringUtils.isEmpty(nodeText)) {
-            throw new ValidationException(this, "No text in script node: " + toString());
-        }
-    }
+	@Override
+	public void validate() {
+		String nodeText = getNode().getTextContent();
+		if (StringUtils.isEmpty(nodeText)) {
+			throw new ValidationException(this, "No text in script node: "
+					+ toString());
+		}
+	}
 }
