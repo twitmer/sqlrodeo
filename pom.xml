@@ -187,6 +187,6 @@
 		<system>GitHub</system>
 		<url>https://github.com/twitmer/sqlrodeo/issues</url>
 	</issueManagement>
-	<url>https://github.com/twitmer/sqlrodeo/wiki</url>
+	<url>http://twitmer.github.io/sqlrodeo/</url>
 	<inceptionYear>2014</inceptionYear>
 </project>
