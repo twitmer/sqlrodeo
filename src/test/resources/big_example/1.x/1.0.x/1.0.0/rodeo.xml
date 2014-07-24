@@ -11,7 +11,8 @@
 	<sql href="ddl/APP_USER.sql" />
 	<sql href="ddl/DEPARTMENT.sql" />
 
-	<!-- TODO: Initial data (dml) -->
+	<!-- Initial data (dml) -->
+	<sql href="dml/DEPARTMENT_DATA.sql" />
 
 	<sql>
 		INSERT INTO SCHEMA_VERSION(major, minor, patch) VALUES (1, 0, 0);

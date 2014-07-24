@@ -1,1 +1,1 @@
-CREATE SEQUENCE dept_seq;
+CREATE SEQUENCE department_seq;

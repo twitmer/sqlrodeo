@@ -46,7 +46,6 @@
 	}
 	var z = x + y;
 	return x;
-	
 	</script>
 
 </sql-rodeo>

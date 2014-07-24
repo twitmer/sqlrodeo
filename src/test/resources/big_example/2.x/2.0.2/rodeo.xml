@@ -7,4 +7,7 @@
 		INSERT INTO SCHEMA_VERSION(major, minor, patch) VALUES (2, 0, 2);
 	</sql>
 
+	<!-- Add some data (dml) -->
+	<sql href="dml/DEPARTMENT_DATA.sql" />
+
 </sql-rodeo>

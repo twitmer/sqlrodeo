@@ -3,6 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
 
+	<sql href="ddl/DEPARTMENT.sql" />
+
 	<sql>
 		INSERT INTO SCHEMA_VERSION(major, minor, patch) VALUES (1, 0, 2);
 	</sql>
