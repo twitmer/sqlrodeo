@@ -56,15 +56,9 @@
 	</sql>
 
 	<!-- Execute all upgrades for the 1.x line of schema changes -->
-	<sql if="version lt 2">
-		ALTER TABLE USER ADD COLUMN EMAIL VARCHAR(70);
-		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 2 );
-	</sql>
+	<include if="version lt 2" href="v2.xml"/>
 
 	<!-- Execute all upgrades for the 1.x line of schema changes -->
-	<sql if="version lt 3">
-		ALTER TABLE USER ADD COLUMN NICKNAME VARCHAR(20);
-		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 3 );
-	</sql>
+	<include if="version lt 3" href="v3.xml"/>
 
 </sql-rodeo>

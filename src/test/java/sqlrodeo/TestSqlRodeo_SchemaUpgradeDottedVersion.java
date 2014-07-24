@@ -21,22 +21,22 @@ import org.slf4j.LoggerFactory;
 import sqlrodeo.utility.FileUtility;
 import sqlrodeo.utility.SqlUtility;
 
-public class TestSqlRodeo_SchemaUpgradeCounter {
+public class TestSqlRodeo_SchemaUpgradeDottedVersion {
 
 	Logger log = LoggerFactory
-			.getLogger(TestSqlRodeo_SchemaUpgradeCounter.class);
+			.getLogger(TestSqlRodeo_SchemaUpgradeDottedVersion.class);
 
 	@Before
 	public void setup() {
 		FileUtility.recursiveDelete(new File(
-				"target/testDbs/schema_upgrade_counter"));
+				"target/testDbs/schema_upgrade_dottedVersion"));
 	}
 
 	@Test
 	public void test() throws IOException {
 
 		// Then: Connect to generated database to verify results.
-		String propsPath = "schema_upgrade_counter/datasource.properties";
+		String propsPath = "schema_upgrade_dottedVersion/datasource.properties";
 		InputStream isr = getClass().getClassLoader().getResourceAsStream(
 				propsPath);
 		Properties props = new Properties();
@@ -50,7 +50,7 @@ public class TestSqlRodeo_SchemaUpgradeCounter {
 
 			// When: Execute the SqlRodeo XML tree.
 			URL resourceUrl = this.getClass().getResource(
-					"/schema_upgrade_counter/master-script.xml");
+					"/schema_upgrade_dottedVersion/master-script.xml");
 			SqlRodeo sqlRodeo = new SqlRodeo();
 			sqlRodeo.execute(resourceUrl);
 
@@ -58,17 +58,17 @@ public class TestSqlRodeo_SchemaUpgradeCounter {
 
 			// Then: Verify we have the expected number of schema versions.
 			assertEquals(4, SqlUtility.getFirstLong(connection,
-					"select count (version) from schema_version"));
+					"select count (major) from schema_version"));
 
 			// Then: Verify each schema version is what we expect.
-			String query = "SELECT version FROM schema_version ORDER BY version";
+			String query = "SELECT major, minor, patch FROM schema_version ORDER BY major, minor, patch";
 			try (Statement stmt = connection.createStatement();
 					ResultSet versions = stmt.executeQuery(query)) {
 
-				SqlUtility.verifyResultRow(versions, "0");
-				SqlUtility.verifyResultRow(versions, "1");
-				SqlUtility.verifyResultRow(versions, "2");
-				SqlUtility.verifyResultRow(versions, "3");
+				SqlUtility.verifyResultRow(versions, "0", "0", "0");
+				SqlUtility.verifyResultRow(versions, "1", "0", "0");
+				SqlUtility.verifyResultRow(versions, "1", "0", "1");
+				SqlUtility.verifyResultRow(versions, "1", "1", "3");
 			}
 
 			// Then: Verify the entry count in USER.
@@ -93,6 +93,5 @@ public class TestSqlRodeo_SchemaUpgradeCounter {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-
 	}
 }
