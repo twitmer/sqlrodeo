@@ -28,7 +28,7 @@
 
 		<!-- Use JEXL syntax for instantiating the 'Version' object. -->
 		
-		<assign id="schema_version" value="new('sqlrodeo.version.Version', '${major}.${minor}.${patch}' )" />
+		<assign id="schema_version" value="new('org.sqlrodeo.version.Version', '${major}.${minor}.${patch}' )" />
 	</query>
 
 	<!-- Execute all upgrades for the 1.x line of schema changes -->

@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>sqlrodeo</groupId>
+	<groupId>org.sqlrodeo</groupId>
 	<artifactId>sqlrodeo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SQL Rodeo</name>
@@ -204,6 +204,6 @@
 		<system>GitHub</system>
 		<url>https://github.com/twitmer/sqlrodeo/issues</url>
 	</issueManagement>
-	<url>http://twitmer.github.io/sqlrodeo/</url>
+	<url>http://sqlrodeo.org/</url>
 	<inceptionYear>2014</inceptionYear>
 </project>

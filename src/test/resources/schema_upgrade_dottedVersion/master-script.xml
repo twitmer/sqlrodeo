@@ -45,7 +45,7 @@
 	</query>
 
 	<!-- Use JEXL syntax for instantiating the 'Version' object. -->
-	<assign id="schema_version" value="new('sqlrodeo.version.Version', '${major}.${minor}.${patch}' )" />
+	<assign id="schema_version" value="new('org.sqlrodeo.version.Version', '${major}.${minor}.${patch}' )" />
 
 	<!-- Create initial schema -->
 	<sql if="schema_version.lessThan('1.0.0')">
