@@ -1,0 +1,50 @@
+/*
+Make the left margin static, so headers are in the same position, whether or not this page has a scroll bar.
+ */
+.container {
+    margin-left: 15px;
+}
+
+/* Overview Page */
+
+#featureComparisonTable thead th {
+    text-align: center;
+}
+
+#featureComparisonTable thead th:first-child {
+    text-align: left;
+}
+
+#featureComparisonTable tbody td {
+    text-align: center;
+}
+
+#featureComparisonTable tbody td:first-child {
+    text-align: left;
+}
+
+/* XML Elements Page */
+
+#xmlElements article {
+    margin-bottom: 250px;
+}
+
+#xmlElements article:last-child {
+    margin-bottom: 0;
+}
+
+#xmlElements article ol.breadcrumb a {
+    cursor: pointer;
+}
+
+#xmlElements {
+    /*background-color:#000;*/
+}
+
+/* Make the element nav table fixed, but only if the screen is "big enough". */
+@media screen and (min-width: 992px) and (min-height: 610px) {
+
+    #navPills {
+        position: fixed;
+    }
+}

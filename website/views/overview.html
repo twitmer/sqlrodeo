@@ -1,0 +1,150 @@
+<div>
+    <h1>SqlRodeo
+        <small> - SQL Organization Library</small>
+    </h1>
+
+    <article id="overview">
+
+        <p class="lead">SqlRodeo is an XML-based library for organizing and executing directories of SQL files.</p>
+
+        <p>I couldn't find a schema versioning tool that met my needs, so I converted my needs to goals and wrote my
+            own. I wanted a simple file-based schema versioning tool that could also maintain test data and perhaps some
+            <abbr title="Extract, Transform and Load">ETL</abbr> tasks.</p>
+
+        <h2>Feature Comparison</h2>
+
+        <p>
+            Here's how SqlRodeo compares to the other versioning tools I initially investigated.
+        </p>
+
+        <div id="featureComparisonTable" class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>SqlRodeo</th>
+                    <th>Liquibase</th>
+                    <th>FlywayDB</th>
+                    <th>Scriptella</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Simple file-based management of SQL [1]</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Compatible with manual changes [2]</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Supports Stored Procedures</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                </tr>
+                <tr>
+                    <td>Schema version can be integer or dotted (1.4.1, 1.4.2, ...)</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Insert, Update of Blobs and Clobs somehow, no matter how convoluted or contrived.[3]</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Insert, Update of Blobs and Clobs as binary files.[3]</td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Supports nested inclusion of data files.</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                </tr>
+                <!-- Feature -->
+                <!-- SqlRodeo -->
+                <!-- Liquibase -->
+                <!-- FlywayDB -->
+                <!-- Scriptella -->
+                <tr>
+                    <td>Allows injection of custom logic</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Support for conditional logic [4]</td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                <tr>
+                    <td>Automatic rollback [5]</td>
+                    <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                    <td class="warning"><span class="glyphicon glyphicon-question-sign"></span></td>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <section id="Notes">
+            <ul>
+                <li>[1] - Liquibase fails here because I (and my DBAs) found the file formats unpalatable. I want
+                    raw SQL files that DBAs can trust and work with, not abstract XML nor SQL with cryptic-but-crucial
+                    comments.
+                </li>
+                <li>[2] - By "manual changes", I mean a DBA can make manual changes to a schema without breaking the
+                    versioning scheme. Typically, this is only needed in one environment, since the others are
+                    completely managed by the versioning tool. Unfortunately, Liquibase fails here because it seems to
+                    break when manual changes interfere with what it expects to find.
+                </li>
+                <li>[3] - Blob/Clob support is tricky. Liquibase requires binary data as hex strings, or be passed to an
+                    extension. FlywayDB only supports it through custom Java code in a JdbcMigration, but this <a
+                            href="http://stackoverflow.com/questions/15823318/migrating-stored-procedures-with-flyway">
+                        may eventually change</a>. Technically, SqlRodeo could handle Blobs and Clobs through custom
+                    logic, but I plan to do better than that.
+                </li>
+                <li>[4] - Liquibase does version comparisons and 'contexts', but no conditional logic beyond that.
+                </li>
+                <li>[5] - Automatic rollback on error is a neat feature, but requires a lot of metadata and manual configuration to implement.
+                </li>
+            </ul>
+        </section>
+
+
+        <h2>Acknowledgements</h2>
+        <ol>
+            <li>Thanks to Liquibase for introducing me to the idea of managing schemas like code.
+            </li>
+            <li>Thanks to Scriptella for introducing me to <a
+                    href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">Apache JEXL</a> for an
+                extremely cool way of supporting conditional logic and user-defined expressions.
+            </li>
+        </ol>
+
+        </p>
+
+    </article>
+
+</div>
