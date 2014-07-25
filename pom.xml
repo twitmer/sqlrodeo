@@ -223,7 +223,7 @@
 				<configuration>
 					<!-- SplitVerifier only needed for Emma. -->
 					<argLine>-XX:-UseSplitVerifier</argLine>
-					<!-- <jvm>${env.JAVA_HOME_7}/bin/javac</jvm> -->
+					<jvm>${env.JAVA_HOME_7}/bin/java</jvm>
 					<includes>
 						<include>**/Req_*.*</include>
 						<include>**/*Spec*.*</include>
