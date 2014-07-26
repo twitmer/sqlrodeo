@@ -32,7 +32,7 @@
 
 	<scm>
 		<connection>scm:git:git@github.com:twitmer/sqlrodeo.git</connection>
-		<url>scm:git:git@github.com:twitmer/sqlrodeo.git</url>
+		<url>git@github.com:twitmer/sqlrodeo.git</url>
 		<developerConnection>scm:git:git@github.com:twitmer/sqlrodeo.git</developerConnection>
 	</scm>
 
