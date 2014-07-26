@@ -287,4 +287,5 @@
 	</issueManagement>
 	<url>http://sqlrodeo.org/</url>
 	<inceptionYear>2014</inceptionYear>
+	<description>SqlRodeo is an XML-based library for organizing and executing directories of SQL files.</description>
 </project>
