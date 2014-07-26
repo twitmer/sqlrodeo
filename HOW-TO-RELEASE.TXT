@@ -1,8 +1,11 @@
 
-#1. Trust info at http://central.sonatype.org/pages/apache-maven.html
+1. Trust info at http://central.sonatype.org/pages/apache-maven.html
 2. Skip the maven release plugin; the ssh/github stuff isn't working for you.
 3. Manually check in a non-snapshot pom and manually make a tag.
-4. Use mvn clean deploy -P release to release a production version.
+4. Use mvn clean deploy -P release to release a production version using the 'release' profile.
+5. Read http://central.sonatype.org/pages/releasing-the-deployment.html
+6. Login to https://oss.sonatype.org/#stagingRepositories, find my staging repo and 'close' it.
+7. Update JIRA ticket to let sonatype know to turn on syncing to the main repos. (1 time task)
 
 Or in words from the above url:
 
