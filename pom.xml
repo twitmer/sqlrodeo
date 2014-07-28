@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<!-- SEE http://central.sonatype.org/pages/apache-maven.html for deployment 
 		help! -->
@@ -7,7 +8,7 @@
 
 	<groupId>org.sqlrodeo</groupId>
 	<artifactId>sqlrodeo</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>SQL Rodeo</name>
 
 	<licenses>
@@ -31,10 +32,9 @@
 
 	<scm>
 		<connection>scm:git:git@github.com:twitmer/sqlrodeo.git</connection>
-		<url>scm:git:git@github.com:twitmer/sqlrodeo.git</url>
+		<url>git@github.com:twitmer/sqlrodeo.git</url>
 		<developerConnection>scm:git:git@github.com:twitmer/sqlrodeo.git</developerConnection>
-	  <tag>sqlrodeo-0.0.1</tag>
-  </scm>
+	</scm>
 
 	<profiles>
 		<profile>
@@ -67,7 +67,7 @@
 						<configuration>
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<autoReleaseAfterClose>false</autoReleaseAfterClose>
 						</configuration>
 					</plugin>
 
@@ -195,15 +195,6 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<javaHome>${env.JAVA_HOME_7}</javaHome>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<!-- <compilerId>groovy-eclipse-compiler</compilerId> -->
@@ -223,7 +214,7 @@
 				<configuration>
 					<!-- SplitVerifier only needed for Emma. -->
 					<argLine>-XX:-UseSplitVerifier</argLine>
-					<jvm>${env.JAVA_HOME_7}/bin/java</jvm>
+					<!-- <jvm>${env.JAVA_HOME_7}/bin/javac</jvm> -->
 					<includes>
 						<include>**/Req_*.*</include>
 						<include>**/*Spec*.*</include>
@@ -287,4 +278,5 @@
 	</issueManagement>
 	<url>http://sqlrodeo.org/</url>
 	<inceptionYear>2014</inceptionYear>
+	<description>SqlRodeo is an XML-based library for organizing and executing directories of SQL files.</description>
 </project>
