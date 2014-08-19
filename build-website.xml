@@ -1,0 +1,35 @@
+<project>
+
+	<target name="clean">
+		<echo>Cleaning...</echo>
+		<delete dir="target/website" />
+	</target>
+
+	<target name="build">
+		<echo>Building...</echo>
+		<mkdir dir="target/website" />
+
+		<!-- Copy the resources -->
+		<copy todir="target/website/css">
+			<fileset dir="src/main/web/css" />
+		</copy>
+		<copy todir="target/website/js">
+			<fileset dir="src/main/web/js" />
+		</copy>
+		
+		<!-- Copy the pages, with filtering -->
+		<loadfile property="header" srcfile="src/main/web/parts/header.html"/>
+		<loadfile property="footer" srcfile="src/main/web/parts/footer.html"/>
+		<loadfile property="navbar" srcfile="src/main/web/parts/navbar.html"/>
+		<copy todir="target/website">
+			<fileset dir="src/main/web/pages" />
+			<filterset>
+				<filter token="header" value="${header}" />
+				<filter token="footer" value="${footer}" />
+				<filter token="navbar" value="${navbar}" />
+			</filterset>
+		</copy>
+
+	</target>
+
+</project>

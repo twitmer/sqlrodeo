@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SqlRodeo</title>
+    @header@
+</head>
+
+<body id="top">
+
+<header id="header">
+    @navbar@
+</header>
+
+<div class="container">
+
+<div class="row">
+<div class="col-sm-2">
+    <nav id="navPills" class="nav nav-pills nav-stacked" style="">
+        <li><a href="#top">Assign</a></li>
+        <li><a href="#Close">Close</a></li>
+        <li><a href="#Commit">Commit</a></li>
+        <li><a href="#Connection">Connection</a></li>
+        <li><a href="#Exit">Exit</a></li>
+        <li><a href="#If">If</a></li>
+        <li><a href="#Include">Include</a></li>
+        <li><a href="#ObjectFactory">ObjectFactory</a></li>
+        <li><a href="#Properties">Properties</a></li>
+        <li><a href="#Query">Query</a></li>
+        <li><a href="#Rollback">Rollback</a></li>
+        <li><a href="#Script">Script</a></li>
+        <li><a href="#Sql">Sql</a></li>
+        <li><a href="#Sql-Rodeo">Sql-rodeo</a></li>
+    </nav>
+</div>
+
+<div class="col-sm-10">
+
+<section id="xmlElements">
+<!--<div>-->
+<!--<h1>Elements</h1>-->
+<!--</div>-->
+
+<!-- ******************************* -->
+<article id="Assign">
+    <h1>&lt;assign&gt;</h1>
+
+    <p>The assign element assigns a value to a variable. The value can be a literal or any JEXL expression, so be sure
+        to familiarize yourself with the <a target="_blank"
+                                            href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL
+            syntax.</a></p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>Assign Strings
+<pre><code>&lt;assign id="hero" value="Luke"/&gt;
+&lt;assign id="princess" value="Leia"/&gt;
+</code></pre>
+        </li>
+        <li>Set "leads" to contain "Luke, Leia, and Han" via text substitution
+<pre><code>&lt;assign id="leads" value="${hero}, ${princess}, and Han"/&gt;
+</code></pre>
+        </li>
+        <li>Perform math via JEXL and variable substitution
+
+<pre><code>&lt;assign id="sale1" value="450"/&gt;
+&lt;assign id="sale2" value="590"/&gt;
+&lt;assign id="salesTotal" value="${sale1} + ${sale2}"/&gt;</code></pre>
+        </li>
+
+        <li>Perform math, but only <code>if</code> a condition is met
+
+<pre><code>&lt;!-- Default commission --&gt;
+&lt;assign id="commission" value="0.20 * ${salesTotal}"/&gt;
+
+&lt;!-- Extra commission when sales exceed 200 --&gt;
+&lt;assign id="commission" value="0.25 * ${salesTotal}"  if="salesTotal > 200"/&gt;</code></pre>
+        </li>
+
+        <li>Instantiate instance of the 'ex.Person' class. This invokes <a target="_blank"
+                                                                           href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html#Functions">JEXL's
+            'new'
+            function</a>.
+            <div>(Java Equivalent: <code>person = new ex.Person( 'Darth', 'Vader' );</code>)</div>
+            <pre><code>&lt;assign id="person" value="new( ex.Person, 'Darth', 'Vader' )"/&gt;</code></pre>
+        </li>
+    </ul>
+
+    <h2>&lt;assign&gt; Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>id</td>
+                <td>Required</td>
+                <td>ID (aka name) of the variable to assign.</td>
+            </tr>
+            <tr>
+                <td>value</td>
+                <td>Required</td>
+                <td>Value to assign to the variable.</td>
+            </tr>
+            <tr>
+                <td>if</td>
+                <td>Optional</td>
+                <td>JEXL expression that suppresses action if it evaluates to false.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Close">
+    <h1>&lt;close&gt;</h1>
+
+    <p>The close element closes the specified database connection.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>
+            Open and close a database connection from a datasource. (The datasource is created by the &lt;objectFactory&gt;
+            element.)
+<pre><code>&lt;objectFactory id="MyDatasource" ...&gt; ... &lt;/objectFactory&gt;/&gt;
+
+&lt;!-- Obtain a connection --&gt;
+&lt;connection id="myConn" datasource-id="MyDataSource"/&gt;
+
+&lt;!-- Close the connection --&gt;
+&lt;close id="myConn"/&gt;</code></pre>
+        </li>
+
+    </ul>
+
+    <h2>&lt;close&gt; Attribute Reference</h2>
+    No attributes / Not applicable.
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Commit">
+    <h1>&lt;commit&gt;</h1>
+
+    <p>The commit element commits the current transaction on the specified connection object. An ExecutionException is
+        thrown if the connection cannot be found under the given ID.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li> Open and commit a database connection.
+<pre><code>&lt;objectFactory id="MyDatasource" ...&gt; ... &lt;/objectFactory&gt;/&gt;
+
+&lt;!-- Obtain a connection --&gt;
+&lt;connection id="myConn" datasource-id="MyDatasource"/&gt;
+
+&lt;!-- Commit the connection --&gt;
+&lt;commit id="myConn"/&gt;</code></pre>
+        </li>
+    </ul>
+    <h2>&lt;commit&gt; Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>id</td>
+                <td>Required</td>
+                <td>ID of the database connection on which to commit the current transaction.</td>
+            </tr>
+            <tr>
+                <td>autocommit</td>
+                <td>Optional</td>
+                <td>Boolean indicating if the connection should be set to autocommit. Valid values are "true" and
+                    "false". Default value is defined by the DataSource.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Connection">
+    <h1>&lt;connection&gt;</h1>
+
+    <p>Open a database connection from the DataSource based on a standard Java DataSource, storing it in the execution
+        context under the given id.</p>
+
+    <p>All database connections in the execution context are automatically closed when SqlRodeo completes.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>Open a database connection from the DataSource
+<pre><code>&lt;objectFactory id="MyDatasource" ...&gt; ... &lt;/objectFactory&gt;/&gt;
+
+&lt;connection id="myConn" datasource-id="MyDatasource"/&gt;</code></pre>
+        </li>
+        <li>Create another, specifying the autocommit value.
+            <pre><code>&lt;connection id="connection2" datasource-id="OtherDatasource" autocommit="true"/&gt;</code></pre>
+
+        </li>
+
+    </ul>
+
+    <h2>&lt;connection&gt; Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>id</td>
+                <td>Required</td>
+                <td>ID of the database connection to create.</td>
+            </tr>
+            <tr>
+                <td>datasource-id</td>
+                <td>Required</td>
+                <td>ID of the DataSource from which to retrieve the connection.</td>
+            </tr>
+            <tr>
+                <td>autocommit</td>
+                <td>Optional</td>
+                <td>Boolean indicating if the connection should be set to autocommit. Valid values are "true" and
+                    "false". Default value is defined by the DataSource.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Exit">
+    <h1>&lt;exit&gt;</h1>
+
+    <p>Immediately halt processing of XML files.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>Exit the script.
+            <pre><code>&lt;exit/&gt;</code></pre>
+        </li>
+    </ul>
+
+    <h2>&lt;exit&gt; Attribute Reference</h2>
+    Not applicable / No attributes.
+    <aside class="label label-warning">Maybe it should support the 'if' attribute?</aside>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="If">
+    <h1>&lt;if&gt;</h1>
+
+    <p>Execute the enclosed block of code if the given condition is true.</p>
+
+    <p>The &lt;if&gt; action can contain any of the following elements:
+    <ul>
+        <li>assign</li>
+        <li>close</li>
+        <li>commit</li>
+        <li>connection</li>
+        <li>exit</li>
+        <li>if</li>
+        <li>include</li>
+        <li>objectFactory</li>
+        <li>properties</li>
+        <li>query</li>
+        <li>rollback</li>
+        <li>sql</li>
+        <li>script</li>
+    </ul>
+    </p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>Set a default commission rate to 10%
+<pre><code>&lt;assign id="commissionRate" value="0.10"/&gt;
+&lt;if condition="salesTotal > 2000"&gt;
+   &lt;assign id="commissionRate" value="0.15"/&gt;
+&lt;/if &gt;</code></pre>
+
+        <li>Nesting of <code>if</code> actions to calculate different commission rates.
+
+<pre><code>&lt;assign id="commissionRate" value="0.10"/&gt;
+&lt;if condition="salesTotal > 2000"&gt;
+   &lt;assign id="commissionRate" value="0.15"/&gt;
+   &lt;if condition="salesTotal > 3000 and surveysReturned > 2"&gt;
+        &lt;assign id="commissionRate" value="0.20"/&gt;
+   &lt;/if&gt;
+&lt;/if&gt;</code></pre>
+        </li>
+    </ul>
+
+    <h2>&lt;if&gt; Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>condition</td>
+                <td>Required</td>
+                <td>Condition to evaluate. The ${..} wrappers are optional
+                    <mark>(TBD: Verify!)</mark>
+                    .
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Include">
+    <h1>&lt;include&gt;</h1>
+
+    <p>Include a relative file.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>Include other files
+            <pre><code>&lt;include href="config/setup.xml"/&gt;</code></pre>
+        </li>
+        <li>Conditionally include another file
+            <pre><code>&lt;include if="include_custom" href="config/custom-setup.xml"&gt;</code></pre>
+        </li>
+
+    </ul>
+
+    <h2>Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>href</td>
+                <td>Required</td>
+                <td>Relative path of file to include.
+                </td>
+            </tr>
+            <tr>
+                <td>if</td>
+                <td>Optional</td>
+                <td>JEXL expression that suppresses action if it evaluates to false.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="ObjectFactory">
+    <h1>&lt;objectFactory&gt;</h1>
+
+    <p>Create (or obtain through JNDI) a DataSource via a provided implementation of javax.naming.spi.ObjectFactory.</p>
+
+    <p>
+        There is no generic way of creating a DataSource implementation, so driver jars typically include an
+        implementation of ObjectFactory to be that generic creation method.
+    </p>
+
+    <p>
+        If your database driver does not include such an implementation, you might need to use a &lt;script&gt; element
+        to manually create the DataSource.
+    </p>
+
+
+    <h2>Examples</h2>
+    <ul>
+
+        <li>Create a Hypersonic DataSource
+<pre><code>&lt;objectFactory id="myHypersonicDataSource"
+    factoryClassName="org.hsqldb.jdbc.JDBCDataSourceFactory"
+    objectClassName="org.hsqldb.jdbc.JDBCDataSource"
+    &gt;
+    database=jdbc:hsqldb:file:target/myDatabase
+    user=admin
+    password=rutabaga
+&lt;/objectFactory&gt;
+
+&lt;!-- Obtain a connection --&gt;
+&lt;connection id="myConn" datasource-id="myHypersonicDataSource"/&gt;</code></pre>
+        </li>
+
+        <li>Access or create an Oracle XE DataSource, first by looking up the 'oraSource' JNDI name. If this lookup
+            fails, a new DataSource will be created via the ObjectFactory parameters.
+
+<pre><code>&lt;objectFactory id="myDataSource"
+    name="oraSource"
+    factoryClassName="oracle.jdbc.pool.OracleDataSourceFactory"
+    objectClassName="oracle.jdbc.pool.OracleDataSource"
+    &gt;
+    url=jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)))
+    user=scott
+    password=tiger
+&lt;/objectFactory&gt;
+
+&lt;!-- Obtain a connection --&gt;
+&lt;connection id="myConn" datasource-id="myDataSource"/&gt;</code></pre>
+        </li>
+    </ul>
+
+
+    <h2>Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>id</td>
+                <td>Required</td>
+                <td>ID of DataSource to create. This would be referenced by the &lt;connection&gt; element.</td>
+            </tr>
+            <tr>
+                <td>factoryClassName</td>
+                <td>Required</td>
+                <td>Fully qualified classname of the factory class to invoke.</td>
+            </tr>
+            <tr>
+                <td>objectClassName</td>
+                <td>Required</td>
+                <td>Fully qualified classname of the object to create.</td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td>Optional</td>
+                <td>JNDI name for DataSource. If JNDI lookup succeeds, the underlying ObjectFactory is not invoked.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Properties">
+    <h1>&lt;properties&gt;</h1>
+
+    <p>Loads a <code>java.util.Properties</code> object from either an HREF or embedded text, and propagates the
+        contained
+        values to the execution context.</p>
+
+    <p></p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>Define properties from embedded text
+            <pre><code>&lt;properties &gt;
+   hsql_db_name=jdbc/myConnection
+   hsql_db_maxTotal=1
+   hsql_db_maxIdle=0
+   hsql_db_maxWaitMillis=1000
+   hsql_db_driverClassName=org.hsqldb.jdbcDriver
+   hsql_db_url=jdbc:hsqldb:file:target/testDbs/example1/database
+   hsql_db_username=sqlRodeo
+   hsql_db_password=sqlRodeo
+&lt;/properties&gt;</code></pre>
+        </li>
+        <li>Define properties from a relative file
+            <pre><code>&lt;properties href="../datasource.properties" /&gt;</code></pre>
+        </li>
+    </ul>
+
+    <h2>Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>href</td>
+                <td>Optional</td>
+                <td>Relative path of property file to include. If present, this element cannot contain any text.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Query">
+    <h1>&lt;query&gt;</h1>
+
+    <p>Execute a SQL query, potentially publishing the results and/or metadata to the execution context.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>A simple query
+            <pre><code>&lt;query connection-id="myConnection"&gt;
+   SELECT count(version) FROM schema_version
+&lt;query&gt;</code></pre>
+        </li>
+        <li>A simple query that publishes the result to the context for later use.
+            <pre><code>&lt;query connection-id="myConnection" publish-as="versionCount"&gt;
+   SELECT count(version) FROM schema_version
+&lt;query&gt;</code></pre>
+        </li>
+        <li>A query that publishes and prints each column of each row to the context.
+            <pre><code>&lt;query connection-id="myConnection" publish-as="id, first, last"&gt;
+   SELECT id, first_name, last_name FROM customer
+   &lt;script&gt;sysout.println("Customer " + id + ": " + first + " " + last );&lt;/script&gt;
+&lt;query&gt;</code></pre>
+            This could result in something like the following being printed to the log:
+            <pre>
+Customer 101: Winnie Pooh
+Customer 233: Eeyore Donkey
+Customer 241: Kanga Kangaroo
+Customer 500: Tigger Tiger</pre>
+        </li>
+        <li>Query that prints each row number, and the final count. If the
+            schema_version table holds 4 rows, and the query element is:
+            <div>
+                        <pre><code>&lt;query rownum="myRow" rowcount="rowcount"&gt;
+   SELECT major FROM schema_version
+   &lt;script&gt;sysout.println("This is row " + therow);&lt;/script&gt;
+&lt;query&gt;
+&lt;script&gt;sysout.println("Final row count is " + rowcount);&lt;/script&gt;
+</code></pre>
+            </div>
+
+            then the following would be printed:
+<pre>This is row 1
+This is row 2
+This is row 3
+This is row 4
+Final row count is 4</pre>
+        </li>
+        <li>Query where substitution has been turned off. For example, the following Oracle query
+                                <pre><code>&lt;query substitute="false" publish-as="result"&gt;
+   SELECT '${someValue}' FROM dual
+&lt;query&gt;
+</code></pre>
+            would result in the 'result' variable holding the text literal <code>${someValue}</code>.
+        </li>
+    </ul>
+
+    <h2>Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>connection-id</td>
+                <td>Optional</td>
+                <td>ID of database connection to use for the query. If not specified, it will default to the only
+                    connection currently in the execution context. If two or more connections are in the execution
+                    context, this element will throw an IllegalArgumentException since it could not identify the default
+                    connection.
+                </td>
+            </tr>
+            <tr>
+                <td>if</td>
+                <td>Optional</td>
+                <td>JEXL expression that suppresses action if it evaluates to false.</td>
+                </td>
+            </tr>
+            <tr>
+                <td>publish-as</td>
+                <td>Optional</td>
+                <td>Comma-separated list of names under which to publish the column values.</td>
+            </tr>
+            <tr>
+                <td>rownum</td>
+                <td>Optional</td>
+                <td>ID under which each row number should be published, starting with 1.</td>
+            </tr>
+            <tr>
+                <td>rowcount</td>
+                <td>Optional</td>
+                <td>ID under which the total number of returned rows should be published.</td>
+            </tr>
+            <tr>
+                <td>substitute</td>
+                <td>Optional</td>
+                <td>Boolean (default is "true") indicating whether or not the query text should go through text
+                    substitution before being
+                    executed by the database connection.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Rollback">
+    <h1>&lt;rollback&gt;</h1>
+
+    <p>Rollback the current transaction on the specified (or default) database connection. Note that this typically has
+        no effect if the connection is in autocommit mode, or if no changes are scheduled to be committed.</p>
+
+    <h2>Examples</h2>
+    <ul>
+        <li>
+            Rollback using the default connection.
+            <pre><code>&lt;rollback/&gt;</code></pre>
+        </li>
+        <li>
+            Rollback on a specified connection.
+            <pre><code>&lt;rollback connection-id="myConnection"/&gt;</code></pre>
+        </li>
+    </ul>
+
+    <h2>Attribute Reference</h2>
+    No attributes / Not applicable.
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Script">
+    <h1>&lt;script&gt;</h1>
+
+    <p>Execute a <a href="http://commons.apache.org/proper/commons-jexl/">JEXL</a> script.</p>
+
+    <h2>Examples</h2>
+
+    <h2>Attribute Reference</h2>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Sql">
+    <h1>&lt;sql&gt;</h1>
+
+    <p>Execute a SQL command, or series of SQL commands separated by a semicolon.</p>
+
+    <h2>Examples</h2>
+    <ul></ul>
+
+    <h2>Attribute Reference</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Presence</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>connection-id</td>
+                <td>Optional</td>
+                <td>ID of database connection to use for the command. If not specified, it will default to the only
+                    connection currently in the execution context. If two or more connections are in the execution
+                    context, this element will throw an IllegalArgumentException since it could not identify the default
+                    connection.
+                </td>
+            </tr>
+            <tr>
+                <td>if</td>
+                <td>Optional</td>
+                <td>JEXL expression that suppresses action if it evaluates to false.</td>
+                </td>
+            </tr>
+            <tr>
+                <td>href</td>
+                <td>Optional</td>
+                <td>Relative path to SQL file to execute. If used, then this element cannot contain any text.</td>
+            </tr>
+            <tr>
+                <td>oneStatement</td>
+                <td>Optional</td>
+                <td>Boolean (default is "false") that indicates if the referenced SQL text should be executed as a
+                    single statement, or split into multiple statements by semicolon. This is useful if the referenced
+                    SQL is treated as a single command, such as creating a stored procedure or complex data type.
+                </td>
+            </tr>
+            <tr>
+                <td>substitute</td>
+                <td>Optional</td>
+                <td>Boolean (default is "true") indicating whether or not the query text should go through text
+                    substitution before being
+                    executed by the database connection.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+
+<!-- ******************************* -->
+<article id="Sql-Rodeo">
+    <h1>&lt;sql-rodeo&gt;</h1>
+
+    <p>Purpose goes here. Some short text.</p>
+
+    <h2>Examples</h2>
+
+    <h2>Attribute Reference</h2>
+    <ol class="breadcrumb">
+        <li><a href="#top">Back to Top</a></li>
+    </ol>
+    <hr/>
+</article>
+</section>
+
+</div>
+</div>
+</div>
+
+@footer@
+
+</body>
+<script>
+    $("#header .navbar li.elements").addClass("active");
+</script>
+</html>
