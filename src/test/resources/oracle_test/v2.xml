@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<sql if="version lt 2">
+		ALTER TABLE USERS ADD (EMAIL VARCHAR(70));
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 2 );
+	</sql>
+
+</sql-rodeo>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<sql if="version lt 3">
+		ALTER TABLE USERS ADD (NICKNAME VARCHAR(20));
+		
+		INSERT INTO USERS(ID, Name, Email, Nickname) Values (1, 'Fred', 'fred@example.com', 'Freddy');
+		
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 3 );
+	</sql>
+
+</sql-rodeo>

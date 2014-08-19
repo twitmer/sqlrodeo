@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<sql-rodeo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.example.org/SqlRodeoSchema" xsi:schemaLocation="http://www.example.org/SqlRodeoSchema SqlRodeoSchema.xsd">
+
+	<!-- Import datasource definition. -->
+	<properties href="datasource.properties" />
+
+	<!-- Define our datasource and 1 connection. -->
+	<objectFactory id="myDataSource" factoryClassName="${db_factoryClassName}"
+		objectClassName="${db_objectClassName}">
+		url=${db_url}
+		user=${db_username}
+		password=${db_password}
+	</objectFactory>
+
+	<!-- Check out a connection from our DataSource. -->
+	<connection id="myConnection" datasource-id="myDataSource" />
+
+	<!-- Determine current schema version. This will create the 'schema_version' 
+		table if it doesn't already exist. -->
+	<!-- Use HSQL-specific way to determine if the version table exists. -->
+	<query connection-id="myConnection" publish-as="versionTableCount">
+	select count(*) from all_objects where object_type in ('TABLE','VIEW') and object_name = 'SCHEMA_VERSION'</query>
+
+	<!-- Initialize schema_version table, if it doesn't yet exist. -->
+	<sql if="versionTableCount == 0" connection-id="myConnection">
+		CREATE TABLE SCHEMA_VERSION (
+			version INT NOT NULL,
+			PRIMARY KEY (version)
+		);
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 0 );
+	</sql>
+
+	<!-- Determine the current DB version. -->
+	<query connection-id="myConnection" publish-as="version">
+		SELECT MAX(version) FROM SCHEMA_VERSION
+	</query>
+
+<!--     <assign id="printer" value="new('org.sqlrodeo.utility.Printer')" /> -->
+	<query connection-id="myConnection" rownum="therow" rowcount="rowcount">
+		SELECT version FROM schema_version
+		<script>sysout.println("the row is " + therow);</script>
+	</query>
+	<script>sysout.println("Final row count is " + rowcount);</script>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<sql if="version lt 1">
+		CREATE TABLE USERS
+		(
+  			ID INTEGER    NOT NULL,
+  			NAME VARCHAR(70)  NOT NULL
+		);
+
+		CREATE TABLE DEPARTMENT
+		(
+  			ID INTEGER    NOT NULL,
+  			NAME VARCHAR(70)  NOT NULL
+		);
+		
+		INSERT INTO SCHEMA_VERSION( version ) VALUES ( 1 );
+	</sql>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<include if="version lt 2" href="v2.xml"/>
+
+	<!-- Execute all upgrades for the 1.x line of schema changes -->
+	<include if="version lt 3" href="v3.xml"/>
+
+</sql-rodeo>
