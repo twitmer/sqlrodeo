@@ -2,3 +2,4 @@ target/
 .settings/
 .classpath
 .project
+src/main/web/.idea
