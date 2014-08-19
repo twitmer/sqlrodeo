@@ -31,6 +31,8 @@ public final class ExecutionContextImplementation implements ExecutionContext {
 	public ExecutionContextImplementation() {
 		delegateMap.put("sysProps", System.getProperties());
 		delegateMap.put("env", System.getenv());
+		delegateMap.put("sysout", System.out);
+		delegateMap.put("syserr", System.err);
 	}
 
 	@Override
