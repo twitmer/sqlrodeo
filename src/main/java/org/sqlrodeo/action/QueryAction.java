@@ -73,22 +73,21 @@ public final class QueryAction extends BaseAction {
 
 		Connection connection = getConnection(context);
 		long resultCount = 0;
-		long rowCount = 0;
 		try (Statement stmt = connection.createStatement()) {
 			log.info("Executing statement: " + queryString);
 			final String qString = queryString;
 			try (ResultSet result = stmt.executeQuery(qString)) {
 				while (result.next()) {
-					publishRow(queryChildren, result, context, publishAs);
 					if (!StringUtils.isEmpty(rowNumId)) {
-						context.put(rowNumId, rowCount);
+						context.put(rowNumId, resultCount + 1);
 					}
+					publishRow(queryChildren, result, context, publishAs);
 					++resultCount;
 				}
 			}
 		}
 
-		// Optionally publish the number of rows retrieved.
+		// Optionally publish the total number of rows retrieved.
 		String rowCountId = getNode().getAttribute("rowcount");
 		if (!StringUtils.isEmpty(rowCountId)) {
 			context.put(rowCountId, resultCount);
