@@ -5,6 +5,9 @@ Make the left margin static, so headers are in the same position, whether or not
     margin-left: 15px;
 }
 
+body {
+	padding-top:70px; /* Required by http://getbootstrap.com/components/#navbar-fixed-top */
+}
 
 /* Overview Page */
 
@@ -27,7 +30,12 @@ Make the left margin static, so headers are in the same position, whether or not
 /* XML Elements Page */
 
 #xmlElements article {
-    margin-bottom: 250px;
+	padding-top:70px;
+	margin-bottom: 250px;
+}
+
+#xmlElements article:first-child {
+	padding-top:0; /* Remove top-padding from first article, since body element already provides it. */
 }
 
 #xmlElements article:last-child {
